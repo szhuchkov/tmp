@@ -2,8 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="android_native_app_glue.h" />
+    <ClInclude Include="OGLDriverGLES.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="..\..\common\Engine.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\OGLDriver.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\pch.h">
@@ -15,14 +19,11 @@
     <ClInclude Include="..\..\common\RenderDevice.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\OGLDriver.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="OGLDriverGLES.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OGLDriverGLES.cpp" />
     <ClCompile Include="..\..\common\Engine.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -32,11 +33,10 @@
     <ClCompile Include="..\..\common\RenderDevice.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="OGLDriverGLES.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
-      <UniqueIdentifier>{c18c59cb-7921-423a-93d7-08badf44d159}</UniqueIdentifier>
+      <UniqueIdentifier>{fe01c6aa-3651-43a0-8246-a9c93ee24a0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

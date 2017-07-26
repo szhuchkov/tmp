@@ -35,10 +35,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <RootNamespace>android</RootNamespace>
+    <RootNamespace>android_app</RootNamespace>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ProjectVersion>1.0</ProjectVersion>
-    <ProjectGuid>{88d5c845-c7e8-4193-8046-919ddd24bfdb}</ProjectGuid>
+    <ProjectGuid>{25c80c0b-7e53-443b-97db-02083bab8a4a}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(AndroidTargetsPath)\Android.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
@@ -125,8 +125,8 @@
     <AntProjectPropertiesFile Include="project.properties" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\android.NativeActivity\android.NativeActivity.vcxproj">
-      <Project>{bca6925a-5bec-4eb9-8b07-0f997ca323f6}</Project>
+    <ProjectReference Include="..\android-app.NativeActivity\android-app.NativeActivity.vcxproj">
+      <Project>{4036fddd-068d-4246-8a6c-5edd1c3e0aef}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />
