@@ -2,5 +2,38 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\common\Engine.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\pch.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\RenderDevice.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLDriverPC.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{82c96dff-7d05-4699-9b61-58c6640e6045}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\Engine.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\pch.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Platform.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\RenderDevice.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLDriverPC.h" />
+    <ClInclude Include="..\common\OGLDriver.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

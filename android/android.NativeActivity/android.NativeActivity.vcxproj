@@ -128,6 +128,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -139,6 +140,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -150,6 +152,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -161,6 +164,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -172,6 +176,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -183,6 +188,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -194,6 +200,7 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
@@ -205,18 +212,29 @@
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalIncludeDirectories>..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv1_CM;EGL;</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\Engine.h" />
+    <ClInclude Include="..\..\common\OGLDriver.h" />
+    <ClInclude Include="..\..\common\pch.h" />
+    <ClInclude Include="..\..\common\Platform.h" />
+    <ClInclude Include="..\..\common\RenderDevice.h" />
     <ClInclude Include="android_native_app_glue.h" />
+    <ClInclude Include="OGLDriverGLES.h" />
     <ClInclude Include="Precompiled.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\Engine.cpp" />
+    <ClCompile Include="..\..\common\pch.cpp" />
+    <ClCompile Include="..\..\common\RenderDevice.cpp" />
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OGLDriverGLES.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

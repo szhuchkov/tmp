@@ -4,9 +4,12 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderDevice.h" />
+    <ClInclude Include="OGLDriver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="RenderDevice.cpp" />
   </ItemGroup>
 </Project>

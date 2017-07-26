@@ -105,6 +105,6 @@ void _LogPrintf(const char* file, int line, const char* format, ...)
 
 	va_end(args);
 
-	printf(buffer);
+	printf("%s", buffer);
 	OutputDebugString(buffer);
 }

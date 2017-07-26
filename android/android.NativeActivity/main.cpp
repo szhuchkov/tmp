@@ -15,8 +15,29 @@
 *
 */
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "AndroidProject1.NativeActivity", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "AndroidProject1.NativeActivity", __VA_ARGS__))
+
+#include "OGLDriver.h"
+
+
+void _LogPrintf(const char* file, int line, const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+
+	char buffer[10000] = { 0 };
+	int offset = 0;
+
+	offset += sprintf(&buffer[offset], "%s(%d): ", file, line);
+	offset += vsprintf(&buffer[offset], format, args);
+	buffer[offset++] = '\n';
+	buffer[offset++] = 0;
+
+	va_end(args);
+
+	printf("%s", buffer);
+	__android_log_print(ANDROID_LOG_INFO, "AGE", "%s", buffer);
+}
+
 
 /**
 * Our saved state data.
@@ -91,7 +112,7 @@ static int engine_init_display(struct engine* engine) {
 	context = eglCreateContext(display, config, NULL, NULL);
 
 	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-		LOGW("Unable to eglMakeCurrent");
+		LogPrintf("eglMakeCurrent() failed");
 		return -1;
 	}
 
@@ -106,9 +127,9 @@ static int engine_init_display(struct engine* engine) {
 	engine->state.angle = 0;
 
 	// Initialize GL state.
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 	glEnable(GL_CULL_FACE);
-	glShadeModel(GL_SMOOTH);
+	//glShadeModel(GL_SMOOTH);
 	glDisable(GL_DEPTH_TEST);
 
 	return 0;
@@ -264,7 +285,7 @@ void android_main(struct android_app* state) {
 					ASensorEvent event;
 					while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
 						&event, 1) > 0) {
-						LOGI("accelerometer: x=%f y=%f z=%f",
+						LogPrintf("accelerometer: x=%f y=%f z=%f",
 							event.acceleration.x, event.acceleration.y,
 							event.acceleration.z);
 					}
