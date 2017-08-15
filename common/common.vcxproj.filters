@@ -6,10 +6,14 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="OGLDriver.h" />
+    <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="RenderDevice.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
 </Project>
