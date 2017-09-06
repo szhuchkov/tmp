@@ -35,8 +35,6 @@ public:
 		if (!FS_SaveFile(testFileName, testData, sizeof(testData)))
 			return false;
 
-		char* read = if (!FS_
-
 		return true;
 	}
 };
