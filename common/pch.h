@@ -2,6 +2,7 @@
 
 
 #include "Platform.h"
+#include "Utils.h"
 
 
 #include <cstdarg>
@@ -16,6 +17,3 @@
 #include <string>
 #include <algorithm>
 
-
-void _LogPrintf(const char* file, int line, const char* format, ...);
-#define LogPrintf(...)		_LogPrintf(__FILE__, __LINE__, __VA_ARGS__)
