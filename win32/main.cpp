@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Engine.h"
+#include "..\tests\TestScene.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -69,6 +70,13 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		return -1;
 	}
 
+	if (!TestScene::GetInstance()->Init())
+	{
+		LogPrintf("TestScene init failed");
+		Engine::GetInstance()->Shutdown();
+		return -1;
+	}
+
 	while (!cl_quit)
 	{
 		MSG msg;
@@ -81,9 +89,17 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		if (!Engine::GetInstance()->Update())
 			break;
 
-		Engine::GetInstance()->Render();
+		constexpr float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
+		constexpr float clearDepth = 1.0f;
+
+		RenderDevice::GetInstance()->BeginFrame();
+		RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
+		TestScene::GetInstance()->Render();
+		//Engine::GetInstance()->Render();
+		RenderDevice::GetInstance()->EndFrame();
 	}
 
+	TestScene::GetInstance()->Shutdown();
 	Engine::GetInstance()->Shutdown();
 
 	return 0;
