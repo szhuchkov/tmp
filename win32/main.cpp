@@ -48,6 +48,10 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 
 	cl_hInstance = hInstance;
 
+	CVar_Add("ScreenWidth", 1280);
+	CVar_Add("ScreenHeight", 720);
+	CVar_Add("Fullscreen", 0);
+
 	WNDCLASS wndClass;
 	memset(&wndClass, 0, sizeof(wndClass));
 	wndClass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
@@ -60,8 +64,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 
 	DWORD wndStyle = WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
-	int width = 1024;
-	int height = 768;
+	int width = CVar_Get<int>("ScreenWidth");
+	int height = CVar_Get<int>("ScreenHeight");
 
 	RECT wndRect;
 	SetRect(&wndRect, 0, 0, width, height);
@@ -121,6 +125,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 
 	TestScene::GetInstance()->Shutdown();
 	Engine::GetInstance()->Shutdown();
+
+	CVar_Clear();
 
 	return 0;
 }

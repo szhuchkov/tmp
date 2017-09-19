@@ -10,6 +10,7 @@ public:
 	~ConsoleVar();
 
 	const char* GetName() const;
+	bool IsStatic() const;
 
 	void SetValue(int value);
 	void SetValue(float value);

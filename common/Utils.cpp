@@ -35,6 +35,29 @@ void CVar_Add(const char* name, const char* value)
 }
 
 
+void CVar_Clear()
+{
+	// enum dynamic vars
+	size_t num = ConsoleVar::GetNumVars();
+	std::vector<ConsoleVar*> vars;
+	vars.reserve(num);
+	for(size_t i = 0; i < num; i++)
+	{
+		auto var = ConsoleVar::GetVar(i);
+		if (!var->IsStatic())
+			vars.push_back(var);
+	}
+
+	// remove dynamic vars
+	num = vars.size();
+	for(size_t i = 0; i < num; i++)
+	{
+		auto var = vars[i];
+		delete var;
+	}
+}
+
+
 template<>
 int CVar_Get(const char* name)
 {

@@ -45,6 +45,12 @@ const char* ConsoleVar::GetName() const
 }
 
 
+bool ConsoleVar::IsStatic() const
+{
+	return !m_dynamic;
+}
+
+
 void ConsoleVar::SetValue(int value)
 {
 	char str[256];
@@ -136,8 +142,8 @@ void ConsoleVar::RemoveVar(ConsoleVar* var)
 	auto it = g_ConsoleVarsByName.find(name);
 	auto it2 = std::find(g_ConsoleVars.begin(), g_ConsoleVars.end(), var);
 
-	assert(it == g_ConsoleVarsByName.end());
-	assert(it2 == g_ConsoleVars.end());
+	assert(it != g_ConsoleVarsByName.end());
+	assert(it2 != g_ConsoleVars.end());
 
 	g_ConsoleVarsByName.erase(it);
 	g_ConsoleVars.erase(it2);

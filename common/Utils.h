@@ -40,15 +40,8 @@ bool FS_SaveFile(const char* name, const void* data, size_t size);
 void CVar_Add(const char* name, int value);
 void CVar_Add(const char* name, float value);
 void CVar_Add(const char* name, const char* value);
+void CVar_Clear();
 
 
 template<typename _T>
 _T CVar_Get(const char* name);
-
-//void CVar_Add(const char* name, int value);
-//void CVar_Add(const char* name, float value);
-//void CVar_Add(const char* name, const char* value);
-
-//int CVar_GetInt(const char* name);
-//float CVar_GetFloat(const char* name);
-//const char* CVar_GetString(const char* name);
