@@ -131,7 +131,7 @@
       <AdditionalIncludeDirectories>..\..\common;$(Sysroot)\usr\include;$(StlIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -142,7 +142,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -154,7 +154,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -166,7 +166,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -178,7 +178,7 @@
       <AdditionalIncludeDirectories>..\..\common;$(Sysroot)\usr\include;$(StlIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -189,7 +189,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -201,7 +201,7 @@
       <AdditionalIncludeDirectories>..\..\common;$(Sysroot)\usr\include;$(StlIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -212,11 +212,12 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;</LibraryDependencies>
+      <LibraryDependencies>%(LibraryDependencies);GLESv3;EGL;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\Engine.h" />
+    <ClInclude Include="..\..\common\math3d.h" />
     <ClInclude Include="..\..\common\OGLDriver.h" />
     <ClInclude Include="..\..\common\pch.h" />
     <ClInclude Include="..\..\common\Platform.h" />
@@ -227,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\Engine.cpp" />
+    <ClCompile Include="..\..\common\math3d.cpp" />
     <ClCompile Include="..\..\common\pch.cpp" />
     <ClCompile Include="..\..\common\RenderDevice.cpp" />
     <ClCompile Include="android_native_app_glue.c" />

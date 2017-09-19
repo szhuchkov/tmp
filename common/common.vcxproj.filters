@@ -8,6 +8,9 @@
     <ClInclude Include="OGLDriver.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="math3d.h">
+      <Filter>math3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -15,5 +18,13 @@
     <ClCompile Include="RenderDevice.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="math3d.cpp">
+      <Filter>math3d</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="math3d">
+      <UniqueIdentifier>{e6cca8c9-9190-45b2-9ce2-7c12b47c192b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

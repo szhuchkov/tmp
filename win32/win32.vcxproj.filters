@@ -12,6 +12,9 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="OGLDriverPC.cpp" />
+    <ClCompile Include="..\common\math3d.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -33,6 +36,9 @@
     </ClInclude>
     <ClInclude Include="OGLDriverPC.h" />
     <ClInclude Include="..\common\OGLDriver.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\math3d.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

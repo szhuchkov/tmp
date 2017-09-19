@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\Engine.cpp" />
+    <ClCompile Include="..\common\math3d.cpp" />
     <ClCompile Include="..\common\pch.cpp" />
     <ClCompile Include="..\common\RenderDevice.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\Engine.h" />
+    <ClInclude Include="..\common\math3d.h" />
     <ClInclude Include="..\common\OGLDriver.h" />
     <ClInclude Include="..\common\pch.h" />
     <ClInclude Include="..\common\Platform.h" />

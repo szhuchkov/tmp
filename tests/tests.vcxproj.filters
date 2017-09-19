@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="UnitTest.h" />
+    <ClInclude Include="FileSystemTest.h" />
+    <ClInclude Include="TestScene.h" />
+    <ClInclude Include="MathTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TestMain.cpp" />
+  </ItemGroup>
+</Project>

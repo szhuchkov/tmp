@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include "..\tests\TestScene.h"
+#include "..\tests\MathTest.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -10,6 +11,15 @@
 static HINSTANCE	cl_hInstance = NULL;
 static HWND			cl_hWnd = NULL;
 static bool			cl_quit = false;
+
+
+static int RunTests()
+{
+	MathTest mathTest;
+	if (!mathTest.Run())
+		return -1;
+	return 0;
+}
 
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -26,6 +36,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, int showCmd)
 {
+	int res = RunTests();
+	if (res)
+		LogPrintf("!!! Unit tests fail");
+
 	cl_hInstance = hInstance;
 
 	WNDCLASS wndClass;

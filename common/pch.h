@@ -3,6 +3,7 @@
 
 #include "Platform.h"
 #include "Utils.h"
+#include "math3d.h"
 
 
 #include <cstdarg>
