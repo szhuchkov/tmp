@@ -15,6 +15,12 @@
     <ClCompile Include="..\common\math3d.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\ConsoleVar.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Utils.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -39,6 +45,12 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\common\math3d.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ConsoleVar.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Utils.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

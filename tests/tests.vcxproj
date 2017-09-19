@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CVarTest.h" />
     <ClInclude Include="FileSystemTest.h" />
     <ClInclude Include="MathTest.h" />
     <ClInclude Include="TestScene.h" />

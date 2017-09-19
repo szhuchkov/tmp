@@ -1,17 +1,79 @@
 #include "pch.h"
 #include "Utils.h"
 #include "FileSystem.h"
+#include "ConsoleVar.h"
 
 
-char* FS_LoadFile(const char* name, size_t* size)
+//char* FS_LoadFile(const char* name, size_t* size)
+//{
+//	char* res = FileSystem::GetInstance()->LoadFile(name, size);
+//	return res;
+//}
+//
+//bool FS_SaveFile(const char* name, const void* data, size_t size)
+//{
+//	bool res = FileSystem::GetInstance()->SaveFile(name, data, size);
+//	return res;
+//}
+
+
+void CVar_Add(const char* name, int value)
 {
-	char* res = FileSystem::GetInstance()->LoadFile(name, size);
-	return res;
+	new ConsoleVar(name, value, true);
 }
 
 
-bool FS_SaveFile(const char* name, const void* data, size_t size)
+void CVar_Add(const char* name, float value)
 {
-	bool res = FileSystem::GetInstance()->SaveFile(name, data, size);
-	return res;
+	new ConsoleVar(name, value, true);
+}
+
+
+void CVar_Add(const char* name, const char* value)
+{
+	new ConsoleVar(name, value, true);
+}
+
+
+template<>
+int CVar_Get(const char* name)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var != nullptr)
+		return var->GetInt();
+
+	return 0;
+}
+
+
+template<>
+float CVar_Get(const char* name)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var != nullptr)
+		return var->GetFloat();
+
+	return 0;
+}
+
+
+template<>
+const char* CVar_Get(const char* name)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var != nullptr)
+		return var->GetString();
+
+	return 0;
+}
+
+
+template<>
+std::string CVar_Get(const char* name)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var != nullptr)
+		return std::string(var->GetString());
+
+	return std::string("");
 }

@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleVar.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="math3d.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleVar.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="math3d.cpp" />

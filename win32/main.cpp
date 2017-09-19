@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "..\tests\TestScene.h"
 #include "..\tests\MathTest.h"
+#include "..\tests\CVarTest.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -18,6 +19,11 @@ static int RunTests()
 	MathTest mathTest;
 	if (!mathTest.Run())
 		return -1;
+
+	CVarTest cvarTest;
+	if (!cvarTest.Run())
+		return -1;
+
 	return 0;
 }
 
