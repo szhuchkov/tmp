@@ -4,17 +4,63 @@
 #include "ConsoleVar.h"
 
 
-//char* FS_LoadFile(const char* name, size_t* size)
-//{
-//	char* res = FileSystem::GetInstance()->LoadFile(name, size);
-//	return res;
-//}
-//
-//bool FS_SaveFile(const char* name, const void* data, size_t size)
-//{
-//	bool res = FileSystem::GetInstance()->SaveFile(name, data, size);
-//	return res;
-//}
+char* FS_LoadFile(const char* name, size_t* size)
+{
+	char* res = FileSystem::GetInstance()->LoadFile(name, size);
+	return res;
+}
+
+
+bool FS_SaveFile(const char* name, const void* data, size_t size)
+{
+	bool res = FileSystem::GetInstance()->SaveFile(name, data, size);
+	return res;
+}
+
+
+bool FS_DeleteFile(const char* name)
+{
+	bool res = FileSystem::GetInstance()->RemoveFile(name);
+	return res;
+}
+
+
+const char* FS_GetRootDir()
+{
+	const char* res = FileSystem::GetInstance()->GetRootDir();
+	return res;
+}
+
+
+const char* FS_GetCurDir()
+{
+	const char* res = FileSystem::GetInstance()->GetCurDir();
+	return res;
+}
+
+
+bool FS_CreateDir(const char* name)
+{
+	bool res = FileSystem::GetInstance()->CreateDir(name);
+	return res;
+}
+
+
+bool FS_DeleteDir(const char* name)
+{
+	bool res = FileSystem::GetInstance()->RemoveDir(name);
+	return res;
+}
+
+
+bool FS_ChangeDir(const char* name)
+{
+	if (!name)
+		name = ".";
+
+	bool res = FileSystem::GetInstance()->ChangeDir(name);
+	return res;
+}
 
 
 void CVar_Add(const char* name, int value)

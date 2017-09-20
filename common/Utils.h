@@ -28,7 +28,21 @@ void _LogPrintf(const char* file, int line, const char* format, ...);
 
 char* FS_LoadFile(const char* name, size_t* size);
 bool FS_SaveFile(const char* name, const void* data, size_t size);
+bool FS_DeleteFile(const char* name);
 
+
+
+//-----------------------------------------------------------------------------
+//
+//	directory utils
+//
+//-----------------------------------------------------------------------------
+
+bool FS_CreateDir(const char* name);
+bool FS_DeleteDir(const char* name);
+bool FS_ChangeDir(const char* name);
+const char* FS_GetCurDir();
+const char* FS_GetRootDir();
 
 
 //-----------------------------------------------------------------------------

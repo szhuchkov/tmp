@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Engine.h"
+#include "FileSystem.h"
 #include "RenderDevice.h"
 
 
@@ -15,6 +16,14 @@ Engine::~Engine()
 
 bool Engine::Init(void* window, int width, int height, bool fullscreen)
 {
+	// init file system
+	if (!FileSystem::GetInstance()->Init())
+	{
+		LogPrintf("FileSystem init failed");
+		return false;
+	}
+
+	// init render device
 	if (!RenderDevice::GetInstance()->Init(window, width, height, fullscreen))
 	{
 		LogPrintf("RenderDevice init failed");
@@ -28,6 +37,7 @@ bool Engine::Init(void* window, int width, int height, bool fullscreen)
 void Engine::Shutdown()
 {
 	RenderDevice::GetInstance()->Shutdown();
+	FileSystem::GetInstance()->Shutdown();
 }
 
 

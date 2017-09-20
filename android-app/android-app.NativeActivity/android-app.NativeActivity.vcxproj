@@ -225,6 +225,7 @@
     <ClInclude Include="..\..\common\RenderDevice.h" />
     <ClInclude Include="..\..\common\Utils.h" />
     <ClInclude Include="android_native_app_glue.h" />
+    <ClInclude Include="FileSystemAndroid.h" />
     <ClInclude Include="OGLDriverGLES.h" />
     <ClInclude Include="Precompiled.h" />
   </ItemGroup>
@@ -236,6 +237,7 @@
     <ClCompile Include="..\..\common\RenderDevice.cpp" />
     <ClCompile Include="..\..\common\Utils.cpp" />
     <ClCompile Include="android_native_app_glue.c" />
+    <ClCompile Include="FileSystemAndroid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OGLDriverGLES.cpp" />
   </ItemGroup>

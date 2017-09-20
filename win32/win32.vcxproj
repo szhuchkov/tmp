@@ -160,6 +160,7 @@
     <ClCompile Include="..\common\pch.cpp" />
     <ClCompile Include="..\common\RenderDevice.cpp" />
     <ClCompile Include="..\common\Utils.cpp" />
+    <ClCompile Include="FileSystemPC.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OGLDriverPC.cpp" />
   </ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="..\common\Platform.h" />
     <ClInclude Include="..\common\RenderDevice.h" />
     <ClInclude Include="..\common\Utils.h" />
+    <ClInclude Include="FileSystemPC.h" />
     <ClInclude Include="OGLDriverPC.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

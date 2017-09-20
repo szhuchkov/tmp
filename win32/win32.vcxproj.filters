@@ -21,6 +21,7 @@
     <ClCompile Include="..\common\Utils.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="FileSystemPC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -53,5 +54,6 @@
     <ClInclude Include="..\common\Utils.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystemPC.h" />
   </ItemGroup>
 </Project>

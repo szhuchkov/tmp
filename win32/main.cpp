@@ -3,6 +3,7 @@
 #include "..\tests\TestScene.h"
 #include "..\tests\MathTest.h"
 #include "..\tests\CVarTest.h"
+#include "..\tests\FileSystemTest.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -24,6 +25,10 @@ static int RunTests()
 	if (!cvarTest.Run())
 		return -1;
 
+	FileSystemTest fileSystemTest;
+	if (!fileSystemTest.Run())
+		return -1;
+
 	return 0;
 }
 
@@ -42,16 +47,18 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, int showCmd)
 {
-	int res = RunTests();
-	if (res)
-		LogPrintf("!!! Unit tests fail");
-
 	cl_hInstance = hInstance;
 
+	// init some vars
 	CVar_Add("ScreenWidth", 1280);
 	CVar_Add("ScreenHeight", 720);
 	CVar_Add("Fullscreen", 0);
 
+	// get screen size from the config
+	int width = CVar_Get<int>("ScreenWidth");
+	int height = CVar_Get<int>("ScreenHeight");
+
+	// setup window class
 	WNDCLASS wndClass;
 	memset(&wndClass, 0, sizeof(wndClass));
 	wndClass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
@@ -62,21 +69,19 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 	wndClass.lpszClassName = WND_CLASS_NAME;
 	RegisterClass(&wndClass);
 
+	// window style
 	DWORD wndStyle = WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
-	int width = CVar_Get<int>("ScreenWidth");
-	int height = CVar_Get<int>("ScreenHeight");
-
+	// adjust window size
 	RECT wndRect;
 	SetRect(&wndRect, 0, 0, width, height);
 	AdjustWindowRect(&wndRect, wndStyle, FALSE);
-
 	width = wndRect.right - wndRect.left;
 	height = wndRect.bottom - wndRect.top;
-
 	int x = (GetSystemMetrics(SM_CXFULLSCREEN) - width) / 2;
 	int y = (GetSystemMetrics(SM_CYFULLSCREEN) - height) / 2;
 
+	// create window
 	cl_hWnd = CreateWindow(WND_CLASS_NAME, WND_NAME, wndStyle, x, y, width, height, GetDesktopWindow(), NULL, hInstance, NULL);
 	if (!cl_hWnd)
 	{
@@ -87,6 +92,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 	ShowWindow(cl_hWnd, SW_NORMAL);
 	UpdateWindow(cl_hWnd);
 
+	// initialize engine
 	if (!Engine::GetInstance()->Init(cl_hWnd, 1024, 768, false))
 	{
 		LogPrintf("Engine init failed");
@@ -94,6 +100,16 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		return -1;
 	}
 
+	// run unit tests
+	int res = RunTests();
+	if (res)
+	{
+		LogPrintf("!!! Unit tests fail");
+		Engine::GetInstance()->Shutdown();
+		return res;
+	}
+
+	// initialize test scene
 	if (!TestScene::GetInstance()->Init())
 	{
 		LogPrintf("TestScene init failed");
@@ -101,8 +117,10 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		return -1;
 	}
 
+	// run main loop
 	while (!cl_quit)
 	{
+		// pump window messages
 		MSG msg;
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -113,6 +131,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		if (!Engine::GetInstance()->Update())
 			break;
 
+		// render test scene
 		constexpr float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
 		constexpr float clearDepth = 1.0f;
 
@@ -123,9 +142,11 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		RenderDevice::GetInstance()->EndFrame();
 	}
 
+	// shutdown
 	TestScene::GetInstance()->Shutdown();
 	Engine::GetInstance()->Shutdown();
 
+	// cleanup vars
 	CVar_Clear();
 
 	return 0;
@@ -140,6 +161,7 @@ void _LogPrintf(const char* file, int line, const char* format, ...)
 	char buffer[10000] = { 0 };
 	int offset = 0;
 
+	// VS double click navigation support
 	offset += sprintf(&buffer[offset], "%s(%d): ", file, line);
 	offset += vsprintf(&buffer[offset], format, args);
 	buffer[offset++] = '\n';
@@ -147,6 +169,7 @@ void _LogPrintf(const char* file, int line, const char* format, ...)
 
 	va_end(args);
 
+	// dump to the console and debug output
 	printf("%s", buffer);
 	OutputDebugString(buffer);
 }

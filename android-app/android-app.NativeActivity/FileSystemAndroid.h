@@ -4,12 +4,12 @@
 #include "FileSystem.h"
 
 
-class FileSystemPC : public FileSystem
+class FileSystemAndroid : public FileSystem
 {
 public:
-	inline static FileSystemPC* GetInstance()
+	inline static FileSystemAndroid* GetInstance()
 	{
-		static FileSystemPC instance;
+		static FileSystemAndroid instance;
 		return &instance;
 	}
 
@@ -27,10 +27,6 @@ public:
 	bool RemoveDir(const char* name) override;
 
 private:
-	FileSystemPC();
-	~FileSystemPC();
-
-private:
-	char m_rootDir[1024] = {'.', 0};
-	char m_curDir[1024] = {'.', 0};
+	FileSystemAndroid();
+	~FileSystemAndroid();
 };
