@@ -16,6 +16,10 @@ Project("{39E2626F-3545-4960-A6E8-258AD8476CE5}") = "android-app.Packaging", "an
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "android-app.NativeActivity", "android-app\android-app.NativeActivity\android-app.NativeActivity.vcxproj", "{4036FDDD-068D-4246-8A6C-5EDD1C3E0AEF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxproj", "{1C0D346F-012F-422C-A5DE-20BD7335E529}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3dx_matrix", "d3dx_matrix\d3dx_matrix.vcxproj", "{271A76E9-1678-4CC9-85C5-678C4232D0F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -92,6 +96,30 @@ Global
 		{4036FDDD-068D-4246-8A6C-5EDD1C3E0AEF}.Release|x64.Build.0 = Release|x64
 		{4036FDDD-068D-4246-8A6C-5EDD1C3E0AEF}.Release|x86.ActiveCfg = Release|x86
 		{4036FDDD-068D-4246-8A6C-5EDD1C3E0AEF}.Release|x86.Build.0 = Release|x86
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Debug|ARM.ActiveCfg = Debug|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Debug|x64.ActiveCfg = Debug|x64
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Debug|x64.Build.0 = Debug|x64
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Debug|x86.ActiveCfg = Debug|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Debug|x86.Build.0 = Debug|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Release|ARM.ActiveCfg = Release|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Release|ARM64.ActiveCfg = Release|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Release|x64.ActiveCfg = Release|x64
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Release|x64.Build.0 = Release|x64
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Release|x86.ActiveCfg = Release|Win32
+		{1C0D346F-012F-422C-A5DE-20BD7335E529}.Release|x86.Build.0 = Release|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Debug|ARM.ActiveCfg = Debug|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Debug|x64.ActiveCfg = Debug|x64
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Debug|x64.Build.0 = Debug|x64
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Debug|x86.ActiveCfg = Debug|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Debug|x86.Build.0 = Debug|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Release|ARM.ActiveCfg = Release|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Release|ARM64.ActiveCfg = Release|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Release|x64.ActiveCfg = Release|x64
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Release|x64.Build.0 = Release|x64
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Release|x86.ActiveCfg = Release|Win32
+		{271A76E9-1678-4CC9-85C5-678C4232D0F1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
