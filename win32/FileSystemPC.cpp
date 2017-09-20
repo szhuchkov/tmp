@@ -39,7 +39,10 @@ void FileSystemPC::Shutdown()
 
 char* FileSystemPC::LoadFile(const char* name, size_t* size)
 {
-	HANDLE hf = CreateFile(name, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	char currName[1024];
+	GetCurrName(currName, name);
+
+	HANDLE hf = CreateFile(currName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if (hf == INVALID_HANDLE_VALUE)
 		return false;
 
@@ -59,7 +62,10 @@ char* FileSystemPC::LoadFile(const char* name, size_t* size)
 
 bool FileSystemPC::SaveFile(const char* name, const void* data, size_t size)
 {
-	HANDLE hf = CreateFile(name, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
+	char currName[1024];
+	GetCurrName(currName, name);
+
+	HANDLE hf = CreateFile(currName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
 	if (hf == INVALID_HANDLE_VALUE)
 		return false;
 
@@ -76,7 +82,10 @@ bool FileSystemPC::SaveFile(const char* name, const void* data, size_t size)
 
 bool FileSystemPC::RemoveFile(const char* name)
 {
-	if (!DeleteFile(name))
+	char currName[1024];
+	GetCurrName(currName, name);
+
+	if (!DeleteFile(currName))
 	{
 		LogPrintf("DeleteFile() failed for '%s'", name);
 		return false;
@@ -88,16 +97,36 @@ bool FileSystemPC::RemoveFile(const char* name)
 bool FileSystemPC::CreateDir(const char* name)
 {
 	char fullName[1024];
-	sprintf(fullName, "%s\\%s", m_rootDir, name);
 
-	if (!CreateDirectory(fullName, NULL))
+	std::vector<std::string> treePath;
+	const char* last = name;
+	for(const char* p = name; ; p++)
 	{
-		DWORD err = GetLastError();
-		if (err == ERROR_ALREADY_EXISTS)
-			return true;
+		if (*p == '/' || *p == '\\' || *p == 0)
+		{
+			treePath.resize(treePath.size() + 1);
+			std::string& back = treePath.back();
+			back.assign(last, p);
 
-		LogPrintf("CreateDirectory() failed for '%s'", name);
-		return false;
+			if (!*p)
+				break;
+		}
+	}
+
+	size_t treeSize = treePath.size();
+	for(size_t i = 0; i < treeSize; i++)
+	{
+		GetFullName(fullName, treePath[i].c_str());
+
+		if (!CreateDirectory(fullName, NULL))
+		{
+			DWORD err = GetLastError();
+			if (err != ERROR_ALREADY_EXISTS)
+			{
+				LogPrintf("CreateDirectory() failed for '%s'", name);
+				return false;
+			}
+		}
 	}
 
 	return true;
@@ -107,7 +136,7 @@ bool FileSystemPC::CreateDir(const char* name)
 bool FileSystemPC::ChangeDir(const char* name)
 {
 	char fullName[1024];
-	sprintf(fullName, "%s\\%s", m_rootDir, name);
+	GetFullName(fullName, name);
 
 	if (!SetCurrentDirectory(fullName))
 	{
@@ -125,7 +154,7 @@ bool FileSystemPC::ChangeDir(const char* name)
 bool FileSystemPC::RemoveDir(const char* name)
 {
 	char fullName[1024];
-	sprintf(fullName, "%s\\%s", m_rootDir, name);
+	GetFullName(fullName, name);
 
 	if (!RemoveDirectory(fullName))
 	{
@@ -150,4 +179,29 @@ const char* FileSystemPC::GetRootDir()
 const char* FileSystemPC::GetCurDir()
 {
 	return m_curDir;
+}
+
+
+void FileSystemPC::GetFullName(char* dst, const char* name)
+{
+	sprintf(dst, "%s\\%s", m_rootDir, name);
+	UpdatePath(dst);
+}
+
+
+void FileSystemPC::GetCurrName(char* dst, const char* name)
+{
+	sprintf(dst, "%s\\%s", m_curDir, name);
+	UpdatePath(dst);
+}
+
+
+void FileSystemPC::UpdatePath(char* path)
+{
+	while(*path)
+	{
+		if (*path == '/')
+			*path = '\\';
+		path++;
+	}
 }

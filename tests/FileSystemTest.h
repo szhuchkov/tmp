@@ -22,7 +22,7 @@ public:
 
 	virtual bool Run()
 	{
-		static const char* testDirName = "FileSystemTest";
+		static const char* testDirName = "FileSystemTest/TestDir/InsideDir";
 		static const char* testFileName = "FileSystemTest.txt";
 		static const char* write = "Test message";
 
@@ -46,10 +46,24 @@ public:
 		if (!FS_DeleteFile(testFileName))
 			return false;
 
+		// can't delete as the dir is current
+		if (FS_DeleteDir(testDirName))
+			return false;
+
 		if (!FS_ChangeDir(nullptr))
 			return false;
 
 		if (!FS_DeleteDir(testDirName))
+			return false;
+
+		// can't delete - not empty
+		if (FS_DeleteDir("FileSystemTest"))
+			return false;
+
+		if (!FS_DeleteDir("FileSystemTest/TestDir"))
+			return false;
+
+		if (!FS_DeleteDir("FileSystemTest"))
 			return false;
 
 		return res;

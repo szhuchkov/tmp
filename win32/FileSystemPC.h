@@ -30,6 +30,10 @@ private:
 	FileSystemPC();
 	~FileSystemPC();
 
+	void GetFullName(char* dst, const char* name);
+	void GetCurrName(char* dst, const char* name);
+	void UpdatePath(char* path);
+
 private:
 	char m_rootDir[1024] = {'.', 0};
 	char m_curDir[1024] = {'.', 0};
