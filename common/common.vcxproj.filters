@@ -12,6 +12,7 @@
       <Filter>math3d</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleVar.h" />
+    <ClInclude Include="ConfigFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -23,6 +24,7 @@
       <Filter>math3d</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleVar.cpp" />
+    <ClCompile Include="ConfigFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">

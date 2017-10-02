@@ -18,9 +18,9 @@ public:
 		const char* var2 = "__testVar2";
 		const char* var3 = "__testVar3";
 
-		CVar_Add(var1, 13);
-		CVar_Add(var2, 13.666f);
-		CVar_Add(var3, "TEST");
+		CVar_Set(var1, 13);
+		CVar_Set(var2, 13.666f);
+		CVar_Set(var3, "TEST");
 
 		if (CVar_Get<int>(var1) != 13)
 			return false;

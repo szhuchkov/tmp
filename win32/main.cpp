@@ -2,8 +2,9 @@
 #include "Engine.h"
 #include "..\tests\TestScene.h"
 #include "..\tests\MathTest.h"
-#include "..\tests\CVarTest.h"
 #include "..\tests\FileSystemTest.h"
+#include "..\tests\CVarTest.h"
+#include "..\tests\ConfigFileTest.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -17,6 +18,10 @@ static bool			cl_quit = false;
 
 static int RunTests()
 {
+	FileSystemTest fileSystemTest;
+	if (!fileSystemTest.Run())
+		return -1;
+
 	MathTest mathTest;
 	if (!mathTest.Run())
 		return -1;
@@ -25,8 +30,8 @@ static int RunTests()
 	if (!cvarTest.Run())
 		return -1;
 
-	FileSystemTest fileSystemTest;
-	if (!fileSystemTest.Run())
+	ConfigFileTest configFileTest;
+	if (!configFileTest.Run())
 		return -1;
 
 	return 0;
@@ -50,9 +55,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 	cl_hInstance = hInstance;
 
 	// init some vars
-	CVar_Add("ScreenWidth", 1280);
-	CVar_Add("ScreenHeight", 720);
-	CVar_Add("Fullscreen", 0);
+	CVar_Set("ScreenWidth", 1280);
+	CVar_Set("ScreenHeight", 720);
+	CVar_Set("Fullscreen", 0);
 
 	// get screen size from the config
 	int width = CVar_Get<int>("ScreenWidth");

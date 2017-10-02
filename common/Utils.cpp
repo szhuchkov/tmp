@@ -4,6 +4,39 @@
 #include "ConsoleVar.h"
 
 
+const char* GetLine(const char* context, char* buffer)
+{
+	while (*context)
+	{
+		if (*context == '\n' || *context == '\r')
+		{
+			context++;
+			break;
+		}
+
+		*buffer++ = *context++;
+	}
+	return *context ? context : nullptr;
+}
+
+
+const char* GetLine(const char* context, std::string& buffer)
+{
+	buffer.clear();
+	while (*context)
+	{
+		if (*context == '\n' || *context == '\r')
+		{
+			context++;
+			break;
+		}
+
+		buffer.push_back(*context++);
+	}
+	return *context ? context : nullptr;
+}
+
+
 char* FS_LoadFile(const char* name, size_t* size)
 {
 	char* res = FileSystem::GetInstance()->LoadFile(name, size);
@@ -63,24 +96,6 @@ bool FS_ChangeDir(const char* name)
 }
 
 
-void CVar_Add(const char* name, int value)
-{
-	new ConsoleVar(name, value, true);
-}
-
-
-void CVar_Add(const char* name, float value)
-{
-	new ConsoleVar(name, value, true);
-}
-
-
-void CVar_Add(const char* name, const char* value)
-{
-	new ConsoleVar(name, value, true);
-}
-
-
 void CVar_Clear()
 {
 	// enum dynamic vars
@@ -122,7 +137,7 @@ float CVar_Get(const char* name)
 	if (var != nullptr)
 		return var->GetFloat();
 
-	return 0;
+	return 0.0f;
 }
 
 
@@ -133,7 +148,7 @@ const char* CVar_Get(const char* name)
 	if (var != nullptr)
 		return var->GetString();
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -145,4 +160,48 @@ std::string CVar_Get(const char* name)
 		return std::string(var->GetString());
 
 	return std::string("");
+}
+
+
+void CVar_Set(const char* name, int value)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var)
+	{
+		var->SetValue(value);
+	}
+	else
+	{
+		new ConsoleVar(name, value);
+	}
+}
+
+
+
+void CVar_Set(const char* name, float value)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var)
+	{
+		var->SetValue(value);
+	}
+	else
+	{
+		new ConsoleVar(name, value);
+	}
+}
+
+
+
+void CVar_Set(const char* name, const char* value)
+{
+	auto* var = ConsoleVar::GetVarByName(name);
+	if (var)
+	{
+		var->SetValue(value);
+	}
+	else
+	{
+		new ConsoleVar(name, value);
+	}
 }

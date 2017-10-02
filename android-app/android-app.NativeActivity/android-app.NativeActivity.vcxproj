@@ -216,6 +216,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\ConfigFile.h" />
     <ClInclude Include="..\..\common\ConsoleVar.h" />
     <ClInclude Include="..\..\common\Engine.h" />
     <ClInclude Include="..\..\common\math3d.h" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Precompiled.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\ConfigFile.cpp" />
     <ClCompile Include="..\..\common\ConsoleVar.cpp" />
     <ClCompile Include="..\..\common\Engine.cpp" />
     <ClCompile Include="..\..\common\math3d.cpp" />

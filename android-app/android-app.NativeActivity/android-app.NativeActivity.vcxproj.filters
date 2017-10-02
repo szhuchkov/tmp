@@ -29,6 +29,9 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="FileSystemAndroid.h" />
+    <ClInclude Include="..\..\common\ConfigFile.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -53,6 +56,9 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="FileSystemAndroid.cpp" />
+    <ClCompile Include="..\..\common\ConfigFile.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

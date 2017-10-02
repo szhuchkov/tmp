@@ -12,6 +12,15 @@
 
 //-----------------------------------------------------------------------------
 //
+//	strings
+//
+//-----------------------------------------------------------------------------
+const char* GetLine(const char* context, char* buffer);
+const char* GetLine(const char* context, std::string& buffer);
+
+
+//-----------------------------------------------------------------------------
+//
 //	logger
 //
 //-----------------------------------------------------------------------------
@@ -29,7 +38,6 @@ void _LogPrintf(const char* file, int line, const char* format, ...);
 char* FS_LoadFile(const char* name, size_t* size);
 bool FS_SaveFile(const char* name, const void* data, size_t size);
 bool FS_DeleteFile(const char* name);
-
 
 
 //-----------------------------------------------------------------------------
@@ -51,9 +59,9 @@ const char* FS_GetRootDir();
 //
 //-----------------------------------------------------------------------------
 
-void CVar_Add(const char* name, int value);
-void CVar_Add(const char* name, float value);
-void CVar_Add(const char* name, const char* value);
+void CVar_Set(const char* name, int value);
+void CVar_Set(const char* name, float value);
+void CVar_Set(const char* name, const char* value);
 void CVar_Clear();
 
 

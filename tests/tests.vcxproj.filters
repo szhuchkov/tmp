@@ -6,6 +6,7 @@
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="MathTest.h" />
     <ClInclude Include="CVarTest.h" />
+    <ClInclude Include="ConfigFileTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestMain.cpp" />
