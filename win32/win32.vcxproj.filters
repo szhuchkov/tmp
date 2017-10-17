@@ -25,6 +25,16 @@
     <ClCompile Include="..\common\ConfigFile.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\InputManager.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\InputDeviceKeyboard.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\InputDeviceMouse.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManagerPC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -59,6 +69,16 @@
     </ClInclude>
     <ClInclude Include="FileSystemPC.h" />
     <ClInclude Include="..\common\ConfigFile.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\InputManager.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManagerPC.h" />
+    <ClInclude Include="..\common\InputDeviceKeyboard.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\InputDeviceMouse.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

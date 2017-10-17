@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Engine.h"
+#include "InputManagerPC.h"
 #include "..\tests\TestScene.h"
 #include "..\tests\MathTest.h"
 #include "..\tests\FileSystemTest.h"
@@ -42,6 +43,38 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 {
 	switch (msg)
 	{
+	case WM_KEYDOWN:
+		InputManagerPC::GetInstance()->OnKeyDown(LOWORD(lParam));
+		break;
+	case WM_KEYUP:
+		InputManagerPC::GetInstance()->OnKeyUp(LOWORD(lParam));
+		break;
+	case WM_MOUSEMOVE:
+		{
+			short x = LOWORD(lParam);
+			short y = HIWORD(lParam);
+			if (x >= 0 && y >= 0)
+				InputManagerPC::GetInstance()->OnMouseMove(LOWORD(lParam), HIWORD(lParam));
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		InputManagerPC::GetInstance()->OnMouseDown(0);
+		break;
+	case WM_LBUTTONUP:
+		InputManagerPC::GetInstance()->OnMouseUp(0);
+		break;
+	case WM_RBUTTONDOWN:
+		InputManagerPC::GetInstance()->OnMouseDown(1);
+		break;
+	case WM_RBUTTONUP:
+		InputManagerPC::GetInstance()->OnMouseUp(1);
+		break;
+	case WM_MBUTTONDOWN:
+		InputManagerPC::GetInstance()->OnMouseDown(2);
+		break;
+	case WM_MBUTTONUP:
+		InputManagerPC::GetInstance()->OnMouseUp(2);
+		break;
 	case WM_CLOSE:
 		cl_quit = true;
 		return 0;
@@ -135,6 +168,18 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 
 		if (!Engine::GetInstance()->Update())
 			break;
+
+		auto mouseDeviceID = InputManager::GetInstance()->FindDevicesByClass(INPUT_DEVICE_CLASS_MOUSE).front()->GetDeviceID();
+
+		for(size_t i = 0; i < InputManager::GetInstance()->GetNumEvents(); i++)
+		{
+			const auto& e = InputManager::GetInstance()->GetEvent(i);
+			if (e.type == INPUT_EVENT_TYPE_TOUCH && e.device == mouseDeviceID)
+			{
+				//if (e.data.touch.x > 400 && e.data.touch.y > 400)
+				//	cl_quit = true;
+			}
+		}
 
 		// render test scene
 		constexpr float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };

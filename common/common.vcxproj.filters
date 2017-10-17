@@ -13,6 +13,9 @@
     </ClInclude>
     <ClInclude Include="ConsoleVar.h" />
     <ClInclude Include="ConfigFile.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputDeviceMouse.h" />
+    <ClInclude Include="InputDeviceKeyboard.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -25,6 +28,9 @@
     </ClCompile>
     <ClCompile Include="ConsoleVar.cpp" />
     <ClCompile Include="ConfigFile.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InputDeviceMouse.cpp" />
+    <ClCompile Include="InputDeviceKeyboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">

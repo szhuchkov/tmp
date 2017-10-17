@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "FileSystem.h"
 #include "RenderDevice.h"
+#include "InputManager.h"
 
 
 Engine::Engine()
@@ -30,12 +31,20 @@ bool Engine::Init(void* window, int width, int height, bool fullscreen)
 		return false;
 	}
 
+	// init input manager
+	if (!InputManager::GetInstance()->Init())
+	{
+		LogPrintf("InputManager init failed");
+		return false;
+	}
+
 	return true;
 }
 
 
 void Engine::Shutdown()
 {
+	InputManager::GetInstance()->Shutdown();
 	RenderDevice::GetInstance()->Shutdown();
 	FileSystem::GetInstance()->Shutdown();
 }
@@ -45,6 +54,9 @@ bool Engine::Update()
 {
 	if (!RenderDevice::GetInstance()->Update())
 		return false;
+
+	InputManager::GetInstance()->ClearEvents();
+	InputManager::GetInstance()->Update();
 
 	return true;
 }
