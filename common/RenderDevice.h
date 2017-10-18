@@ -83,6 +83,7 @@ public:
 	bool Init(void* window, int width, int height, bool fullscreen);
 	void Shutdown();
 	bool Update();
+	bool Resize(int width, int height);
 
 	bool BeginFrame();
 	void EndFrame();

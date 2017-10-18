@@ -12,6 +12,7 @@ public:
 
 	bool Init(void* window, int width, int height, bool fullscreen);
 	void Shutdown();
+	bool Resize(int width, int height);
 	bool Update();
 	void Render();
 

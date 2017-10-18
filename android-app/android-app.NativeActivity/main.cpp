@@ -18,6 +18,8 @@
 
 #include "Engine.h"
 #include "InputManagerAndroid.h"
+#include "RenderDevice.h"
+#include "..\..\tests\TestScene.h"
 
 
 #define LOG_INPUT_EVENTS	1
@@ -67,16 +69,34 @@ struct engine {
 * Initialize an EGL context for the current display.
 */
 static int engine_init_display(struct engine* engine) {
+	LogPrintf(">>> Init...");
+
 	int width = ANativeWindow_getWidth(engine->app->window);
 	int height = ANativeWindow_getHeight(engine->app->window);
 
 	if (!Engine::GetInstance()->Init(engine->app->window, width, height, false))
 		return -1;
 
+	if (!TestScene::GetInstance()->Init())
+		return -1;
+
 	return 0;
 }
 
 
+/**
+* Tear down the EGL context currently associated with the display.
+*/
+static void engine_term_display(struct engine* engine) {
+	LogPrintf(">>> Shutdown...");
+	TestScene::GetInstance()->Shutdown();
+	Engine::GetInstance()->Shutdown();
+}
+
+
+/**
+* 
+*/
 static int engine_update_frame(struct engine* engine) {
 	if (!Engine::GetInstance()->Update())
 		return -1;
@@ -102,18 +122,19 @@ static int engine_update_frame(struct engine* engine) {
 	return 0;
 }
 
+
 /**
 * Just the current frame in the display.
 */
 static void engine_draw_frame(struct engine* engine) {
-	Engine::GetInstance()->Render();
-}
-
-/**
-* Tear down the EGL context currently associated with the display.
-*/
-static void engine_term_display(struct engine* engine) {
-	Engine::GetInstance()->Shutdown();
+	if (RenderDevice::GetInstance()->BeginFrame())
+	{
+		constexpr float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
+		RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, 1.0f, 0);
+		TestScene::GetInstance()->Render();
+		RenderDevice::GetInstance()->EndFrame();
+	}
+	//Engine::GetInstance()->Render();
 }
 
 
@@ -329,27 +350,31 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 	struct engine* engine = (struct engine*)app->userData;
 	switch (cmd) {
 	case APP_CMD_SAVE_STATE:
+		LogPrintf(">>> APP_CMD_SAVE_STATE");
 		break;
 	case APP_CMD_INIT_WINDOW:
+		LogPrintf(">>> APP_CMD_INIT_WINDOW");
 		// The window is being shown, get it ready.
 		if (engine->app->window != NULL) {
-			if (engine_init_display(engine))
+			if (!engine->initialized)
 			{
-				engine->quit = 1;
-			}
-			else
-			{
-				engine->initialized = 1;
-				engine_draw_frame(engine);
+				if (engine_init_display(engine))
+				{
+					engine->quit = 1;
+				}
+				else
+				{
+					engine->initialized = 1;
+					engine_draw_frame(engine);
+				}
 			}
 		}
 		break;
 	case APP_CMD_TERM_WINDOW:
-		// The window is being hidden or closed, clean it up.
-		engine_term_display(engine);
-		engine->initialized = 0;
+		LogPrintf(">>> APP_CMD_TERM_WINDOW");
 		break;
 	case APP_CMD_GAINED_FOCUS:
+		LogPrintf(">>> APP_CMD_GAINED_FOCUS");
 		// When our app gains focus, we start monitoring the accelerometer.
 		if (engine->accelerometerSensor != NULL) {
 			ASensorEventQueue_enableSensor(engine->sensorEventQueue,
@@ -361,6 +386,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		}
 		break;
 	case APP_CMD_LOST_FOCUS:
+		LogPrintf(">>> APP_CMD_LOST_FOCUS");
 		// When our app loses focus, we stop monitoring the accelerometer.
 		// This is to avoid consuming battery while not being used.
 		if (engine->accelerometerSensor != NULL) {
@@ -370,6 +396,42 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		// Also stop animating.
 		engine->animating = 0;
 		engine_draw_frame(engine);
+		break;
+	case APP_CMD_WINDOW_RESIZED:
+		{
+			LogPrintf(">>> APP_CMD_WINDOW_RESIZED");
+			int width = ANativeWindow_getWidth(engine->app->window);
+			int height = ANativeWindow_getHeight(engine->app->window);
+			Engine::GetInstance()->Resize(width, height);
+		}
+		break;
+	case APP_CMD_CONFIG_CHANGED:
+		{
+			LogPrintf(">>> APP_CMD_CONFIG_CHANGED");
+		}
+		break;
+	case APP_CMD_START:
+		LogPrintf(">>> APP_CMD_START");
+		break;
+	case APP_CMD_RESUME:
+		LogPrintf(">>> APP_CMD_RESUME");
+		break;
+	case APP_CMD_PAUSE:
+		LogPrintf(">>> APP_CMD_PAUSE");
+		break;
+	case APP_CMD_STOP:
+		LogPrintf(">>> APP_CMD_STOP");
+		break;
+	case APP_CMD_DESTROY:
+		LogPrintf(">>> APP_CMD_DESTROY");
+		engine_term_display(engine);
+		engine->initialized = 0;
+		break;
+	case APP_CMD_INPUT_CHANGED:
+		LogPrintf(">>> APP_CMD_INPUT_CHANGED");
+		break;
+	default:
+		LogPrintf(">>> APP_CMD: %d", cmd);
 		break;
 	}
 }
@@ -435,11 +497,11 @@ void android_main(struct android_app* state) {
 			}
 
 			// Check if we are exiting.
-			if (state->destroyRequested != 0) {
-				engine.initialized = 0;
-				engine_term_display(&engine);
-				return;
-			}
+			//if (state->destroyRequested != 0) {
+			//	engine.initialized = 0;
+			//	engine_term_display(&engine);
+			//	return;
+			//}
 		}
 
 		if (engine.initialized && engine.animating) {

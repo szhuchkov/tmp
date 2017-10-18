@@ -22,14 +22,6 @@ bool OGLDriverGLES::Init(void* pwnd, int width, int height, bool fullscreen)
 {
 	ANativeWindow* window = (ANativeWindow*)pwnd;
 
-	const EGLint attribs[] = {
-		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-		EGL_BLUE_SIZE, 8,
-		EGL_GREEN_SIZE, 8,
-		EGL_RED_SIZE, 8,
-		EGL_NONE,
-	};
-
 	m_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 	if (m_display == EGL_NO_DISPLAY)
 	{
@@ -43,9 +35,21 @@ bool OGLDriverGLES::Init(void* pwnd, int width, int height, bool fullscreen)
 		return false;
 	}
 
+	const EGLint configAttribs[] = {
+		EGL_LEVEL, 0,
+		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+		EGL_BLUE_SIZE, 8,
+		EGL_GREEN_SIZE, 8,
+		EGL_RED_SIZE, 8,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+		EGL_NONE,
+	};
+
 	EGLConfig config;
 	EGLint numConfigs;
-	eglChooseConfig(m_display, attribs, &config, 1, &numConfigs);
+	eglChooseConfig(m_display, configAttribs, &config, 1, &numConfigs);
+
+	LogPrintf("Num EGL configs: %d", numConfigs);
 
 	EGLint format;
 	eglGetConfigAttrib(m_display, config, EGL_NATIVE_VISUAL_ID, &format);
@@ -59,7 +63,12 @@ bool OGLDriverGLES::Init(void* pwnd, int width, int height, bool fullscreen)
 		return false;
 	}
 
-	m_context = eglCreateContext(m_display, config, NULL, NULL);
+	GLint contextAttribs[] = {
+		EGL_CONTEXT_CLIENT_VERSION, 2,
+		EGL_NONE,
+	};
+
+	m_context = eglCreateContext(m_display, config, NULL, contextAttribs);
 	if (m_context == EGL_NO_CONTEXT)
 	{
 		LogPrintf("eglCreateContext() failed");
@@ -75,6 +84,10 @@ bool OGLDriverGLES::Init(void* pwnd, int width, int height, bool fullscreen)
 	eglQuerySurface(m_display, m_surface, EGL_WIDTH, &m_width);
 	eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &m_height);
 
+	LogPrintf("GL_VENDOR = %s", glGetString(GL_VENDOR));
+	LogPrintf("GL_RENDERER = %s", glGetString(GL_RENDERER));
+	LogPrintf("GL_VERSION = %s", glGetString(GL_VERSION));
+	LogPrintf("GL_SHADING_LANGUAGE_VERSION = %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	return true;
 }
 

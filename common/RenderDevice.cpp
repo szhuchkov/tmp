@@ -123,6 +123,13 @@ bool RenderDevice::Update()
 }
 
 
+bool RenderDevice::Resize(int width, int height)
+{
+	glViewport(0, 0, width, height);
+	return true;
+}
+
+
 bool RenderDevice::BeginFrame()
 {
 	return true;

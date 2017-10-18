@@ -50,6 +50,17 @@ void Engine::Shutdown()
 }
 
 
+bool Engine::Resize(int width, int height)
+{
+	LogPrintf(">>> Resize(%d, %d)", width, height);
+
+	if (!RenderDevice::GetInstance()->Resize(width, height))
+		return false;
+
+	return true;
+}
+
+
 bool Engine::Update()
 {
 	if (!RenderDevice::GetInstance()->Update())

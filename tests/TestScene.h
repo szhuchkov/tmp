@@ -18,7 +18,7 @@ private:
 	Shader*			m_shader = nullptr;
 
 	static constexpr char* g_TestVS = R"(
-#version 130
+#version 100
 
 attribute vec3 aPos;
 attribute vec4 aColor;
@@ -33,9 +33,9 @@ void main()
 )";
 
 	static constexpr char* g_TestFS = R"(
-#version 130
+#version 100
 
-varying vec4 vColor;
+varying lowp vec4 vColor;
 
 void main()
 {
