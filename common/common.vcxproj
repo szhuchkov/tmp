@@ -127,6 +127,7 @@
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="InputDeviceKeyboard.h" />
     <ClInclude Include="InputDeviceMouse.h" />
+    <ClInclude Include="InputDeviceTouch.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="math3d.h" />
     <ClInclude Include="OGLDriver.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="InputDeviceKeyboard.cpp" />
     <ClCompile Include="InputDeviceMouse.cpp" />
+    <ClCompile Include="InputDeviceTouch.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="math3d.cpp" />
     <ClCompile Include="pch.cpp" />

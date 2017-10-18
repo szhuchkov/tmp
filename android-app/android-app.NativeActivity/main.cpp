@@ -17,6 +17,17 @@
 
 
 #include "Engine.h"
+#include "InputManagerAndroid.h"
+
+
+#define LOG_INPUT_EVENTS	1
+
+
+#if LOG_INPUT_EVENTS
+#define LogInput LogPrintf
+#else
+#define LogInput	
+#endif
 
 
 void _LogPrintf(const char* file, int line, const char* format, ...)
@@ -46,7 +57,9 @@ struct engine {
 	const ASensor* accelerometerSensor;
 	ASensorEventQueue* sensorEventQueue;
 
+	int initialized;
 	int animating;
+	int quit;
 };
 
 
@@ -59,6 +72,32 @@ static int engine_init_display(struct engine* engine) {
 
 	if (!Engine::GetInstance()->Init(engine->app->window, width, height, false))
 		return -1;
+
+	return 0;
+}
+
+
+static int engine_update_frame(struct engine* engine) {
+	if (!Engine::GetInstance()->Update())
+		return -1;
+
+	size_t numEvents = InputManager::GetInstance()->GetNumEvents();
+	if (numEvents)
+		LogPrintf(">>> Num Events = %d", numEvents);
+
+	for(size_t i = 0; i < numEvents; i++)
+	{
+		const auto& event = InputManager::GetInstance()->GetEvent(i);
+		if (event.type == INPUT_EVENT_TYPE_BUTTON && event.index == AKEYCODE_BACK && !event.data.button.state)
+		{
+			LogPrintf(">>> EXIT!!!");
+			engine->quit = 1;
+		}
+		else
+		{
+			LogPrintf(">>> ev: device = %d, type = %d, index = %d, %d", event.device, event.type, event.index, event.data.button.state);
+		}
+	}
 
 	return 0;
 }
@@ -77,16 +116,209 @@ static void engine_term_display(struct engine* engine) {
 	Engine::GetInstance()->Shutdown();
 }
 
+
 /**
 * Process the next input event.
 */
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
-	if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+	int type = AInputEvent_getType(event);
+	int deviceId = AInputEvent_getDeviceId(event);
+	int source = AInputEvent_getSource(event);
+	int sourceClass = source & AINPUT_SOURCE_CLASS_MASK;
+
+	if (type == AINPUT_EVENT_TYPE_KEY) {
+		int action = AKeyEvent_getAction(event);
+		switch(source) {
+		case AINPUT_SOURCE_KEYBOARD:
+			{
+				int code = AKeyEvent_getKeyCode(event);
+				int scanCode = AKeyEvent_getScanCode(event);
+				if (action == AKEY_EVENT_ACTION_DOWN)
+					InputManagerAndroid::GetInstance()->OnKeyDown(code, scanCode);
+				else if (action == AKEY_EVENT_ACTION_UP)
+					InputManagerAndroid::GetInstance()->OnKeyUp(code, scanCode);
+			}
+			break;
+		case AINPUT_SOURCE_DPAD:
+		case AINPUT_SOURCE_GAMEPAD:
+		case AINPUT_SOURCE_JOYSTICK:
+		case AINPUT_SOURCE_MOUSE:
+			{
+				int code = AKeyEvent_getKeyCode(event);
+				int scanCode = AKeyEvent_getScanCode(event);
+				if (action == AKEY_EVENT_ACTION_DOWN)
+					InputManagerAndroid::GetInstance()->OnButtonDown(deviceId, code, scanCode);
+				else if (action == AKEY_EVENT_ACTION_UP)
+					InputManagerAndroid::GetInstance()->OnButtonUp(deviceId, code, scanCode);
+			}
+			break;
+		};
+	}
+	else if (type == AINPUT_EVENT_TYPE_MOTION) {
+		switch(sourceClass){
+		case AINPUT_SOURCE_CLASS_POINTER:
+			{
+				int numPointers = AMotionEvent_getPointerCount(event);
+				int actionMasked = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+				int actionIndex = (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+				if (actionMasked == AMOTION_EVENT_ACTION_MOVE) {
+					for (int i = 0; i < numPointers; i++) {
+						int pointer = AMotionEvent_getPointerId(event, i);
+						int x = AMotionEvent_getX(event, i);
+						int y = AMotionEvent_getY(event, i);
+						InputManagerAndroid::GetInstance()->OnPointerMove(pointer, x, y);
+					}
+				}
+				else if (actionMasked == AMOTION_EVENT_ACTION_POINTER_DOWN || actionMasked == AMOTION_EVENT_ACTION_DOWN) {
+					int pointer = AMotionEvent_getPointerId(event, actionIndex);
+					int x = AMotionEvent_getX(event, pointer);
+					int y = AMotionEvent_getY(event, pointer);
+					InputManagerAndroid::GetInstance()->OnPointerDown(pointer, x, y);
+				}
+				else if (actionMasked == AMOTION_EVENT_ACTION_POINTER_UP || actionMasked == AMOTION_EVENT_ACTION_UP) {
+					int pointer = AMotionEvent_getPointerId(event, actionIndex);
+					int x = AMotionEvent_getX(event, pointer);
+					int y = AMotionEvent_getY(event, pointer);
+					InputManagerAndroid::GetInstance()->OnPointerUp(pointer, x, y);
+				}
+			}
+			break;
+		case AINPUT_SOURCE_CLASS_JOYSTICK:
+			{
+				int actionMasked = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+				int actionIndex = (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+				int pointer = AMotionEvent_getPointerId(event, actionIndex);
+				float x = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_X, pointer);
+				float y = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Y, pointer);
+				float rx = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RX, pointer);
+				float ry = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RY, pointer);
+			}
+			break;
+		}
+	}
+
+#if LOG_INPUT_EVENTS
+	if (type == AINPUT_EVENT_TYPE_MOTION) {
+		int action = AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+		int pointer = (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+		int numPointers = AMotionEvent_getPointerCount(event);
+		std::string pointerIdString = "";
+		for(int pointerIndex = 0; pointerIndex < numPointers; pointerIndex++) {
+			char buf[512] = { 0 };
+			sprintf(buf, "%d", AMotionEvent_getPointerId(event, pointerIndex));
+			pointerIdString += buf;
+			if (pointerIndex != numPointers - 1)
+				pointerIdString += ',';
+		}
+		const char* actionText = "UNKNOWN";
+		switch(action){
+		case AMOTION_EVENT_ACTION_DOWN:
+			actionText = "AMOTION_EVENT_ACTION_DOWN";
+			break;
+		case AMOTION_EVENT_ACTION_UP:
+			actionText = "AMOTION_EVENT_ACTION_UP";
+			break;
+		case AMOTION_EVENT_ACTION_MOVE:
+			actionText = "AMOTION_EVENT_ACTION_MOVE";
+			break;
+		case AMOTION_EVENT_ACTION_CANCEL:
+			actionText = "AMOTION_EVENT_ACTION_CANCEL";
+			break;
+		case AMOTION_EVENT_ACTION_OUTSIDE:
+			actionText = "AMOTION_EVENT_ACTION_OUTSIDE";
+			break;
+		case AMOTION_EVENT_ACTION_POINTER_DOWN:
+			actionText = "AMOTION_EVENT_ACTION_POINTER_DOWN";
+			break;
+		case AMOTION_EVENT_ACTION_POINTER_UP:
+			actionText = "AMOTION_EVENT_ACTION_POINTER_UP";
+			break;
+		case AMOTION_EVENT_ACTION_HOVER_MOVE:
+			actionText = "AMOTION_EVENT_ACTION_HOVER_MOVE";
+			break;
+		case AMOTION_EVENT_ACTION_SCROLL:
+			actionText = "AMOTION_EVENT_ACTION_SCROLL";
+			break;
+		case AMOTION_EVENT_ACTION_HOVER_ENTER:
+			actionText = "AMOTION_EVENT_ACTION_HOVER_ENTER";
+			break;
+		case AMOTION_EVENT_ACTION_HOVER_EXIT:
+			actionText = "AMOTION_EVENT_ACTION_HOVER_EXIT";
+			break;
+		}
+		const char* sourceText = "UNKNOWN";
+		switch (source)
+		{
+		case AINPUT_SOURCE_KEYBOARD:
+			sourceText = "AINPUT_SOURCE_KEYBOARD";
+			break;
+		case AINPUT_SOURCE_DPAD:
+			sourceText = "AINPUT_SOURCE_DPAD";
+			break;
+		case AINPUT_SOURCE_GAMEPAD:
+			sourceText = "AINPUT_SOURCE_GAMEPAD";
+			break;
+		case AINPUT_SOURCE_TOUCHSCREEN:
+			sourceText = "AINPUT_SOURCE_TOUCHSCREEN";
+			break;
+		case AINPUT_SOURCE_MOUSE:
+			sourceText = "AINPUT_SOURCE_MOUSE";
+			break;
+		case AINPUT_SOURCE_STYLUS:
+			sourceText = "AINPUT_SOURCE_STYLUS";
+			break;
+		case AINPUT_SOURCE_TRACKBALL:
+			sourceText = "AINPUT_SOURCE_TRACKBALL";
+			break;
+		case AINPUT_SOURCE_TOUCHPAD:
+			sourceText = "AINPUT_SOURCE_TOUCHPAD";
+			break;
+		case AINPUT_SOURCE_TOUCH_NAVIGATION:
+			sourceText = "AINPUT_SOURCE_TOUCH_NAVIGATION";
+			break;
+		case AINPUT_SOURCE_JOYSTICK:
+			sourceText = "AINPUT_SOURCE_JOYSTICK";
+		default:
+			break;
+		}
+		const char* sourceClassText = "UNKNOWN";
+		switch(sourceClass) {
+		case AINPUT_SOURCE_CLASS_NONE:
+			sourceClassText = "AINPUT_SOURCE_CLASS_NONE";
+			break;
+		case AINPUT_SOURCE_CLASS_BUTTON:
+			sourceClassText = "AINPUT_SOURCE_CLASS_BUTTON";
+			break;
+		case AINPUT_SOURCE_CLASS_POINTER:
+			sourceClassText = "AINPUT_SOURCE_CLASS_POINTER";
+			break;
+		case AINPUT_SOURCE_CLASS_NAVIGATION:
+			sourceClassText = "AINPUT_SOURCE_CLASS_NAVIGATION";
+			break;
+		case AINPUT_SOURCE_CLASS_POSITION:
+			sourceClassText = "AINPUT_SOURCE_CLASS_POSITION";
+			break;
+		case AINPUT_SOURCE_CLASS_JOYSTICK:
+			sourceClassText = "AINPUT_SOURCE_CLASS_JOYSTICK";
+			break;
+		};
 		float x = AMotionEvent_getX(event, 0);
 		float y = AMotionEvent_getY(event, 0);
-		LogPrintf("MotionEvent: %f, %f", x, y);
+		LogInput("AINPUT_EVENT_TYPE_MOTION: (deviceId = %d, source = %s, sourceClass = %s, action = %s, pointer = %d, numPointers = %d (%s)) -> x = %f, y = %f",
+			deviceId, sourceText, sourceClassText, actionText, pointer, numPointers, pointerIdString.c_str(), x, y);
 		return 1;
 	}
+	else if (type == AINPUT_EVENT_TYPE_KEY) {
+		auto action = AKeyEvent_getAction(event);
+		auto code = AKeyEvent_getKeyCode(event);
+		auto scanCode = AKeyEvent_getScanCode(event);
+		if (action == AKEY_EVENT_ACTION_DOWN)
+			LogInput("AKEY_EVENT_ACTION_DOWN: %d (scanCode = %d)", code, scanCode);
+		else if (action == AKEY_EVENT_ACTION_UP)
+			LogInput("AKEY_EVENT_ACTION_UP: %d (scanCode = %d)", code, scanCode);
+		return 1;
+	}
+#endif
 	return 0;
 }
 
@@ -101,13 +333,21 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 	case APP_CMD_INIT_WINDOW:
 		// The window is being shown, get it ready.
 		if (engine->app->window != NULL) {
-			engine_init_display(engine);
-			engine_draw_frame(engine);
+			if (engine_init_display(engine))
+			{
+				engine->quit = 1;
+			}
+			else
+			{
+				engine->initialized = 1;
+				engine_draw_frame(engine);
+			}
 		}
 		break;
 	case APP_CMD_TERM_WINDOW:
 		// The window is being hidden or closed, clean it up.
 		engine_term_display(engine);
+		engine->initialized = 0;
 		break;
 	case APP_CMD_GAINED_FOCUS:
 		// When our app gains focus, we start monitoring the accelerometer.
@@ -117,6 +357,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			// We'd like to get 60 events per second (in us).
 			ASensorEventQueue_setEventRate(engine->sensorEventQueue,
 				engine->accelerometerSensor, (1000L / 60) * 1000);
+			engine->animating = 1;
 		}
 		break;
 	case APP_CMD_LOST_FOCUS:
@@ -161,7 +402,9 @@ void android_main(struct android_app* state) {
 
 	// loop waiting for stuff to do.
 
-	while (1) {
+	LogPrintf(">>> Enter main loop");
+
+	while (!engine.quit) {
 		// Read all pending events.
 		int ident;
 		int events;
@@ -184,24 +427,33 @@ void android_main(struct android_app* state) {
 					ASensorEvent event;
 					while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
 						&event, 1) > 0) {
-						LogPrintf("accelerometer: x=%f y=%f z=%f",
-							event.acceleration.x, event.acceleration.y,
-							event.acceleration.z);
+						//LogPrintf("accelerometer: x=%f y=%f z=%f",
+						//	event.acceleration.x, event.acceleration.y,
+						//	event.acceleration.z);
 					}
 				}
 			}
 
 			// Check if we are exiting.
 			if (state->destroyRequested != 0) {
+				engine.initialized = 0;
 				engine_term_display(&engine);
 				return;
 			}
 		}
 
-		if (engine.animating) {
+		if (engine.initialized && engine.animating) {
+			if (engine_update_frame(&engine)) {
+				engine.quit = 1;
+				break;
+			}
+
 			// Drawing is throttled to the screen update rate, so there
 			// is no need to do timing here.
 			engine_draw_frame(&engine);
 		}
 	}
+
+	LogPrintf(">>> Exit main loop");
+	exit(0);
 }

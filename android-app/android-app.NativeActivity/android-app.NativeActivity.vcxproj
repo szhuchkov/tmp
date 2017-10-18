@@ -219,6 +219,8 @@
     <ClInclude Include="..\..\common\ConfigFile.h" />
     <ClInclude Include="..\..\common\ConsoleVar.h" />
     <ClInclude Include="..\..\common\Engine.h" />
+    <ClInclude Include="..\..\common\InputDeviceKeyboard.h" />
+    <ClInclude Include="..\..\common\InputDeviceTouch.h" />
     <ClInclude Include="..\..\common\InputManager.h" />
     <ClInclude Include="..\..\common\math3d.h" />
     <ClInclude Include="..\..\common\OGLDriver.h" />
@@ -236,6 +238,8 @@
     <ClCompile Include="..\..\common\ConfigFile.cpp" />
     <ClCompile Include="..\..\common\ConsoleVar.cpp" />
     <ClCompile Include="..\..\common\Engine.cpp" />
+    <ClCompile Include="..\..\common\InputDeviceKeyboard.cpp" />
+    <ClCompile Include="..\..\common\InputDeviceTouch.cpp" />
     <ClCompile Include="..\..\common\InputManager.cpp" />
     <ClCompile Include="..\..\common\math3d.cpp" />
     <ClCompile Include="..\..\common\pch.cpp" />

@@ -16,6 +16,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InputDeviceMouse.h" />
     <ClInclude Include="InputDeviceKeyboard.h" />
+    <ClInclude Include="InputDeviceTouch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputDeviceMouse.cpp" />
     <ClCompile Include="InputDeviceKeyboard.cpp" />
+    <ClCompile Include="InputDeviceTouch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">
