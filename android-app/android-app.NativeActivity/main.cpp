@@ -19,6 +19,7 @@
 #include "Engine.h"
 #include "InputManagerAndroid.h"
 #include "RenderDevice.h"
+#include "OGLDriverGLES.h"
 #include "..\..\tests\TestScene.h"
 
 
@@ -353,19 +354,31 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		LogPrintf(">>> APP_CMD_SAVE_STATE");
 		break;
 	case APP_CMD_INIT_WINDOW:
-		LogPrintf(">>> APP_CMD_INIT_WINDOW");
-		// The window is being shown, get it ready.
-		if (engine->app->window != NULL) {
-			if (!engine->initialized)
+		{
+			LogPrintf(">>> APP_CMD_INIT_WINDOW");
+
+			// The window is being shown, get it ready.
+			if (engine->app->window != NULL)
 			{
-				if (engine_init_display(engine))
+				if (engine->initialized)
 				{
-					engine->quit = 1;
+					if (!OGLDriverGLES::GetInstance()->OnWindowChanged(engine->app->window))
+					{
+						LogPrintf("OnWindowChanged() failed");
+						engine->quit = 1;
+					}
 				}
 				else
 				{
-					engine->initialized = 1;
-					engine_draw_frame(engine);
+					if (engine_init_display(engine))
+					{
+						engine->quit = 1;
+					}
+					else
+					{
+						engine->initialized = 1;
+						engine_draw_frame(engine);
+					}
 				}
 			}
 		}
@@ -374,28 +387,32 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		LogPrintf(">>> APP_CMD_TERM_WINDOW");
 		break;
 	case APP_CMD_GAINED_FOCUS:
-		LogPrintf(">>> APP_CMD_GAINED_FOCUS");
-		// When our app gains focus, we start monitoring the accelerometer.
-		if (engine->accelerometerSensor != NULL) {
-			ASensorEventQueue_enableSensor(engine->sensorEventQueue,
-				engine->accelerometerSensor);
-			// We'd like to get 60 events per second (in us).
-			ASensorEventQueue_setEventRate(engine->sensorEventQueue,
-				engine->accelerometerSensor, (1000L / 60) * 1000);
-			engine->animating = 1;
+		{
+			LogPrintf(">>> APP_CMD_GAINED_FOCUS");
+			// When our app gains focus, we start monitoring the accelerometer.
+			if (engine->accelerometerSensor != NULL) {
+				ASensorEventQueue_enableSensor(engine->sensorEventQueue,
+					engine->accelerometerSensor);
+				// We'd like to get 60 events per second (in us).
+				ASensorEventQueue_setEventRate(engine->sensorEventQueue,
+					engine->accelerometerSensor, (1000L / 60) * 1000);
+				engine->animating = 1;
+			}
 		}
 		break;
 	case APP_CMD_LOST_FOCUS:
-		LogPrintf(">>> APP_CMD_LOST_FOCUS");
-		// When our app loses focus, we stop monitoring the accelerometer.
-		// This is to avoid consuming battery while not being used.
-		if (engine->accelerometerSensor != NULL) {
-			ASensorEventQueue_disableSensor(engine->sensorEventQueue,
-				engine->accelerometerSensor);
+		{
+			LogPrintf(">>> APP_CMD_LOST_FOCUS");
+			// When our app loses focus, we stop monitoring the accelerometer.
+			// This is to avoid consuming battery while not being used.
+			if (engine->accelerometerSensor != NULL) {
+				ASensorEventQueue_disableSensor(engine->sensorEventQueue,
+					engine->accelerometerSensor);
+			}
+			// Also stop animating.
+			engine->animating = 0;
+			engine_draw_frame(engine);
 		}
-		// Also stop animating.
-		engine->animating = 0;
-		engine_draw_frame(engine);
 		break;
 	case APP_CMD_WINDOW_RESIZED:
 		{
@@ -406,9 +423,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		}
 		break;
 	case APP_CMD_CONFIG_CHANGED:
-		{
-			LogPrintf(">>> APP_CMD_CONFIG_CHANGED");
-		}
+		LogPrintf(">>> APP_CMD_CONFIG_CHANGED");
 		break;
 	case APP_CMD_START:
 		LogPrintf(">>> APP_CMD_START");
@@ -497,7 +512,7 @@ void android_main(struct android_app* state) {
 			}
 
 			// Check if we are exiting.
-			//if (state->destroyRequested != 0) {
+			//if (state->destroyRequested != 0 && engine.initialized) {
 			//	engine.initialized = 0;
 			//	engine_term_display(&engine);
 			//	return;
@@ -514,6 +529,12 @@ void android_main(struct android_app* state) {
 			// is no need to do timing here.
 			engine_draw_frame(&engine);
 		}
+	}
+
+	if (engine.initialized)
+	{
+		engine_term_display(&engine);
+		engine.initialized = 0;
 	}
 
 	LogPrintf(">>> Exit main loop");
