@@ -24,12 +24,20 @@
 
 
 #define LOG_INPUT_EVENTS	1
+#define LOG_APP_EVENTS		1
 
 
 #if LOG_INPUT_EVENTS
 #define LogInput LogPrintf
 #else
 #define LogInput	
+#endif
+
+
+#if LOG_APP_EVENTS
+#define LogAppEvent	LogPrintf
+#else
+#define LogAppEvent
 #endif
 
 
@@ -55,10 +63,6 @@ void _LogPrintf(const char* file, int line, const char* format, ...)
 
 struct engine {
 	struct android_app* app;
-
-	ASensorManager* sensorManager;
-	const ASensor* accelerometerSensor;
-	ASensorEventQueue* sensorEventQueue;
 
 	int initialized;
 	int animating;
@@ -103,9 +107,6 @@ static int engine_update_frame(struct engine* engine) {
 		return -1;
 
 	size_t numEvents = InputManager::GetInstance()->GetNumEvents();
-	if (numEvents)
-		LogPrintf(">>> Num Events = %d", numEvents);
-
 	for(size_t i = 0; i < numEvents; i++)
 	{
 		const auto& event = InputManager::GetInstance()->GetEvent(i);
@@ -351,11 +352,11 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 	struct engine* engine = (struct engine*)app->userData;
 	switch (cmd) {
 	case APP_CMD_SAVE_STATE:
-		LogPrintf(">>> APP_CMD_SAVE_STATE");
+		LogAppEvent(">>> APP_CMD_SAVE_STATE");
 		break;
 	case APP_CMD_INIT_WINDOW:
 		{
-			LogPrintf(">>> APP_CMD_INIT_WINDOW");
+			LogAppEvent(">>> APP_CMD_INIT_WINDOW");
 
 			// The window is being shown, get it ready.
 			if (engine->app->window != NULL)
@@ -384,69 +385,54 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		}
 		break;
 	case APP_CMD_TERM_WINDOW:
-		LogPrintf(">>> APP_CMD_TERM_WINDOW");
+		LogAppEvent(">>> APP_CMD_TERM_WINDOW");
 		break;
 	case APP_CMD_GAINED_FOCUS:
 		{
-			LogPrintf(">>> APP_CMD_GAINED_FOCUS");
-			// When our app gains focus, we start monitoring the accelerometer.
-			if (engine->accelerometerSensor != NULL) {
-				ASensorEventQueue_enableSensor(engine->sensorEventQueue,
-					engine->accelerometerSensor);
-				// We'd like to get 60 events per second (in us).
-				ASensorEventQueue_setEventRate(engine->sensorEventQueue,
-					engine->accelerometerSensor, (1000L / 60) * 1000);
-				engine->animating = 1;
-			}
+			LogAppEvent(">>> APP_CMD_GAINED_FOCUS");
+			engine->animating = 1;
 		}
 		break;
 	case APP_CMD_LOST_FOCUS:
 		{
-			LogPrintf(">>> APP_CMD_LOST_FOCUS");
-			// When our app loses focus, we stop monitoring the accelerometer.
-			// This is to avoid consuming battery while not being used.
-			if (engine->accelerometerSensor != NULL) {
-				ASensorEventQueue_disableSensor(engine->sensorEventQueue,
-					engine->accelerometerSensor);
-			}
-			// Also stop animating.
+			LogAppEvent(">>> APP_CMD_LOST_FOCUS");
 			engine->animating = 0;
 			engine_draw_frame(engine);
 		}
 		break;
 	case APP_CMD_WINDOW_RESIZED:
 		{
-			LogPrintf(">>> APP_CMD_WINDOW_RESIZED");
+			LogAppEvent(">>> APP_CMD_WINDOW_RESIZED");
 			int width = ANativeWindow_getWidth(engine->app->window);
 			int height = ANativeWindow_getHeight(engine->app->window);
 			Engine::GetInstance()->Resize(width, height);
 		}
 		break;
 	case APP_CMD_CONFIG_CHANGED:
-		LogPrintf(">>> APP_CMD_CONFIG_CHANGED");
+		LogAppEvent(">>> APP_CMD_CONFIG_CHANGED");
 		break;
 	case APP_CMD_START:
-		LogPrintf(">>> APP_CMD_START");
+		LogAppEvent(">>> APP_CMD_START");
 		break;
 	case APP_CMD_RESUME:
-		LogPrintf(">>> APP_CMD_RESUME");
+		LogAppEvent(">>> APP_CMD_RESUME");
 		break;
 	case APP_CMD_PAUSE:
-		LogPrintf(">>> APP_CMD_PAUSE");
+		LogAppEvent(">>> APP_CMD_PAUSE");
 		break;
 	case APP_CMD_STOP:
-		LogPrintf(">>> APP_CMD_STOP");
+		LogAppEvent(">>> APP_CMD_STOP");
 		break;
 	case APP_CMD_DESTROY:
-		LogPrintf(">>> APP_CMD_DESTROY");
+		LogAppEvent(">>> APP_CMD_DESTROY");
 		engine_term_display(engine);
 		engine->initialized = 0;
 		break;
 	case APP_CMD_INPUT_CHANGED:
-		LogPrintf(">>> APP_CMD_INPUT_CHANGED");
+		LogAppEvent(">>> APP_CMD_INPUT_CHANGED");
 		break;
 	default:
-		LogPrintf(">>> APP_CMD: %d", cmd);
+		LogAppEvent(">>> APP_CMD: %d", cmd);
 		break;
 	}
 }
@@ -464,13 +450,6 @@ void android_main(struct android_app* state) {
 	state->onAppCmd = engine_handle_cmd;
 	state->onInputEvent = engine_handle_input;
 	engine.app = state;
-
-	// Prepare to monitor accelerometer
-	engine.sensorManager = ASensorManager_getInstance();
-	engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
-		ASENSOR_TYPE_ACCELEROMETER);
-	engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
-		state->looper, LOOPER_ID_USER, NULL, NULL);
 
 	if (state->savedState != NULL) {
 	}
@@ -496,19 +475,6 @@ void android_main(struct android_app* state) {
 			// Process this event.
 			if (source != NULL) {
 				source->process(state, source);
-			}
-
-			// If a sensor has data, process it now.
-			if (ident == LOOPER_ID_USER) {
-				if (engine.accelerometerSensor != NULL) {
-					ASensorEvent event;
-					while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
-						&event, 1) > 0) {
-						//LogPrintf("accelerometer: x=%f y=%f z=%f",
-						//	event.acceleration.x, event.acceleration.y,
-						//	event.acceleration.z);
-					}
-				}
 			}
 
 			// Check if we are exiting.
