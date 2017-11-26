@@ -1,42 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="Platform.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderDevice.h" />
-    <ClInclude Include="OGLDriver.h" />
     <ClInclude Include="FileSystem.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="math3d.h">
       <Filter>math3d</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleVar.h" />
-    <ClInclude Include="ConfigFile.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="InputDeviceMouse.h" />
-    <ClInclude Include="InputDeviceKeyboard.h" />
-    <ClInclude Include="InputDeviceTouch.h" />
+    <ClInclude Include="InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDeviceKeyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDeviceMouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDeviceTouch.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigFile.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleVar.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLDriver.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDevice.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="RenderDevice.cpp" />
     <ClCompile Include="FileSystem.cpp" />
-    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="math3d.cpp">
       <Filter>math3d</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleVar.cpp" />
-    <ClCompile Include="ConfigFile.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="InputDeviceMouse.cpp" />
-    <ClCompile Include="InputDeviceKeyboard.cpp" />
-    <ClCompile Include="InputDeviceTouch.cpp" />
+    <ClCompile Include="InputDeviceKeyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDeviceMouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDeviceTouch.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigFile.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleVar.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderDevice.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">
       <UniqueIdentifier>{e6cca8c9-9190-45b2-9ce2-7c12b47c192b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{7d9679e0-3e6c-4aeb-ad4f-9f6c706c7020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{aa08c8b8-c3b8-4434-a355-854a428db8b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{ef24258c-a740-4c8d-a106-4082de68413f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{9dcd75e5-f217-40ae-baf6-053e4ea4199a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

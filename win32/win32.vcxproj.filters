@@ -2,84 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\common\Engine.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\pch.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\RenderDevice.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="OGLDriverPC.cpp" />
-    <ClCompile Include="..\common\math3d.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\ConsoleVar.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\Utils.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="FileSystemPC.cpp" />
-    <ClCompile Include="..\common\ConfigFile.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\InputManager.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\InputDeviceKeyboard.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\InputDeviceMouse.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="InputManagerPC.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="common">
-      <UniqueIdentifier>{82c96dff-7d05-4699-9b61-58c6640e6045}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\common\Engine.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\pch.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\Platform.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\RenderDevice.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="OGLDriverPC.h" />
-    <ClInclude Include="..\common\OGLDriver.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\math3d.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\ConsoleVar.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\Utils.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="FileSystemPC.h" />
-    <ClInclude Include="..\common\ConfigFile.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\InputManager.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="InputManagerPC.h" />
-    <ClInclude Include="..\common\InputDeviceKeyboard.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\InputDeviceMouse.h">
-      <Filter>common</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

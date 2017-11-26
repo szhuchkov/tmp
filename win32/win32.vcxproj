@@ -154,37 +154,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\ConfigFile.cpp" />
-    <ClCompile Include="..\common\ConsoleVar.cpp" />
-    <ClCompile Include="..\common\Engine.cpp" />
-    <ClCompile Include="..\common\InputDeviceKeyboard.cpp" />
-    <ClCompile Include="..\common\InputDeviceMouse.cpp" />
-    <ClCompile Include="..\common\InputManager.cpp" />
-    <ClCompile Include="..\common\math3d.cpp" />
-    <ClCompile Include="..\common\pch.cpp" />
-    <ClCompile Include="..\common\RenderDevice.cpp" />
-    <ClCompile Include="..\common\Utils.cpp" />
     <ClCompile Include="FileSystemPC.cpp" />
     <ClCompile Include="InputManagerPC.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OGLDriverPC.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\ConfigFile.h" />
-    <ClInclude Include="..\common\ConsoleVar.h" />
-    <ClInclude Include="..\common\Engine.h" />
-    <ClInclude Include="..\common\InputDeviceKeyboard.h" />
-    <ClInclude Include="..\common\InputDeviceMouse.h" />
-    <ClInclude Include="..\common\InputManager.h" />
-    <ClInclude Include="..\common\math3d.h" />
-    <ClInclude Include="..\common\OGLDriver.h" />
-    <ClInclude Include="..\common\pch.h" />
-    <ClInclude Include="..\common\Platform.h" />
-    <ClInclude Include="..\common\RenderDevice.h" />
-    <ClInclude Include="..\common\Utils.h" />
     <ClInclude Include="FileSystemPC.h" />
     <ClInclude Include="InputManagerPC.h" />
     <ClInclude Include="OGLDriverPC.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\common\common.vcxproj">
+      <Project>{9a6bf074-3b02-4fcc-9edd-a24bd5f5afdb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
