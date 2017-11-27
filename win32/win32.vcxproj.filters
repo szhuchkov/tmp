@@ -11,4 +11,7 @@
     <ClInclude Include="FileSystemPC.h" />
     <ClInclude Include="InputManagerPC.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.scene" />
+  </ItemGroup>
 </Project>

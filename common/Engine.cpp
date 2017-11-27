@@ -3,6 +3,7 @@
 #include "FileSystem.h"
 #include "RenderDevice.h"
 #include "InputManager.h"
+#include "Scene.h"
 
 
 Engine::Engine()
@@ -68,6 +69,8 @@ bool Engine::Update()
 
 	InputManager::GetInstance()->ClearEvents();
 	InputManager::GetInstance()->Update();
+
+    Scene::GetInstance()->Update(15);
 
 	return true;
 }

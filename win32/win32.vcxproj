@@ -169,6 +169,9 @@
       <Project>{9a6bf074-3b02-4fcc-9edd-a24bd5f5afdb}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.scene" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

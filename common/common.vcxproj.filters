@@ -39,6 +39,27 @@
     <ClInclude Include="pch.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObject.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneFactory.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinyxml2.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObjectData.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObjects\SO_EmptyObject.h">
+      <Filter>Scene\SceneObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -73,6 +94,24 @@
     <ClCompile Include="pch.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObject.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxml2.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObjectData.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneFactory.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">
@@ -89,6 +128,12 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{9dcd75e5-f217-40ae-baf6-053e4ea4199a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty">
+      <UniqueIdentifier>{ff804df3-997d-4c1f-a5c9-bf73d03c9a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\SceneObjects">
+      <UniqueIdentifier>{ef9897f8-c4f3-4920-8558-fa077cbcf73b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

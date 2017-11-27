@@ -216,18 +216,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\ConfigFile.h" />
-    <ClInclude Include="..\..\common\ConsoleVar.h" />
-    <ClInclude Include="..\..\common\Engine.h" />
-    <ClInclude Include="..\..\common\InputDeviceKeyboard.h" />
-    <ClInclude Include="..\..\common\InputDeviceTouch.h" />
-    <ClInclude Include="..\..\common\InputManager.h" />
-    <ClInclude Include="..\..\common\math3d.h" />
-    <ClInclude Include="..\..\common\OGLDriver.h" />
-    <ClInclude Include="..\..\common\pch.h" />
-    <ClInclude Include="..\..\common\Platform.h" />
-    <ClInclude Include="..\..\common\RenderDevice.h" />
-    <ClInclude Include="..\..\common\Utils.h" />
     <ClInclude Include="android_native_app_glue.h" />
     <ClInclude Include="FileSystemAndroid.h" />
     <ClInclude Include="InputManagerAndroid.h" />
@@ -235,16 +223,6 @@
     <ClInclude Include="Precompiled.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\common\ConfigFile.cpp" />
-    <ClCompile Include="..\..\common\ConsoleVar.cpp" />
-    <ClCompile Include="..\..\common\Engine.cpp" />
-    <ClCompile Include="..\..\common\InputDeviceKeyboard.cpp" />
-    <ClCompile Include="..\..\common\InputDeviceTouch.cpp" />
-    <ClCompile Include="..\..\common\InputManager.cpp" />
-    <ClCompile Include="..\..\common\math3d.cpp" />
-    <ClCompile Include="..\..\common\pch.cpp" />
-    <ClCompile Include="..\..\common\RenderDevice.cpp" />
-    <ClCompile Include="..\..\common\Utils.cpp" />
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="FileSystemAndroid.cpp" />
     <ClCompile Include="InputManagerAndroid.cpp" />

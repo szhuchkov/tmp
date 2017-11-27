@@ -1,11 +1,8 @@
 #include "pch.h"
 #include "Engine.h"
 #include "InputManagerPC.h"
-#include "..\tests\TestScene.h"
-#include "..\tests\MathTest.h"
-#include "..\tests\FileSystemTest.h"
-#include "..\tests\CVarTest.h"
-#include "..\tests\ConfigFileTest.h"
+#include "RenderDevice.h"
+#include "Scene.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -15,28 +12,6 @@
 static HINSTANCE	cl_hInstance = NULL;
 static HWND			cl_hWnd = NULL;
 static bool			cl_quit = false;
-
-
-static int RunTests()
-{
-	FileSystemTest fileSystemTest;
-	if (!fileSystemTest.Run())
-		return -1;
-
-	MathTest mathTest;
-	if (!mathTest.Run())
-		return -1;
-
-	CVarTest cvarTest;
-	if (!cvarTest.Run())
-		return -1;
-
-	ConfigFileTest configFileTest;
-	if (!configFileTest.Run())
-		return -1;
-
-	return 0;
-}
 
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -138,22 +113,12 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 		return -1;
 	}
 
-	// run unit tests
-	int res = RunTests();
-	if (res)
-	{
-		LogPrintf("!!! Unit tests fail");
-		Engine::GetInstance()->Shutdown();
-		return res;
-	}
-
-	// initialize test scene
-	if (!TestScene::GetInstance()->Init())
-	{
-		LogPrintf("TestScene init failed");
-		Engine::GetInstance()->Shutdown();
-		return -1;
-	}
+    if (!Scene::GetInstance()->Load("test.scene"))
+    {
+        LogPrintf("Unable to load test scene");
+        Engine::GetInstance()->Shutdown();
+        return -1;
+    }
 
 	// run main loop
 	while (!cl_quit)
@@ -181,19 +146,11 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 			}
 		}
 
-		// render test scene
-		constexpr float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
-		constexpr float clearDepth = 1.0f;
-
-		RenderDevice::GetInstance()->BeginFrame();
-		RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
-		TestScene::GetInstance()->Render();
-		//Engine::GetInstance()->Render();
-		RenderDevice::GetInstance()->EndFrame();
+		Engine::GetInstance()->Render();
 	}
 
 	// shutdown
-	TestScene::GetInstance()->Shutdown();
+    Scene::GetInstance()->Clear();
 	Engine::GetInstance()->Shutdown();
 
 	// cleanup vars

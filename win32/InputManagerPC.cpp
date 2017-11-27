@@ -66,7 +66,7 @@ void InputManagerPC::OnMouseUp(int button)
 
 void InputManagerPC::OnMouseMove(int x, int y)
 {
-	LogPrintf("onMouseMove %d, %d", x, y);
+	//LogPrintf("onMouseMove %d, %d", x, y);
 	m_mouse.OnMouseMove(x, y);
 }
 
