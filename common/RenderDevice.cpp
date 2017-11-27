@@ -216,19 +216,29 @@ void RenderDevice::SetShader(Shader* shader)
 }
 
 
+void RenderDevice::SetTexture(unsigned int sampler, Texture* texture)
+{
+	glActiveTexture(GL_TEXTURE0 + sampler);
+	glBindTexture(GL_TEXTURE_2D, texture ? texture->handle : 0);
+}
+
+
+void RenderDevice::SetUniform(unsigned int index, const Vector4& value)
+{
+}
+
+
+void RenderDevice::SetMatrix(unsigned int index, const Matrix& value)
+{
+}
+
+
 void RenderDevice::DrawPrimitive(unsigned int type, unsigned int offset, unsigned int count)
 {
 	SetupVertexStream();
 
 	GLenum mode = GLPrimitiveType(type);
 	glDrawArrays(mode, offset, count);
-}
-
-
-void RenderDevice::SetTexture(unsigned int sampler, Texture* texture)
-{
-	glActiveTexture(GL_TEXTURE0 + sampler);
-	glBindTexture(GL_TEXTURE_2D, texture ? texture->handle : 0);
 }
 
 
@@ -487,4 +497,51 @@ void RenderDevice::DeleteShader(Shader* shader)
 		glDeleteProgram(shader->program);
 		delete shader;
 	}
+}
+
+
+Texture* RenderDevice::CreateTexture2D(unsigned int width, unsigned int height, unsigned int levels, unsigned int format, unsigned int usage)
+{
+    GLuint handle = 0;
+    glGenTextures(1, &handle);
+
+    glBindTexture(GL_TEXTURE_2D, handle);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_PACK_ALIGNMENT, 1);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    Texture* tex = new Texture();
+    tex->width = width;
+    tex->height = height;
+    tex->depth = 0;
+    tex->levels = levels;
+    tex->format = format;
+    tex->usage = usage;
+    tex->handle = handle;
+
+    return tex;
+}
+
+
+void RenderDevice::DeleteTexture(Texture* texture)
+{
+    if (texture)
+    {
+        glDeleteTextures(1, &texture->handle);
+        delete texture;
+    }
+}
+
+
+void RenderDevice::UpdateTexture2D(Texture* texture, unsigned int level, const void* data)
+{
+    glBindTexture(GL_TEXTURE_2D, texture->handle);
+    glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -3,6 +3,7 @@
 #include "FileSystem.h"
 #include "RenderDevice.h"
 #include "InputManager.h"
+#include "RenderWorld.h"
 #include "Scene.h"
 
 
@@ -39,12 +40,20 @@ bool Engine::Init(void* window, int width, int height, bool fullscreen)
 		return false;
 	}
 
+    // init render world
+    if (!RenderWorld::GetInstance()->Init())
+    {
+        LogPrintf("RenderWorld init failed");
+        return false;
+    }
+
 	return true;
 }
 
 
 void Engine::Shutdown()
 {
+    RenderWorld::GetInstance()->Shutdown();
 	InputManager::GetInstance()->Shutdown();
 	RenderDevice::GetInstance()->Shutdown();
 	FileSystem::GetInstance()->Shutdown();
@@ -80,9 +89,7 @@ void Engine::Render()
 {
 	if (RenderDevice::GetInstance()->BeginFrame())
 	{
-		const float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
-		const float clearDepth = 1.0f;
-		RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
+        RenderWorld::GetInstance()->Render();
 		RenderDevice::GetInstance()->EndFrame();
 	}
 }

@@ -198,6 +198,7 @@ public:
 };
 
 
+void MatrixIdentity(Matrix* dst);
 void MatrixMultiply(Matrix* dst, const Matrix* m1, const Matrix* m2);
 bool MatrixInverse(Matrix* dst, const Matrix* m, float* det = nullptr);
 void MatrixLookAt(Matrix* dst, const Vector3* eye, const Vector3* at, const Vector3* up);

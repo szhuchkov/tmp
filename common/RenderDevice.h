@@ -80,6 +80,15 @@ public:
 		TEXTURE_USAGE_DEPTH_BUFFER,
 	};
 
+    enum MatrixName
+    {
+        MATRIX_WORLD,
+        MATRIX_VIEW_PROJECTION,
+        MATRIX_VIEW_INVERSE,
+        MATRIX_SHADOW,
+        MATRIX_LIGHT,
+    };
+
 	bool Init(void* window, int width, int height, bool fullscreen);
 	void Shutdown();
 	bool Update();
@@ -117,8 +126,8 @@ public:
 	void SetShader(Shader* shader);
 	void SetTexture(unsigned int sampler, Texture* texture);
 	void SetRenderTarget(RenderTarget* target);
-	void SetUniform(unsigned int index, const float* data);
-	void SetMatrix(unsigned int index, const float* data);
+	void SetUniform(unsigned int index, const Vector4& value);
+	void SetMatrix(unsigned int index, const Matrix& value);
 	void DrawPrimitive(unsigned int type, unsigned int offset, unsigned int count);
 	void DrawIndexedPrimitive(unsigned int type, unsigned int vertexOffset, unsigned int vertexCount, unsigned int indexOffset, unsigned int count);
 

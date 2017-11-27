@@ -2,119 +2,125 @@
 
 
 #include "RenderDevice.h"
+#include "RenderWorld.h"
 
 
 class TestScene
 {
 private:
-	struct DrawVertex
-	{
-		float		x, y, z;
-		uint32_t	color;
-	};
-
-	VertexBuffer*	m_verts = nullptr;
-	IndexBuffer*	m_inds = nullptr;
-	Shader*			m_shader = nullptr;
-
-	static constexpr char* g_TestVS = R"(
-#version 100
-
-attribute vec3 aPos;
-attribute vec4 aColor;
-
-varying vec4 vColor;
-
-void main()
-{
-	gl_Position = vec4(aPos, 1.0);
-	vColor = aColor;
-}
-)";
-
-	static constexpr char* g_TestFS = R"(
-#version 100
-
-varying lowp vec4 vColor;
-
-void main()
-{
-	gl_FragColor = vColor;
-}
-)";
+    struct DrawVertex
+    {
+        float x, y, z;
+        float u, v;
+    };
 
 private:
-	TestScene()
-	{
-	}
+    TestScene()
+    {
+    }
 
-	~TestScene()
-	{
-	}
+    ~TestScene()
+    {
+    }
 
 public:
-	inline static TestScene* GetInstance()
-	{
-		static TestScene instance;
-		return &instance;
-	}
+    inline static TestScene* GetInstance()
+    {
+        static TestScene instance;
+        return &instance;
+    }
 
-	bool Init()
-	{
-		static DrawVertex verts[] =
-		{
-			{ -0.5f, -0.5f, 0.0f, 0xffffffff },
-			{ -0.5f,  0.5f, 0.0f, 0xff0000ff },
-			{  0.5f,  0.5f, 0.0f, 0xff00ff00 },
-			{  0.5f, -0.5f, 0.0f, 0xffff0000 },
-		};
+    uint32_t RandomColor()
+    {
+        int r = std::rand() & 0xff;
+        int g = std::rand() & 0xff;
+        int b = std::rand() & 0xff;
+        return 0xff000000 | (r << 16) | (g << 8) | (b << 0);
+    }
 
-		static uint16_t inds[] =
-		{
-			0, 1, 2, 0, 2, 3
-		};
+    bool Init()
+    {
+        static const DrawVertex verts[] =
+        {
+            { -0.5f, -0.5f, 0.0f, 0.0f, 1.0f },
+            { -0.5f,  0.5f, 0.0f, 0.0f, 0.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f, 0.0f },
+            {  0.5f, -0.5f, 0.0f, 1.0f, 1.0f },
+        };
 
-		m_verts = RenderDevice::GetInstance()->CreateVertexBuffer(RenderDevice::VERTEX_XYZ | RenderDevice::VERTEX_COLOR, ARRAY_SIZE(verts), verts);
-		if (!m_verts)
-		{
-			LogPrintf("Unable to create vertex buffer");
-			return false;
-		}
+        static const uint16_t inds[] =
+        {
+            0, 1, 2, 0, 2, 3,
+        };
 
-		m_inds = RenderDevice::GetInstance()->CreateIndexBuffer(RenderDevice::INDEX_16, ARRAY_SIZE(inds), inds);
-		if (!m_inds)
-		{
-			LogPrintf("Unable to create index buffer");
-			return false;
-		}
+        // create light
+        m_light.flags = 0;
+        MatrixIdentity(&m_light.position);
+        RenderWorld::GetInstance()->AddLight(&m_light);
 
-		m_shader = RenderDevice::GetInstance()->CreateShader(g_TestVS, g_TestFS);
-		if (!m_shader)
-		{
-			LogPrintf("Unable to create shader");
-			return false;
-		}
+        // create texture
+        std::vector<uint32_t> pixels(16 * 16);
+        for (size_t i = 0; i < 16 * 16; i++)
+            pixels[i] = RandomColor();
+        m_texture = RenderDevice::GetInstance()->CreateTexture2D(16, 16, 1,
+            RenderDevice::TEXF_A8R8G8B8, RenderDevice::TEXTURE_USAGE_DEFAULT);
+        RenderDevice::GetInstance()->UpdateTexture2D(m_texture, 0, &pixels[0]);
 
-		return true;
-	}
+        // create surface
+        m_surface.vertexOffset = 0;
+        m_surface.vertexCount = ARRAY_SIZE(verts);
+        m_surface.indexOffset = 0;
+        m_surface.indexCount = ARRAY_SIZE(inds);
+        m_surface.material = &m_material;
 
-	void Shutdown()
-	{
-		RenderDevice::GetInstance()->DeleteVertexBuffer(m_verts);
-		m_verts = nullptr;
+        // create geometry
+        m_geometry.primitive = RenderDevice::PRIMITIVE_TRIANGLES;
+        m_geometry.verts = RenderDevice::GetInstance()->CreateVertexBuffer(
+            RenderDevice::VERTEX_XYZ | RenderDevice::VERTEX_TEXCOORD, m_surface.vertexCount, verts);
+        m_geometry.inds = RenderDevice::GetInstance()->CreateIndexBuffer(
+            RenderDevice::INDEX_16, m_surface.indexCount, inds);
+        m_model.geometry = &m_geometry;
+        m_model.surfaces.push_back(&m_surface);
 
-		RenderDevice::GetInstance()->DeleteIndexBuffer(m_inds);
-		m_inds = nullptr;
+        // create material
+        m_material.base = RenderWorld::GetInstance()->GetBaseMaterial("Quad");
+        m_material.flags = 0;
+        m_material.texmaps[0] = m_texture;
+        m_material.texmaps[1] = nullptr;
+        m_material.texmaps[2] = nullptr;
+        m_material.texmaps[3] = nullptr;
 
-		RenderDevice::GetInstance()->DeleteShader(m_shader);
-		m_shader = nullptr;
-	}
+        // create entity
+        m_entity.model = &m_model;
+        m_entity.flags = 0;
+        m_entity.renderLayer = 0;
+        MatrixIdentity(&m_entity.position);
+        RenderWorld::GetInstance()->AddEntity(&m_entity);
 
-	void Render()
-	{
-		RenderDevice::GetInstance()->SetVertexBuffer(m_verts);
-		RenderDevice::GetInstance()->SetIndexBuffer(m_inds);
-		RenderDevice::GetInstance()->SetShader(m_shader);
-		RenderDevice::GetInstance()->DrawIndexedPrimitive(RenderDevice::PRIMITIVE_TRIANGLES, 0, 4, 0, 6);
-	}
+        // setup camera
+        MatrixLookAt(&m_camera.view, &Vector3(0, 0, -1), &Vector3(0, 0, 0), &Vector3(0, 1, 0));
+        MatrixPerspective(&m_camera.proj, 80.0f, 1.5f, 1.0f, 1000.0f);
+        RenderWorld::GetInstance()->SetCamera(&m_camera);
+
+        return true;
+    }
+
+    void Shutdown()
+    {
+        RenderDevice::GetInstance()->DeleteTexture(m_texture);
+        RenderDevice::GetInstance()->DeleteVertexBuffer(m_geometry.verts);
+        RenderDevice::GetInstance()->DeleteIndexBuffer(m_geometry.inds);
+        RenderWorld::GetInstance()->RemoveLight(&m_light);
+        RenderWorld::GetInstance()->RemoveEntity(&m_entity);
+    }
+
+private:
+    Texture* m_texture = nullptr;
+    RenderCamera m_camera;
+    RenderLight m_light;
+    RenderEntity m_entity;
+    RenderGeometry m_geometry;
+    RenderModel m_model;
+    RenderSurface m_surface;
+    RenderMaterial m_material;
 };

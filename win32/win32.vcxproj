@@ -170,7 +170,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="BasicMaterial.ps" />
+    <None Include="BasicMaterial.vs" />
+    <None Include="BasicMaterialShadow.ps" />
+    <None Include="BasicMaterialShadow.vs" />
+    <None Include="Quad.ps" />
+    <None Include="Quad.vs" />
     <None Include="test.scene" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ShaderPreload.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

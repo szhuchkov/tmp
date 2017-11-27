@@ -27,7 +27,8 @@ const char* GetLine(const char* context, std::string& buffer)
 	{
 		if (*context == '\n' || *context == '\r')
 		{
-			context++;
+            while(*context == '\n' || *context == '\r')
+                context++;
 			break;
 		}
 
@@ -41,6 +42,13 @@ char* FS_LoadFile(const char* name, size_t* size)
 {
 	char* res = FileSystem::GetInstance()->LoadFile(name, size);
 	return res;
+}
+
+
+std::string FS_LoadText(const char* name)
+{
+    char* text = FileSystem::GetInstance()->LoadFile(name, nullptr);
+    return std::string(text ? text : "");
 }
 
 

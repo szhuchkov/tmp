@@ -12,6 +12,36 @@
     <ClInclude Include="InputManagerPC.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.scene" />
+    <Filter Include="tmpdata">
+      <UniqueIdentifier>{fa0ce711-2c52-4324-9541-13086bb5134e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.scene">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterial.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterial.ps">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterialShadow.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterialShadow.ps">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="Quad.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="Quad.ps">
+      <Filter>tmpdata</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ShaderPreload.txt">
+      <Filter>tmpdata</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -55,6 +55,16 @@ void Vec3Cross(Vector3* dst, const Vector3* a, const Vector3* b)
 }
 
 
+void MatrixIdentity(Matrix* dst)
+{
+    *dst = Matrix(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1);
+}
+
+
 void MatrixMultiply(Matrix* dst, const Matrix* a, const Matrix* b)
 {
 	float a00 = (*a)[0][0];

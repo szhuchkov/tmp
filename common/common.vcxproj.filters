@@ -60,6 +60,27 @@
     <ClInclude Include="SceneObjects\SO_EmptyObject.h">
       <Filter>Scene\SceneObjects</Filter>
     </ClInclude>
+    <ClInclude Include="RenderWorld.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="BatchRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMaterial.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="M_BasicMaterial.h">
+      <Filter>Render\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Quad.h">
+      <Filter>Render\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -112,6 +133,21 @@
     <ClCompile Include="SceneFactory.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="RenderWorld.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="BatchRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMaterial.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">
@@ -134,6 +170,9 @@
     </Filter>
     <Filter Include="Scene\SceneObjects">
       <UniqueIdentifier>{ef9897f8-c4f3-4920-8558-fa077cbcf73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Materials">
+      <UniqueIdentifier>{1682feb6-f2ac-4080-9f71-956f80e6d1c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

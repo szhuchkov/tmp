@@ -3,6 +3,7 @@
 #include "InputManagerPC.h"
 #include "RenderDevice.h"
 #include "Scene.h"
+#include "..\tests\TestScene.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -120,6 +121,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
         return -1;
     }
 
+    TestScene::GetInstance()->Init();
+
 	// run main loop
 	while (!cl_quit)
 	{
@@ -148,6 +151,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 
 		Engine::GetInstance()->Render();
 	}
+
+    TestScene::GetInstance()->Shutdown();
 
 	// shutdown
     Scene::GetInstance()->Clear();

@@ -38,6 +38,7 @@ void _LogPrintf(const char* file, int line, const char* format, ...);
 char* FS_LoadFile(const char* name, size_t* size);
 bool FS_SaveFile(const char* name, const void* data, size_t size);
 bool FS_DeleteFile(const char* name);
+std::string FS_LoadText(const char* name);
 
 
 //-----------------------------------------------------------------------------
