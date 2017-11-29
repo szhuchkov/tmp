@@ -6,8 +6,9 @@ class SceneObjectData
 public:
     void Clear();
 
-    bool HasProperty(const char* name);
+    bool HasProperty(const char* name) const;
 
+    // write values
     void SetString(const char* name, const char* value);
     void SetInt(const char* name, int value);
     void SetFloat(const char* name, float value);
@@ -16,6 +17,7 @@ public:
     void SetVec4(const char* name, const Vector4& value);
     void SetMatrix(const char* name, const Matrix& value);
 
+    // read values
     const char* GetString(const char* name) const;
     int GetInt(const char* name) const;
     float GetFloat(const char* name) const;
