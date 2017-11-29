@@ -44,4 +44,9 @@
       <Filter>tmpdata</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="checker.tga">
+      <Filter>tmpdata</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

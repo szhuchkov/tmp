@@ -3,11 +3,14 @@
 
 #include "RenderDevice.h"
 #include "RenderWorld.h"
+#include "TextureManager.h"
 
 
 class TestScene
 {
 private:
+    const char* TEXTURE_NAME = "checker.jpg";
+
     struct DrawVertex
     {
         float x, y, z;
@@ -59,12 +62,16 @@ public:
         RenderWorld::GetInstance()->AddLight(&m_light);
 
         // create texture
+#if 1
+        m_texture = TextureManager::GetInstance()->LoadTexture(TEXTURE_NAME);
+#else
         std::vector<uint32_t> pixels(16 * 16);
         for (size_t i = 0; i < 16 * 16; i++)
             pixels[i] = RandomColor();
         m_texture = RenderDevice::GetInstance()->CreateTexture2D(16, 16, 1,
             RenderDevice::TEXF_A8R8G8B8, RenderDevice::TEXTURE_USAGE_DEFAULT);
         RenderDevice::GetInstance()->UpdateTexture2D(m_texture, 0, &pixels[0]);
+#endif
 
         // create surface
         m_surface.vertexOffset = 0;
@@ -107,7 +114,11 @@ public:
 
     void Shutdown()
     {
+#if 1
+        TextureManager::GetInstance()->DeleteTexture(m_texture);
+#else
         RenderDevice::GetInstance()->DeleteTexture(m_texture);
+#endif
         RenderDevice::GetInstance()->DeleteVertexBuffer(m_geometry.verts);
         RenderDevice::GetInstance()->DeleteIndexBuffer(m_geometry.inds);
         RenderWorld::GetInstance()->RemoveLight(&m_light);
