@@ -81,6 +81,57 @@
     <ClInclude Include="M_Quad.h">
       <Filter>Render\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="TexFormatTGA.h">
+      <Filter>Render\TextureFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="TexFormatJPG.h">
+      <Filter>Render\TextureFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jconfig.h">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jpeglib.h">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\cderror.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\cdjpeg.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jchuff.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jdct.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jdhuff.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jerror.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jinclude.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jmemsys.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jmorecfg.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jpegint.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jversion.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\transupp.h">
+      <Filter>3rdParty\jpeglib\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -148,6 +199,96 @@
     <ClCompile Include="MaterialManager.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="TexFormatTGA.cpp">
+      <Filter>Render\TextureFormats</Filter>
+    </ClCompile>
+    <ClCompile Include="TexFormatJPG.cpp">
+      <Filter>Render\TextureFormats</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdapimin.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdapistd.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdatasrc.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdcoefct.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdcolor.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jddctmgr.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdhuff.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdinput.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmainct.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmarker.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmaster.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmerge.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdphuff.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdpostct.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdsample.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdtrans.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctflt.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctfst.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctint.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctred.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jquant1.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jquant2.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemansi.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcomapi.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jerror.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemmgr.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jutils.c">
+      <Filter>3rdParty\jpeglib\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">
@@ -174,5 +315,22 @@
     <Filter Include="Render\Materials">
       <UniqueIdentifier>{1682feb6-f2ac-4080-9f71-956f80e6d1c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render\TextureFormats">
+      <UniqueIdentifier>{8ed9e522-d4ef-43cc-b23e-61ce2d64df4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\jpeglib">
+      <UniqueIdentifier>{296999d0-2367-4e17-863b-a4f5b0f974cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\jpeglib\src">
+      <UniqueIdentifier>{007e7b17-b917-44b7-aed8-bec3a1fca8be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\jpeglib\headers">
+      <UniqueIdentifier>{15202c4d-2836-411a-9fa0-093a2c8f9a15}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="jpeglib\makefile.vc">
+      <Filter>3rdParty\jpeglib</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -31,6 +31,7 @@ protected:
     void SetMatrix(unsigned int index, const Matrix& value);
 
     Shader* GetShader(const char* vs, const char* ps, const char* gs = nullptr);
+    Texture* LoadTexture(const char* name);
 
 private:
     int m_sortIndex = 0;

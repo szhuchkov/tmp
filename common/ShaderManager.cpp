@@ -37,9 +37,9 @@ Shader* ShaderManager::GetShader(const char* vs, const char* ps, const char* gs)
     // search for existing shader
     for (auto item : m_shaders)
     {
-        if (vs && item.vs == vs &&
-            ps && item.ps == ps &&
-            gs && item.gs == gs)
+        if ((!vs || (item.vs == vs)) &&
+            (!ps || (item.ps == ps)) &&
+            (!gs || (item.gs == gs)))
             return item.shader;
     }
 

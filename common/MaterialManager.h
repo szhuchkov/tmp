@@ -16,13 +16,13 @@ public:
     bool Init();
     void Shutdown();
 
-    BaseMaterial* GetMaterial(const char* name);
+    BaseMaterial* GetBaseMaterial(const char* name);
 
 private:
     MaterialManager();
     ~MaterialManager();
 
-    void AddMaterial(BaseMaterial* mtr);
+    void AddBaseMaterial(BaseMaterial* mtr);
 
 private:
     std::unordered_map<std::string, BaseMaterial*> m_materials;

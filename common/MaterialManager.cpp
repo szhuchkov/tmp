@@ -19,8 +19,8 @@ MaterialManager::~MaterialManager()
 bool MaterialManager::Init()
 {
     // add basic materials
-    AddMaterial(new M_Quad());
-    AddMaterial(new M_BasicMaterial());
+    AddBaseMaterial(new M_Quad());
+    AddBaseMaterial(new M_BasicMaterial());
 
     // now initialize all
     int numErrors = 0;
@@ -56,13 +56,13 @@ void MaterialManager::Shutdown()
 }
 
 
-void MaterialManager::AddMaterial(BaseMaterial* mtr)
+void MaterialManager::AddBaseMaterial(BaseMaterial* mtr)
 {
     m_materials[mtr->GetName()] = mtr;
 }
 
 
-BaseMaterial* MaterialManager::GetMaterial(const char* name)
+BaseMaterial* MaterialManager::GetBaseMaterial(const char* name)
 {
     auto it = m_materials.find(name);
     if (it != m_materials.end())

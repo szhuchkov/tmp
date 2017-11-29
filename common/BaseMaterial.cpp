@@ -3,6 +3,7 @@
 #include "RenderWorld.h"
 #include "RenderDevice.h"
 #include "ShaderManager.h"
+#include "TextureManager.h"
 
 
 BaseMaterial::BaseMaterial(const char* name) :
@@ -77,6 +78,12 @@ void BaseMaterial::SetMaterial(RenderMaterial* material)
 Shader* BaseMaterial::GetShader(const char* vs, const char* ps, const char* gs)
 {
     return ShaderManager::GetInstance()->GetShader(vs, ps, gs);
+}
+
+
+Texture* BaseMaterial::LoadTexture(const char* name)
+{
+    return TextureManager::GetInstance()->LoadTexture(name);
 }
 
 

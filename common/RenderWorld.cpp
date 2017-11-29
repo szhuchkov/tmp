@@ -21,7 +21,7 @@ RenderWorld::~RenderWorld()
 
 BaseMaterial* RenderWorld::GetBaseMaterial(const char* name)
 {
-    auto mtr = MaterialManager::GetInstance()->GetMaterial(name);
+    auto mtr = MaterialManager::GetInstance()->GetBaseMaterial(name);
     if (!mtr)
     {
         LogPrintf("Warning: base material '%s' not found", name);
