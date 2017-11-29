@@ -1,13 +1,12 @@
 #include "pch.h"
 #include "UnitTest.h"
-#include "FileSystemTest.h"
-#include "SceneObjectDataTest.h"
+#include "MeshDataTest.h"
 
 
 int main(int argc, char** argv)
 {
     UnitTest* tests[] = {
-        new SceneObjectDataTest(),
+        new MeshDataTest(),
     };
 
     int numTests = ARRAY_SIZE(tests);
