@@ -76,6 +76,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)jpeglib\jpeglib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />

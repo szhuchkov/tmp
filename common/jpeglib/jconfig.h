@@ -16,11 +16,13 @@
 #undef INCOMPLETE_TYPES_BROKEN
 
 /* n3d: custom section */
+#if WIN32
 #define XMD_H
 #undef FAR
 #undef NEED_FAR_POINTERS
 typedef short INT16;
 typedef int INT32;
+#endif
 
 /* Define "boolean" as unsigned char, not int, per Windows custom */
 #ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */

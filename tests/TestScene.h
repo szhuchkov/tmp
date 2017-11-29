@@ -105,7 +105,10 @@ public:
         RenderWorld::GetInstance()->AddEntity(&m_entity);
 
         // setup camera
-        MatrixLookAt(&m_camera.view, &Vector3(0, 0, -1), &Vector3(0, 0, 0), &Vector3(0, 1, 0));
+        Vector3 camPos(0, 0, -1);
+        Vector3 camTarget(0, 0, 0);
+        Vector3 camUp(0, 1, 0);
+        MatrixLookAt(&m_camera.view, &camPos, &camTarget, &camUp);
         MatrixPerspective(&m_camera.proj, 80.0f, 1.5f, 1.0f, 1000.0f);
         RenderWorld::GetInstance()->SetCamera(&m_camera);
 

@@ -1,14 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="UnitTest.h" />
-    <ClInclude Include="FileSystemTest.h" />
-    <ClInclude Include="TestScene.h" />
-    <ClInclude Include="MathTest.h" />
-    <ClInclude Include="CVarTest.h" />
     <ClInclude Include="ConfigFileTest.h" />
+    <ClInclude Include="CVarTest.h" />
+    <ClInclude Include="FileSystemTest.h" />
+    <ClInclude Include="MathTest.h" />
+    <ClInclude Include="SceneObjectDataTest.h" />
+    <ClInclude Include="TestScene.h" />
+    <ClInclude Include="UnitTest.h" />
+    <ClInclude Include="..\win32\FileSystemPC.h" />
+    <ClInclude Include="..\win32\InputManagerPC.h" />
+    <ClInclude Include="..\win32\OGLDriverPC.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestMain.cpp" />
+    <ClCompile Include="..\win32\FileSystemPC.cpp" />
+    <ClCompile Include="..\win32\InputManagerPC.cpp" />
+    <ClCompile Include="..\win32\OGLDriverPC.cpp" />
   </ItemGroup>
 </Project>

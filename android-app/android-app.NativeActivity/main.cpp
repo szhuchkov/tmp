@@ -17,9 +17,9 @@
 
 
 #include "Engine.h"
-#include "InputManagerAndroid.h"
-#include "RenderDevice.h"
+#include "Render\RenderDevice.h"
 #include "OGLDriverGLES.h"
+#include "InputManagerAndroid.h"
 #include "..\..\tests\TestScene.h"
 
 
@@ -126,14 +126,7 @@ static bool AppUpdate(AndroidAppContext* context)
 
 static void AppRender(AndroidAppContext* context)
 {
-	if (RenderDevice::GetInstance()->BeginFrame())
-	{
-		constexpr float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
-		RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, 1.0f, 0);
-		TestScene::GetInstance()->Render();
-		RenderDevice::GetInstance()->EndFrame();
-	}
-	//Engine::GetInstance()->Render();
+	Engine::GetInstance()->Render();
 }
 
 

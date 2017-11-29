@@ -1,27 +1,24 @@
 #include "pch.h"
 #include "UnitTest.h"
 #include "FileSystemTest.h"
+#include "SceneObjectDataTest.h"
 
 
-static const UnitTest* g_UnitTests[] =
+int main(int argc, char** argv)
 {
-	FileSystemTest::GetInstance()
-};
+    UnitTest* tests[] = {
+        new SceneObjectDataTest(),
+    };
 
+    int numTests = ARRAY_SIZE(tests);
 
-static const int NUM_TESTS = sizeof(g_UnitTests) / sizeof(g_UnitTests[0]);
-
-
-int test_main()
-{
 	int passed = 0;
 	int errors = 0;
 
-	for(int i = 0; i < NUM_TESTS; i++)
+	for(int i = 0; i < numTests; i++)
 	{
-		UnitTest* test = g_UnitTests[i];
-
-		const char* name = test->GetName();
+        auto test = tests[i];
+		auto name = test->GetName();
 
 		LogPrintf("Running test '%s'...", name);
 
@@ -36,7 +33,30 @@ int test_main()
 			LogPrintf("Success!");
 			passed++;
 		}
+
+        delete test;
 	}
 
 	return (errors ? -1 : 0);
+}
+
+
+void _LogPrintf(const char* file, int line, const char* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    char buffer[10000] = { 0 };
+    int offset = 0;
+
+    // VS double click navigation support
+    offset += sprintf(&buffer[offset], "%s(%d): ", file, line);
+    offset += vsprintf(&buffer[offset], format, args);
+    buffer[offset++] = '\n';
+    buffer[offset++] = 0;
+
+    va_end(args);
+
+    // dump to the console and debug output
+    printf("%s", buffer);
 }

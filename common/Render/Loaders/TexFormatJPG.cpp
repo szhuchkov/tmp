@@ -1,9 +1,13 @@
 #include "pch.h"
 #include "TexFormatJPG.h"
 
+#if defined __ANDROID__
+#include <jpeglib\jpeglib.h>
+#else
 extern "C" {
 #include <jpeglib\jpeglib.h>
-}
+};
+#endif
 
 
 class TexFormatJPG::Context

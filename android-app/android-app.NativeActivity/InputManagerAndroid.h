@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "InputManager.h"
-#include "InputDeviceTouch.h"
-#include "InputDeviceKeyboard.h"
+#include "Input/InputManager.h"
+#include "Input/InputDeviceTouch.h"
+#include "Input/InputDeviceKeyboard.h"
 
 
 class InputManagerAndroid : public InputManager
