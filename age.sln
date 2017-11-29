@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win32", "win32\win32.vcxproj", "{D7D05C96-6AF9-48AB-993B-EF1301638AB9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB} = {9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "android-app", "android-app", "{66B916AA-1B03-48B9-88EC-7671CB7211B7}"
 EndProject
@@ -20,7 +15,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3dx_matrix", "d3dx_matrix\d3dx_matrix.vcxproj", "{271A76E9-1678-4CC9-85C5-678C4232D0F1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxitems", "{45D41ACC-2C3C-43D2-BC10-02AA73FFC7C7}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		common\common.vcxitems*{4036fddd-068d-4246-8a6c-5edd1c3e0aef}*SharedItemsImports = 4
+		common\common.vcxitems*{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}*SharedItemsImports = 9
+		common\common.vcxitems*{d7d05c96-6af9-48ab-993b-ef1301638ab9}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
 		Debug|ARM64 = Debug|ARM64
@@ -44,18 +46,6 @@ Global
 		{D7D05C96-6AF9-48AB-993B-EF1301638AB9}.Release|x64.Build.0 = Release|x64
 		{D7D05C96-6AF9-48AB-993B-EF1301638AB9}.Release|x86.ActiveCfg = Release|Win32
 		{D7D05C96-6AF9-48AB-993B-EF1301638AB9}.Release|x86.Build.0 = Release|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Debug|ARM.ActiveCfg = Debug|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Debug|ARM64.ActiveCfg = Debug|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Debug|x64.ActiveCfg = Debug|x64
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Debug|x64.Build.0 = Debug|x64
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Debug|x86.ActiveCfg = Debug|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Debug|x86.Build.0 = Debug|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Release|ARM.ActiveCfg = Release|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Release|ARM64.ActiveCfg = Release|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Release|x64.ActiveCfg = Release|x64
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Release|x64.Build.0 = Release|x64
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Release|x86.ActiveCfg = Release|Win32
-		{9A6BF074-3B02-4FCC-9EDD-A24BD5F5AFDB}.Release|x86.Build.0 = Release|Win32
 		{25C80C0B-7E53-443B-97DB-02083BAB8A4A}.Debug|ARM.ActiveCfg = Debug|ARM
 		{25C80C0B-7E53-443B-97DB-02083BAB8A4A}.Debug|ARM.Build.0 = Debug|ARM
 		{25C80C0B-7E53-443B-97DB-02083BAB8A4A}.Debug|ARM.Deploy.0 = Debug|ARM

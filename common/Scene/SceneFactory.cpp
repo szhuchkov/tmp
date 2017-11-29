@@ -2,7 +2,7 @@
 #include "SceneFactory.h"
 #include "SceneObject.h"
 
-#include <SceneObjects\SO_EmptyObject.h>
+#include "SceneObjects\SO_EmptyObject.h"
 
 
 SceneObject* SceneFactory::CreateObject(int id, const char* clsName)

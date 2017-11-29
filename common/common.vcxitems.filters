@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Engine.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)FileSystem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tinyxml\tinyxml2.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BatchRender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\RenderWorld.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\RenderDevice.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputDeviceKeyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputDeviceMouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputDeviceTouch.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\MaterialManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\OGLDriver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneFactory.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneLoader.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObject.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectData.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_EmptyObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Materials\M_Quad.h">
+      <Filter>Render\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Materials\M_BasicMaterial.h">
+      <Filter>Render\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\TextureManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatTGA.h">
+      <Filter>Render\TextureFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatJPG.h">
+      <Filter>Render\TextureFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\math3d.h">
+      <Filter>math3d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\ShaderManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\Utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\Platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)FileSystem.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jcomapi.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapimin.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapistd.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdatasrc.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcoefct.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcolor.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jddctmgr.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdhuff.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdinput.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmainct.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmarker.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmaster.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmerge.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdphuff.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdpostct.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdsample.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jerror.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctflt.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctfst.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctint.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctred.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemansi.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemmgr.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant1.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant2.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jutils.c">
+      <Filter>3rdParty\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)tinyxml\tinyxml2.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\BatchRender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\RenderWorld.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\RenderDevice.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceKeyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceMouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceTouch.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\MaterialManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneFactory.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneLoader.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObject.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectData.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\TextureManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatJPG.cpp">
+      <Filter>Render\TextureFormats</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatTGA.cpp">
+      <Filter>Render\TextureFormats</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\math3d.cpp">
+      <Filter>math3d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\ShaderManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utils\Utils.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="math3d">
+      <UniqueIdentifier>{e6cca8c9-9190-45b2-9ce2-7c12b47c192b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{7d9679e0-3e6c-4aeb-ad4f-9f6c706c7020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{aa08c8b8-c3b8-4434-a355-854a428db8b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{ef24258c-a740-4c8d-a106-4082de68413f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{9dcd75e5-f217-40ae-baf6-053e4ea4199a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty">
+      <UniqueIdentifier>{ff804df3-997d-4c1f-a5c9-bf73d03c9a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\SceneObjects">
+      <UniqueIdentifier>{ef9897f8-c4f3-4920-8558-fa077cbcf73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Materials">
+      <UniqueIdentifier>{1682feb6-f2ac-4080-9f71-956f80e6d1c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\TextureFormats">
+      <UniqueIdentifier>{8ed9e522-d4ef-43cc-b23e-61ce2d64df4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\jpeglib">
+      <UniqueIdentifier>{296999d0-2367-4e17-863b-a4f5b0f974cd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

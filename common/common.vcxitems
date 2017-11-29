@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\BatchRender.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)FileSystem.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceKeyboard.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceMouse.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceTouch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jcomapi.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapimin.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapistd.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdatasrc.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcoefct.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcolor.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jddctmgr.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdhuff.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdinput.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmainct.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmarker.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmaster.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmerge.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdphuff.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdpostct.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdsample.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jerror.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctflt.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctfst.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctint.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctred.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemansi.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemmgr.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant1.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant2.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jutils.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\MaterialManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\math3d.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\RenderDevice.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\RenderWorld.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\Scene.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneFactory.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneLoader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObject.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectData.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\ShaderManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatJPG.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatTGA.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\TextureManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)tinyxml\tinyxml2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utils\Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BatchRender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Engine.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)FileSystem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputDeviceKeyboard.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputDeviceMouse.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputDeviceTouch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\InputManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\MaterialManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\math3d.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Materials\M_BasicMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Materials\M_Quad.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\OGLDriver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\Platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\RenderDevice.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\RenderWorld.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\Scene.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneFactory.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneLoader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_EmptyObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\ShaderManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatJPG.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatTGA.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\TextureManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tinyxml\tinyxml2.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils\Utils.h" />
+  </ItemGroup>
+</Project>

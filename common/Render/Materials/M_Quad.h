@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "BaseMaterial.h"
+#include "../BaseMaterial.h"
 
 
 class M_Quad : public BaseMaterial

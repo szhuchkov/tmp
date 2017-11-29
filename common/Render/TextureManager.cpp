@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "TextureManager.h"
 #include "RenderDevice.h"
-#include "TexFormatTGA.h"
-#include "TexFormatJPG.h"
+#include "Loaders/TexFormatTGA.h"
+#include "Loaders/TexFormatJPG.h"
 
 
 TextureManager::TextureManager()

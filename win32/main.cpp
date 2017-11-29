@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Engine.h"
+#include "Render/RenderDevice.h"
+#include "Scene/Scene.h"
 #include "InputManagerPC.h"
-#include "RenderDevice.h"
-#include "Scene.h"
-#include "..\tests\TestScene.h"
+#include "../tests/TestScene.h"
 
 
 #define WND_NAME		"AGE RenderWindow"

@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Engine.h"
 #include "FileSystem.h"
-#include "RenderDevice.h"
-#include "InputManager.h"
-#include "RenderWorld.h"
-#include "Scene.h"
+#include "Render/RenderDevice.h"
+#include "Render/RenderWorld.h"
+#include "Input/InputManager.h"
+#include "Scene/Scene.h"
 
 
 Engine::Engine()

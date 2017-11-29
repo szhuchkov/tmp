@@ -15,7 +15,7 @@
 #include <algorithm>
 
 
-#include "Platform.h"
-#include "Utils.h"
-#include "math3d.h"
+#include "Utils/Platform.h"
+#include "Utils/Utils.h"
+#include "Math/math3d.h"
 

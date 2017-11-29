@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "RenderDevice.h"
-#include "RenderWorld.h"
-#include "TextureManager.h"
+#include "Render/RenderDevice.h"
+#include "Render/RenderWorld.h"
+#include "Render/TextureManager.h"
 
 
 class TestScene

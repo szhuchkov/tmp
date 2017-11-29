@@ -2,8 +2,8 @@
 #include "MaterialManager.h"
 #include "BaseMaterial.h"
 
-#include "M_Quad.h"
-#include "M_BasicMaterial.h"
+#include "Materials/M_Quad.h"
+#include "Materials/M_BasicMaterial.h"
 
 
 MaterialManager::MaterialManager()

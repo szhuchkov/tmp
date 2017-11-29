@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "SceneObject.h"
+#include "..\SceneObject.h"
 
 
 class SO_EmptyObject : public SceneObject

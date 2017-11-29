@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "BaseMaterial.h"
-#include "RenderWorld.h"
+#include "../BaseMaterial.h"
+#include "../RenderWorld.h"
 
 
 class M_BasicMaterial : public BaseMaterial
