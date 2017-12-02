@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="MeshExport.h" />
+    <ClInclude Include="SceneExport.h" />
+    <ClInclude Include="..\common\tinyxml\tinyxml2.h">
+      <Filter>tinyxml</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="MeshExport.cpp" />
+    <ClCompile Include="SceneExport.cpp" />
+    <ClCompile Include="..\common\tinyxml\tinyxml2.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MeshExport.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="tinyxml">
+      <UniqueIdentifier>{e32d0d50-8959-4229-945a-78ce7ef83ba8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
