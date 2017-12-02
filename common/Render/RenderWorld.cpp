@@ -152,6 +152,19 @@ void RenderWorld::RenderForContext(RenderContext* context)
     CullLights(context);
     CullEntities(context);
 
+    static float angle = 0.0f;
+    angle += 0.00007f;
+    Vector3 camPos(8 * sinf(angle), 1.8f, 8 * cosf(angle));
+    Vector3 camTarget(0, 0, 0);
+    Vector3 camUp(0, 1, 0);
+
+    Matrix view;
+    MatrixLookAt(&view, &camPos, &camTarget, &camUp);
+    Matrix proj;
+    MatrixPerspective(&proj, 80.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
+    Matrix viewProj = view * proj;
+    RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION, viewProj);
+
     // TODO: threads
     for (auto light : context->visibleLights)
     {

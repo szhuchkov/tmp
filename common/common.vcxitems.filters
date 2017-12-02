@@ -78,6 +78,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)jpeglib\jpeglib.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_StaticMesh.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_SkyLight.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -225,6 +229,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\MeshManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">

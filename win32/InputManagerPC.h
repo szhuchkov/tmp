@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "Input/InputManager.h"
-#include "Input/InputDeviceMouse.h"
-#include "Input/InputDeviceKeyboard.h"
+#include <Input/InputManager.h>
+#include <Input/InputDeviceMouse.h>
+#include <Input/InputDeviceKeyboard.h>
 
 
 class InputManagerPC : public InputManager

@@ -62,3 +62,8 @@ void SceneObject::Kill()
 {
     m_isAllive = false;
 }
+
+
+void SceneObject::Spawn()
+{
+}

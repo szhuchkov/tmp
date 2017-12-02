@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "BatchRender.h"
-#include "RenderWorld.h"
-#include "BaseMaterial.h"
-#include "RenderDevice.h"
+#include <Render/BatchRender.h>
+#include <Render/RenderWorld.h>
+#include <Render/BaseMaterial.h>
+#include <Render/RenderDevice.h>
 
 
 class BatchRender::SortDrawSurfacesPred
@@ -76,13 +76,16 @@ void BatchRender::AddDrawSurface(RenderContext* context)
     auto& surf = m_surfaces.back();
     surf.entity = context->entity;
     surf.surface = context->surface;
-
-    m_sortSurfaces.push_back(&surf);
 }
 
 
 void BatchRender::Execute()
 {
+    size_t numSurfaces = m_surfaces.size();
+    m_sortSurfaces.resize(numSurfaces);
+    for (size_t i = 0; i < numSurfaces; i++)
+        m_sortSurfaces[i] = &m_surfaces[i];
+
     std::sort(m_sortSurfaces.begin(), m_sortSurfaces.end(), SortDrawSurfacesPred(m_context));
 
     RenderEntity* lastEntity = nullptr;
@@ -151,5 +154,6 @@ void BatchRender::Execute()
         }
     }
 
+    m_surfaces.clear();
     m_sortSurfaces.clear();
 }

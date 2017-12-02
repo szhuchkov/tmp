@@ -83,7 +83,7 @@ public:
         // create geometry
         m_geometry.primitive = RenderDevice::PRIMITIVE_TRIANGLES;
         m_geometry.verts = RenderDevice::GetInstance()->CreateVertexBuffer(
-            RenderDevice::VERTEX_XYZ | RenderDevice::VERTEX_TEXCOORD, m_surface.vertexCount, verts);
+            RenderDevice::VERTEX_POSITION | RenderDevice::VERTEX_TEXCOORD, m_surface.vertexCount, verts);
         m_geometry.inds = RenderDevice::GetInstance()->CreateIndexBuffer(
             RenderDevice::INDEX_16, m_surface.indexCount, inds);
         m_model.geometry = &m_geometry;
@@ -118,7 +118,7 @@ public:
     void Shutdown()
     {
 #if 1
-        TextureManager::GetInstance()->DeleteTexture(m_texture);
+        TextureManager::GetInstance()->FreeTexture(m_texture);
 #else
         RenderDevice::GetInstance()->DeleteTexture(m_texture);
 #endif

@@ -17,6 +17,12 @@ bool SceneObjectData::HasProperty(const char* name) const
 }
 
 
+void SceneObjectData::SetBool(const char* name, bool value)
+{
+    m_items[name] = value ? "true" : "false";
+}
+
+
 void SceneObjectData::SetString(const char* name, const char* value)
 {
     m_items[name] = value ? value : "";
@@ -73,6 +79,15 @@ void SceneObjectData::SetMatrix(const char* name, const Matrix& value)
         m[8], m[9], m[10], m[11],
         m[12], m[13], m[14], m[15]);
     SetString(name, buffer);
+}
+
+
+bool SceneObjectData::GetBool(const char* name) const
+{
+    auto it = m_items.find(name);
+    if (it != m_items.end())
+        return it->second == "true";
+    return false;
 }
 
 

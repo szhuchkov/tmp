@@ -65,8 +65,20 @@ bool TexFormatTGA::Load(const char* name)
 
         if (header->bitsPerPixel == 32)
         {
-            memcpy(data, ptr, 4 * width * height);
-            ptr += 4 * width * height;
+            char *src = ptr;
+            char* dst = data;
+            for (unsigned int row = 0; row < height; row++)
+            {
+                for (unsigned int col = 0; col < width; col++)
+                {
+                    dst[0] = src[2];
+                    dst[1] = src[1];
+                    dst[2] = src[0];
+                    dst[3] = src[3];
+                    src += 4;
+                    dst += 4;
+                }
+            }
         }
         else if (header->bitsPerPixel == 24)
         {
@@ -76,10 +88,12 @@ bool TexFormatTGA::Load(const char* name)
             {
                 for (unsigned int col = 0; col < width; col++)
                 {
-                    *dst++ = *src++;
-                    *dst++ = *src++;
-                    *dst++ = *src++;
-                    *dst++ = char(0xff);
+                    dst[0] = src[2];
+                    dst[1] = src[1];
+                    dst[2] = src[0];
+                    dst[3] = char(0xff);
+                    src += 3;
+                    dst += 4;
                 }
             }
         }

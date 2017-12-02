@@ -17,6 +17,11 @@ public:
 		return &instance;
 	}
 
+    // limits
+    enum { MAX_SAMPLERS = 8 };
+    enum { MAX_UNIFORMS = 20 };
+    enum { MAX_MATRICES = 10 };
+
 	enum ClearFlags
 	{
 		CLEAR_COLOR = 1,
@@ -35,18 +40,23 @@ public:
 
 	enum VertexFormat
 	{
-		VERTEX_XYZ = (1 << 0),
-		VERTEX_NORMAL = (1 << 1),
-		VERTEX_TEXCOORD = (1 << 2),
-		VERTEX_COLOR = (1 << 3),
-		VERTEX_DYNAMIC = (1 << 10),
+        VERTEX_POSITION = (1 << 0),
+        VERTEX_NORMAL = (1 << 1),
+        VERTEX_TEXCOORD = (1 << 2),
+        VERTEX_TANGENT = (1 << 3),
+        VERTEX_TBN = (1 << 4),
+        VERTEX_BONE_WEIGHT = (1 << 5),
+        VERTEX_BONE_INDEX = (1 << 6),
+        VERTEX_COLOR = (1 << 7),
+
+        VERTEX_DYNAMIC = (1 << 16),
 	};
 
 	enum IndexFormat
 	{
-		INDEX_16 = (1 << 0),
-		INDEX_32 = (1 << 1),
-		INDEX_DYNAMIC = (1 << 10),
+		INDEX_16 = 0,
+		INDEX_32 = (1 << 20),
+		INDEX_DYNAMIC = (1 << 21),
 	};
 
 	enum TextureFormat
@@ -87,6 +97,7 @@ public:
         MATRIX_VIEW_INVERSE,
         MATRIX_SHADOW,
         MATRIX_LIGHT,
+        MATRIX_USER_MATRIX_0,
     };
 
 	bool Init(void* window, int width, int height, bool fullscreen);
@@ -136,11 +147,39 @@ private:
 	~RenderDevice();
 
 	unsigned int CompileShader(const char* code, unsigned int type);
+    void InitShader(Shader* shader);
+
+    void ValidateState();
 	void SetupVertexStream();
+
+    // state flags
+    enum
+    {
+        DIRTY_VERTS = (1 << 0),
+        DIRTY_INDS = (1 << 1),
+        DIRTY_SHADER = (1 << 2),
+        DIRTY_SAMPLERS = (1 << 3),
+        DIRTY_MATRICES = (1 << 4),
+        DIRTY_UNIFORMS = (1 << 5),
+    };
+
+    // current dirty state
+    uint32_t            m_state = 0;
+    uint32_t            m_samplerState = 0;
 
 	// batching
 	VertexBuffer*		m_activeVerts = nullptr;
 	IndexBuffer*		m_activeInds = nullptr;
 	Shader*				m_activeShader = nullptr;
 	unsigned int		m_activeAttribs = 0;
+    unsigned int        m_activeStreamOffset = 0;
+
+    // texture cache
+    Texture*            m_activeSamplers[MAX_SAMPLERS] = {};
+
+    // constant cache
+    Matrix              m_matrixValue[MAX_MATRICES];
+    int                 m_matrixVersion[MAX_MATRICES] = {};
+    Vector4             m_uniformValue[MAX_UNIFORMS];
+    int                 m_uniformVersion[MAX_UNIFORMS] = {};
 };

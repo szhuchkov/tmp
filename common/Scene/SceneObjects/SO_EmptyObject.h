@@ -1,14 +1,16 @@
 #pragma once
 
 
-#include "..\SceneObject.h"
+#include <Scene/SceneObject.h>
 
 
 class SO_EmptyObject : public SceneObject
 {
 public:
-    SO_EmptyObject(int id, const char* clsName) :
-        SceneObject(id, clsName)
+    static constexpr char* CLASS_NAME = "EmptyObject";
+
+    SO_EmptyObject(int id) :
+        SceneObject(id, CLASS_NAME)
     {
     }
 };

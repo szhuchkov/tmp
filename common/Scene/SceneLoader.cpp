@@ -38,6 +38,7 @@ bool SceneLoader::Load(const char* fileName)
     }
 
     // enum objects inside 'Scene'
+    std::vector<SceneObject*> spawnObjects;
     for (auto objElement = sceneElement->FirstChildElement(); objElement != nullptr; objElement = objElement->NextSiblingElement())
     {
         // get all properties
@@ -61,6 +62,10 @@ bool SceneLoader::Load(const char* fileName)
                     LogPrintf("Unable to load object '%s' from '%s'", clsName, fileName);
                     obj->Kill();
                 }
+                else
+                {
+                    spawnObjects.push_back(obj);
+                }
             }
             else
             {
@@ -72,6 +77,10 @@ bool SceneLoader::Load(const char* fileName)
             LogPrintf("Object with no ClassName in '%s'", fileName);
         }
     }
+
+    // spawn objects
+    for (auto obj : spawnObjects)
+        obj->Spawn();
 
     return true;
 }

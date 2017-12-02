@@ -3,4 +3,14 @@
   <Object>
     <ClassName>EmptyObject</ClassName>
   </Object>
+  <Object>
+    <ClassName>SkyLight</ClassName>
+    <Color>0.6, 0.5, 0.2</Color>
+    <CastShadows>true</CastShadows>
+  </Object>
+  <Object>
+    <ClassName>StaticMesh</ClassName>
+    <MeshName>test.mesh</MeshName>
+    <MaterialsName>test.mtr</MaterialsName>
+  </Object>
 </Scene>

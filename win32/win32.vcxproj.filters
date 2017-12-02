@@ -38,6 +38,12 @@
     <None Include="Quad.ps">
       <Filter>tmpdata</Filter>
     </None>
+    <None Include="test.mesh">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="test.mtr">
+      <Filter>tmpdata</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ShaderPreload.txt">

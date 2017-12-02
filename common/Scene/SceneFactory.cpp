@@ -1,15 +1,19 @@
 #include "pch.h"
-#include "SceneFactory.h"
-#include "SceneObject.h"
-
-#include "SceneObjects\SO_EmptyObject.h"
+#include <Scene/SceneFactory.h>
+#include <Scene/SceneObject.h>
+#include <Scene/SceneObjects/SO_EmptyObject.h>
+#include <Scene/SceneObjects/SO_SkyLight.h>
+#include <Scene/SceneObjects/SO_StaticMesh.h>
 
 
 SceneObject* SceneFactory::CreateObject(int id, const char* clsName)
 {
     SceneObject* res = nullptr;
-    if (!strcmp(clsName, "EmptyObject"))
-        res = new SO_EmptyObject(id, clsName);
+#define MAKE_SCENE_OBJECT(cls)    (strcmp(clsName, cls::CLASS_NAME) ? nullptr : new cls(id))
+    if (!res) res = MAKE_SCENE_OBJECT(SO_EmptyObject);
+    if (!res) res = MAKE_SCENE_OBJECT(SO_SkyLight);
+    if (!res) res = MAKE_SCENE_OBJECT(SO_StaticMesh);
+#undef MAKE_SCENE_OBJECT
     return res;
 }
 

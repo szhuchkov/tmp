@@ -13,15 +13,17 @@ public:
         return &instance;
     }
 
-    Texture* LoadTexture(const char* name);
-    void DeleteTexture(Texture* tex);
+    Texture* LoadTexture(const char* name, bool genMipmaps = true);
+    void FreeTexture(Texture* tex);
 
 private:
     TextureManager();
     ~TextureManager();
 
     template <typename _LoaderType>
-    Texture* Load(const char* name);
+    Texture* Load(const char* name, bool genMips);
+
+    void GenMipLevel(unsigned int w, unsigned int h, const std::vector<uint32_t>& src, std::vector<uint32_t>& dst);
 
 private:
     struct TextureNode

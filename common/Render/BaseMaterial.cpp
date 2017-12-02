@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "BaseMaterial.h"
-#include "RenderWorld.h"
-#include "RenderDevice.h"
-#include "ShaderManager.h"
-#include "TextureManager.h"
+#include <Render/BaseMaterial.h>
+#include <Render/RenderWorld.h>
+#include <Render/RenderDevice.h>
+#include <Render/ShaderManager.h>
+#include <Render/TextureManager.h>
 
 
 BaseMaterial::BaseMaterial(const char* name) :

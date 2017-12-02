@@ -64,6 +64,24 @@ bool MeshData::Load(const char* fileName)
         ptr += sizeof(Bone) * m_header->numBones;
     }
 
+    struct TestVertex
+    {
+        Vector3 pos;
+        Vector3 norm;
+        Vector2 tex;
+        Vector3 tang;
+        uint32_t clr;
+    };
+
+    //size_t sz = sizeof(TestVertex);
+    //std::vector<TestVertex> testVerts;
+    //testVerts.resize(GetNumVerts());
+    //memcpy(&testVerts[0], GetVerts(), sz * GetNumVerts());
+
+    //std::vector<uint32_t> inds;
+    //inds.resize(GetNumInds());
+    //memcpy(&inds[0], GetInds(), 4 * GetNumInds());
+
     return true;
 }
 

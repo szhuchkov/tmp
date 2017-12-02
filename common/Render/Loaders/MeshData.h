@@ -6,6 +6,7 @@ class MeshData
 public:
     static const uint32_t VERSION = 100;
 
+    // should match RenderDevice formags
     static const uint32_t VERTEX_POSITION = (1 << 0);
     static const uint32_t VERTEX_NORMAL = (1 << 1);
     static const uint32_t VERTEX_TEXCOORD = (1 << 2);

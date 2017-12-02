@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "Engine.h"
-#include "Render/RenderDevice.h"
-#include "Scene/Scene.h"
+#include <Engine.h>
+#include <Render/RenderDevice.h>
+#include <Scene/Scene.h>
 #include "InputManagerPC.h"
 #include "../tests/TestScene.h"
 
@@ -121,7 +121,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
         return -1;
     }
 
-    TestScene::GetInstance()->Init();
+//    TestScene::GetInstance()->Init();
 
 	// run main loop
 	while (!cl_quit)

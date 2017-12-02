@@ -11,6 +11,7 @@ public:
     int GetID() const;
     bool IsAllive() const;
 
+    virtual void Spawn();
     virtual void Update(unsigned int dt);
     virtual void Kill();
 
@@ -20,7 +21,7 @@ public:
 private:
     std::string m_className;
     int m_id = -1;
-    bool m_isAllive = false;
+    bool m_isAllive = true;
     unsigned int m_killTimeout = ~0;
 
 protected:

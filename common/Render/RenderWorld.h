@@ -20,9 +20,9 @@ enum RenderLayer
 };
 
 
-enum LightEntityFlags
+enum LightFlags
 {
-    LIGHT_ENTITY_SHADOWS,
+    LIGHT_CAST_SHADOW = 1,
 };
 
 
@@ -41,13 +41,14 @@ enum LightType
 
 enum RenderEntityFlags
 {
-    RENDER_ENTITY_CAST_SHADOW,
+    RENDER_ENTITY_CAST_SHADOW = 1,
 };
 
 
 enum MaterialFlags
 {
-    MATERIAL_FLAG_TWOSIDED,
+    MATERIAL_FLAG_TRANSPARENT   = 1,
+    MATERIAL_FLAG_TWOSIDED      = 2,
 };
 
 
@@ -102,8 +103,10 @@ struct RenderEntity
 
 struct RenderLight
 {
-    Matrix                      position;
+    LightType                   type;
     unsigned int                flags;
+    Vector3                     color;
+    Matrix                      position;
 };
 
 

@@ -170,6 +170,8 @@
     <None Include="BasicMaterialShadow.vs" />
     <None Include="Quad.ps" />
     <None Include="Quad.vs" />
+    <None Include="test.mesh" />
+    <None Include="test.mtr" />
     <None Include="test.scene" />
   </ItemGroup>
   <ItemGroup>

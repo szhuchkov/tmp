@@ -9,6 +9,7 @@ public:
     bool HasProperty(const char* name) const;
 
     // write values
+    void SetBool(const char* name, bool value);
     void SetString(const char* name, const char* value);
     void SetInt(const char* name, int value);
     void SetFloat(const char* name, float value);
@@ -18,6 +19,7 @@ public:
     void SetMatrix(const char* name, const Matrix& value);
 
     // read values
+    bool GetBool(const char* name) const;
     const char* GetString(const char* name) const;
     int GetInt(const char* name) const;
     float GetFloat(const char* name) const;

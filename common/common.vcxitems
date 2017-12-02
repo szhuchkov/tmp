@@ -16,7 +16,9 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\BatchRender.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\MeshManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -72,7 +74,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)jpeglib\jpeglib.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BatchRender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_SkyLight.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_StaticMesh.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Engine.h" />
