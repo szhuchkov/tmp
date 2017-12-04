@@ -69,12 +69,31 @@ public:
 	Vector2& operator -= (const Vector2& v);
 	Vector2& operator *= (const Vector2& v);
 	Vector2& operator /= (const Vector2& v);
+
+    friend Vector2 operator * (float s, const Vector2& v);
 };
+
+
+float Vec2Length(const Vector2* a);
+float Vec2LengthSq(const Vector2* a);
+float Vec2Dot(const Vector2* a, const Vector2* b);
+float Vec2Distance(const Vector2* a, const Vector2* b);
+float Vec2DistanceSq(const Vector2* a, const Vector2* b);
+void Vec2Normalize(Vector2* dst, const Vector2* src);
 
 
 class Vector3
 {
 public:
+    static const Vector3 ZERO;
+    static const Vector3 ONE;
+    static const Vector3 UP;
+    static const Vector3 DOWN;
+    static const Vector3 RIGHT;
+    static const Vector3 LEFT;
+    static const Vector3 FORWARD;
+    static const Vector3 BACK;
+
 	float	x, y, z;
 
 	Vector3();
@@ -112,6 +131,8 @@ public:
 	Vector3& operator -= (const Vector3& v);
 	Vector3& operator *= (const Vector3& v);
 	Vector3& operator /= (const Vector3& v);
+
+    friend Vector3 operator * (float s, const Vector3& v);
 };
 
 
@@ -164,6 +185,8 @@ public:
 	Vector4& operator -= (const Vector4& v);
 	Vector4& operator *= (const Vector4& v);
 	Vector4& operator /= (const Vector4& v);
+
+    friend Vector4 operator * (float s, const Vector4& v);
 };
 
 
@@ -368,6 +391,11 @@ MATH_INLINE Vector2& Vector2::operator /= (const Vector2& v)
 	return (*this);
 }
 
+MATH_INLINE Vector2 operator * (float s, const Vector2& v)
+{
+    return v * s;
+}
+
 
 //-----------------------------------------------------------------------------
 //
@@ -539,6 +567,11 @@ MATH_INLINE Vector3& Vector3::operator /= (const Vector3& v)
 	y /= v.y;
 	z /= v.z;
 	return (*this);
+}
+
+MATH_INLINE Vector3 operator * (float s, const Vector3& v)
+{
+    return v * s;
 }
 
 
@@ -723,6 +756,11 @@ MATH_INLINE Vector4& Vector4::operator /= (const Vector4& v)
 	z /= v.z;
 	w /= v.w;
 	return (*this);
+}
+
+MATH_INLINE Vector4 operator * (float s, const Vector4& v)
+{
+    return v * s;
 }
 
 

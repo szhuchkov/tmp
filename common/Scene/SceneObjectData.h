@@ -28,6 +28,16 @@ public:
     Vector4 GetVec4(const char* name) const;
     Matrix GetMatrix(const char* name) const;
 
+    // safe get values
+    bool GetBool(const char* name, bool* dst) const;
+    bool GetString(const char* name, std::string* dst) const;
+    bool GetInt(const char* name, int* dst) const;
+    bool GetFloat(const char* name, float* dst) const;
+    bool GetVec2(const char* name, Vector2* dst) const;
+    bool GetVec3(const char* name, Vector3* dst) const;
+    bool GetVec4(const char* name, Vector4* dst) const;
+    bool GetMatrix(const char* name, Matrix* dst) const;
+
 private:
     std::unordered_map<std::string, std::string> m_items;
 };

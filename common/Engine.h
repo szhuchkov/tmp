@@ -16,7 +16,11 @@ public:
 	bool Update();
 	void Render();
 
+    void* GetWindow();
+
 private:
 	Engine();
 	~Engine();
+
+    void*   m_window = nullptr;
 };;

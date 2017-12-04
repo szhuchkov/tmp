@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Engine.h"
 #include "InputManagerPC.h"
 
 
@@ -22,6 +23,14 @@ bool InputManagerPC::Init()
 {
 	AddInputDevice(&m_mouse);
 	AddInputDevice(&m_keyboard);
+
+    HWND hwnd = static_cast<HWND>(Engine::GetInstance()->GetWindow());
+    RECT rect;
+    GetWindowRect(hwnd, &rect);
+    m_cursorInitialPos.x = (rect.left + rect.right) / 2;
+    m_cursorInitialPos.y = (rect.bottom + rect.top) / 2;
+    SetCursorPos(m_cursorInitialPos.x, m_cursorInitialPos.y);
+
 	return InputManager::Init();
 }
 
@@ -36,6 +45,35 @@ void InputManagerPC::Shutdown()
 
 void InputManagerPC::Update()
 {
+    if (!m_focus)
+        return;
+
+    POINT cursorPos;
+    GetCursorPos(&cursorPos);
+
+    int cx = cursorPos.x - m_cursorInitialPos.x;
+    int cy = cursorPos.y - m_cursorInitialPos.y;
+
+    if (m_mouse.IsCursorLocked() != m_cursorLocked)
+    {
+        m_cursorLocked = m_mouse.IsCursorLocked();
+        ShowCursor(m_cursorLocked ? FALSE : TRUE);
+    }
+
+    if (m_cursorLocked)
+    {
+        if (cx != 0 || cy != 0)
+            SetCursorPos(m_cursorInitialPos.x, m_cursorInitialPos.y);
+
+        auto pos = m_mouse.GetCursorPos();
+        if (pos.x != cx || pos.y != cy)
+            m_mouse.OnMouseMove(cx, cy);
+    }
+    else
+    {
+        m_mouse.OnMouseMove(cursorPos.x, cursorPos.y);
+    }
+
 	InputManager::Update();
 }
 
@@ -67,7 +105,15 @@ void InputManagerPC::OnMouseUp(int button)
 void InputManagerPC::OnMouseMove(int x, int y)
 {
 	//LogPrintf("onMouseMove %d, %d", x, y);
-	m_mouse.OnMouseMove(x, y);
+    //x = x - m_cursorInitialPos.x;
+    //y = y - m_cursorInitialPos.y;
+    //if (m_mouse.IsCursorLocked() != m_cursorLocked)
+   // {
+    //    m_cursorLocked = m_mouse.IsCursorLocked();
+        //ShowCursor(m_cursorLocked ? FALSE : TRUE);
+    //}
+
+	//m_mouse.OnMouseMove(x, y);
 }
 
 
@@ -76,3 +122,20 @@ void InputManagerPC::OnMouseWheel(int z)
 	m_mouse.OnMouseWheel(z);
 }
 
+
+void InputManagerPC::OnFocusChanged(bool focus)
+{
+    if (m_focus == focus)
+        return;
+
+    m_focus = focus;
+    if (m_focus)
+    {
+        SetCursorPos(m_cursorInitialPos.x, m_cursorInitialPos.y);
+        ShowCursor(m_cursorLocked ? FALSE : TRUE);
+    }
+    else
+    {
+        ShowCursor(TRUE);
+    }
+}

@@ -4,6 +4,7 @@
 #include <Scene/SceneObjects/SO_EmptyObject.h>
 #include <Scene/SceneObjects/SO_SkyLight.h>
 #include <Scene/SceneObjects/SO_StaticMesh.h>
+#include <Scene/SceneObjects/SO_FreeFlyCamera.h>
 
 
 SceneObject* SceneFactory::CreateObject(int id, const char* clsName)
@@ -13,6 +14,7 @@ SceneObject* SceneFactory::CreateObject(int id, const char* clsName)
     if (!res) res = MAKE_SCENE_OBJECT(SO_EmptyObject);
     if (!res) res = MAKE_SCENE_OBJECT(SO_SkyLight);
     if (!res) res = MAKE_SCENE_OBJECT(SO_StaticMesh);
+    if (!res) res = MAKE_SCENE_OBJECT(SO_FreeFlyCamera);
 #undef MAKE_SCENE_OBJECT
     return res;
 }

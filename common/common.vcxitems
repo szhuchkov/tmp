@@ -27,35 +27,90 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceMouse.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputDeviceTouch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Input\InputManager.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jcomapi.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapimin.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapistd.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdatasrc.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcoefct.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcolor.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jddctmgr.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdhuff.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdinput.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmainct.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmarker.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmaster.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmerge.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdphuff.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdpostct.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdsample.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jerror.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctflt.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctfst.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctint.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctred.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemansi.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemmgr.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant1.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant2.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jutils.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jcomapi.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapimin.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdapistd.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdatasrc.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcoefct.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdcolor.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jddctmgr.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdhuff.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdinput.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmainct.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmarker.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmaster.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdmerge.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdphuff.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdpostct.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jdsample.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jerror.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctflt.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctfst.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctint.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jidctred.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemansi.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jmemmgr.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant1.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jquant2.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)jpeglib\jutils.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\MaterialManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Math\math3d.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\RenderDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\RenderWorld.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene\Scene.cpp" />
@@ -67,7 +122,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatJPG.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\TexFormatTGA.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\TextureManager.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)tinyxml\tinyxml2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)tinyxml\tinyxml2.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +134,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_FreeFlyCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_SkyLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_StaticMesh.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />

@@ -2,6 +2,22 @@
 #include "math3d.h"
 
 
+const Vector3 Vector3::ZERO(0, 0, 0);
+const Vector3 Vector3::ONE(1, 1, 1);
+const Vector3 Vector3::UP(0, 1, 0);
+const Vector3 Vector3::DOWN(0, -1, 0);
+const Vector3 Vector3::LEFT(-1, 0, 0);
+const Vector3 Vector3::RIGHT(1, 0, 0);
+const Vector3 Vector3::FORWARD(0, 0, 1);
+const Vector3 Vector3::BACK(0, 0, -1);
+
+
+float Vec2Dot(const Vector2* a, const Vector2* b)
+{
+    return a->x * b->x + a->y * b->y;
+}
+
+
 float Vec3Dot(const Vector3* a, const Vector3* b)
 {
 	return a->x * b->x + a->y * b->y + a->z * b->z;

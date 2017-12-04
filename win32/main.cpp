@@ -19,11 +19,24 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 {
 	switch (msg)
 	{
+    case WM_ACTIVATE:
+    {
+        switch (wParam)
+        {
+        case WA_INACTIVE:
+            InputManagerPC::GetInstance()->OnFocusChanged(false);
+            break;
+        default:
+            InputManagerPC::GetInstance()->OnFocusChanged(true);
+            break;
+        }
+    }
+    break;
 	case WM_KEYDOWN:
-		InputManagerPC::GetInstance()->OnKeyDown(LOWORD(lParam));
+		InputManagerPC::GetInstance()->OnKeyDown(LOWORD(wParam));
 		break;
 	case WM_KEYUP:
-		InputManagerPC::GetInstance()->OnKeyUp(LOWORD(lParam));
+		InputManagerPC::GetInstance()->OnKeyUp(LOWORD(wParam));
 		break;
 	case WM_MOUSEMOVE:
 		{

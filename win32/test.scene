@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Scene>
   <Object>
+    <ClassName>FreeFlyCamera</ClassName>
+    <Position>0, 2, -7</Position>
+  </Object>
+  <Object>
     <ClassName>EmptyObject</ClassName>
   </Object>
   <Object>

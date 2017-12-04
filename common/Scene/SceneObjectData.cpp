@@ -157,3 +157,104 @@ Matrix SceneObjectData::GetMatrix(const char* name) const
         &m[12], &m[13], &m[14], &m[15]);
     return res;
 }
+
+
+bool SceneObjectData::GetBool(const char* name, bool* dst) const
+{
+    auto it = m_items.find(name);
+    if (it == m_items.end())
+        return false;
+
+    if (it->second == "true")
+        *dst = true;
+    else if (it->second == "false")
+        *dst = false;
+    else
+        return false;
+
+    return true;
+}
+
+
+bool SceneObjectData::GetString(const char* name, std::string* dst) const
+{
+    auto it = m_items.find(name);
+    if (it == m_items.end())
+        return false;
+
+    if (it->second.empty())
+        return false;
+
+    *dst = it->second;
+
+    return true;
+}
+
+
+bool SceneObjectData::GetInt(const char* name, int* dst) const
+{
+    auto it = m_items.find(name);
+    if (it == m_items.end())
+        return false;
+
+    int res;
+    if (sscanf(it->second.c_str(), "%d", &res) == 1)
+    {
+        *dst = res;
+        return true;
+    }
+
+    return false;
+}
+
+
+bool SceneObjectData::GetFloat(const char* name, float* dst) const
+{
+    auto it = m_items.find(name);
+    if (it == m_items.end())
+        return false;
+
+    float res;
+    if (sscanf(it->second.c_str(), "%f", &res) == 1)
+    {
+        *dst = res;
+        return true;
+    }
+
+    return false;
+}
+
+
+bool SceneObjectData::GetVec2(const char* name, Vector2* dst) const
+{
+    auto it = m_items.find(name);
+    if (it == m_items.end())
+        return false;
+
+    Vector2 res;
+    if (sscanf(it->second.c_str(), "%f,%f", &res.x, &res.y) == 2)
+    {
+        *dst = res;
+        return true;
+    }
+
+    return false;
+}
+
+
+
+bool SceneObjectData::GetVec3(const char* name, Vector3* dst) const
+{
+    auto it = m_items.find(name);
+    if (it == m_items.end())
+        return false;
+
+    Vector3 res;
+    if (sscanf(it->second.c_str(), "%f,%f,%f", &res.x, &res.y, &res.z) == 3)
+    {
+        *dst = res;
+        return true;
+    }
+
+    return false;
+}

@@ -192,9 +192,21 @@ bool RenderDevice::Update()
 }
 
 
+RenderDevice::ScreenSize RenderDevice::GetScreenSize()
+{
+    ScreenSize size;
+    size.width = m_width;
+    size.height = m_height;
+    size.aspect = static_cast<float>(m_width) / m_height;
+    return size;
+}
+
+
 bool RenderDevice::Resize(int width, int height)
 {
-	glViewport(0, 0, width, height);
+    m_width = width;
+    m_height = height;
+    m_state = DIRTY_TARGET;
 	return true;
 }
 
@@ -261,6 +273,16 @@ void RenderDevice::Clear(unsigned int flags, const float* color, float depth, in
 	}
 
 	glClear(mask);
+}
+
+
+void RenderDevice::SetRenderTarget(RenderTarget* target)
+{
+    if (m_activeTarget != target)
+    {
+        m_activeTarget = target;
+        m_state |= DIRTY_TARGET;
+    }
 }
 
 
@@ -364,6 +386,21 @@ void RenderDevice::DrawIndexedPrimitive(unsigned int type, unsigned int vertexOf
 
 void RenderDevice::ValidateState()
 {
+    // render target
+    if (m_state & DIRTY_TARGET)
+    {
+        if (m_activeTarget)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, m_activeTarget->framebuffer);
+            glViewport(0, 0, m_activeTarget->color->width, m_activeTarget->color->height);
+        }
+        else
+        {
+            glBindBuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, m_width, m_height);
+        }
+    }
+
     // vertex buffer
     if (m_state & DIRTY_VERTS)
     {
@@ -716,11 +753,20 @@ Texture* RenderDevice::CreateTexture2D(unsigned int width, unsigned int height, 
     glBindTexture(GL_TEXTURE_2D, handle);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, levels == 1 ? GL_LINEAR : GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_PACK_ALIGNMENT, 1);
+    if (usage == TEXTURE_USAGE_DEPTH_BUFFER)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, levels == 1 ? GL_LINEAR : GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    }
 
     glBindTexture(GL_TEXTURE_2D, 0);
 

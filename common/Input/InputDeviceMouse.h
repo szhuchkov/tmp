@@ -13,6 +13,11 @@ public:
 		BUTTON_STATE_DOWN,
 	};
 
+    struct CursorPos
+    {
+        int x, y;
+    };
+
 	InputDeviceMouse();
 	virtual ~InputDeviceMouse();
 
@@ -29,6 +34,11 @@ public:
 	int GetNumAxis() const override;
 	float GetAxis(int axis) const override;
 
+    void LockCursor();
+    void UnlockCursor();
+    bool IsCursorLocked() const;
+    const CursorPos& GetCursorPos() const;
+
 	void OnMouseDown(int button);
 	void OnMouseUp(int button);
 	void OnMouseMove(int x, int y);
@@ -39,4 +49,6 @@ private:
 	int m_buttons[MAX_MOUSE_BUTTONS];
 	static const int MAX_MOUSE_AXIS = 3;
 	int m_axis[MAX_MOUSE_AXIS];
+    bool m_cursorLock = false;
+    CursorPos m_cursorPos;
 };

@@ -19,6 +19,7 @@ public:
 	void Shutdown() override;
 	void Update() override;
 
+    void OnFocusChanged(bool focus);
 	void OnKeyDown(int code);
 	void OnKeyUp(int code);
 	void OnMouseDown(int button);
@@ -29,6 +30,10 @@ public:
 private:
 	InputManagerPC();
 	~InputManagerPC();
+
+    POINT m_cursorInitialPos;
+    bool m_cursorLocked = false;
+    bool m_focus = true;
 
 	InputDeviceMouse m_mouse;
 	InputDeviceKeyboard m_keyboard;

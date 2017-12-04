@@ -82,6 +82,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_SkyLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_FreeFlyCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />

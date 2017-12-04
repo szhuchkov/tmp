@@ -19,6 +19,8 @@ Engine::~Engine()
 
 bool Engine::Init(void* window, int width, int height, bool fullscreen)
 {
+    m_window = window;
+
 	// init file system
 	if (!FileSystem::GetInstance()->Init())
 	{
@@ -92,4 +94,10 @@ void Engine::Render()
         RenderWorld::GetInstance()->Render();
 		RenderDevice::GetInstance()->EndFrame();
 	}
+}
+
+
+void* Engine::GetWindow()
+{
+    return m_window;
 }

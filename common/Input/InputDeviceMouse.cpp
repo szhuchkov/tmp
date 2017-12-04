@@ -64,6 +64,24 @@ float InputDeviceMouse::GetAxis(int index) const
 }
 
 
+bool InputDeviceMouse::IsCursorLocked() const
+{
+    return m_cursorLock;
+}
+
+
+void InputDeviceMouse::LockCursor()
+{
+    m_cursorLock = true;
+}
+
+
+void InputDeviceMouse::UnlockCursor()
+{
+    m_cursorLock = false;
+}
+
+
 void InputDeviceMouse::OnMouseDown(int button)
 {
 	if (button >= MAX_MOUSE_BUTTONS)
@@ -106,7 +124,10 @@ void InputDeviceMouse::OnMouseMove(int x, int y)
 			PushAxisEvent(1, static_cast<float>(y));
 		}
 
-		PushTouchEvent(0, 0, x, y);
+		//PushTouchEvent(0, 0, x, y);
+
+        m_cursorPos.x = x;
+        m_cursorPos.y = y;
 	}
 }
 
@@ -118,4 +139,10 @@ void InputDeviceMouse::OnMouseWheel(int z)
 		m_axis[2] = z;
 		PushAxisEvent(2, static_cast<float>(z));
 	}
+}
+
+
+const InputDeviceMouse::CursorPos& InputDeviceMouse::GetCursorPos() const
+{
+    return m_cursorPos;
 }
