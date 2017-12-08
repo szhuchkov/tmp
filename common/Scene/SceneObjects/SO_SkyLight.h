@@ -17,6 +17,7 @@ public:
         m_light.type = LIGHT_TYPE_SKY;
         m_light.flags = 0;
         m_light.color = Vector3(0, 0, 0);
+        MatrixIdentity(&m_light.position);
     }
 
     ~SO_SkyLight()

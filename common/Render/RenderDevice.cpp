@@ -28,26 +28,26 @@ static VertexAttribDesc g_VertexAttribDesc[] =
 
 static const char* g_UniformName[RenderDevice::MAX_UNIFORMS] =
 {
-    "Uniform0",
-    "Uniform1",
-    "Uniform2",
-    "Uniform3",
-    "Uniform4",
-    "Uniform5",
-    "Uniform6",
-    "Uniform7",
-    "Uniform8",
-    "Uniform9",
-    "Uniform10",
-    "Uniform11",
-    "Uniform12",
-    "Uniform13",
-    "Uniform14",
-    "Uniform15",
-    "Uniform16",
-    "Uniform17",
-    "Uniform18",
-    "Uniform19",
+    "gUniform0",
+    "gUniform1",
+    "gUniform2",
+    "gUniform3",
+    "gUniform4",
+    "gUniform5",
+    "gUniform6",
+    "gUniform7",
+    "gUniform8",
+    "gUniform9",
+    "gUniform10",
+    "gUniform11",
+    "gUniform12",
+    "gUniform13",
+    "gUniform14",
+    "gUniform15",
+    "gUniform16",
+    "gUniform17",
+    "gUniform18",
+    "gUniform19",
 };
 
 
@@ -800,4 +800,115 @@ void RenderDevice::UpdateTexture2D(Texture* texture, unsigned int level, const v
     glBindTexture(GL_TEXTURE_2D, texture->handle);
     glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+
+RenderTarget* RenderDevice::CreateRenderTarget(unsigned int width, unsigned int height, unsigned int colorFormat, unsigned int depthFormat)
+{
+    // create color texture
+    Texture* colorTex = nullptr;
+    if (colorFormat != TEXF_NONE)
+    {
+        colorTex = CreateTexture2D(width, height, 1, colorFormat, TEXTURE_USAGE_RENDER_TARGET);
+        if (!colorTex)
+        {
+            LogPrintf("Unable to create color texture for render target (%u, %u @ %u, %u)",
+                width, height, colorFormat, depthFormat);
+            return nullptr;
+        }
+    }
+
+    // create depth texture
+    Texture* depthTex = nullptr;
+    if (depthFormat != TEXF_NONE)
+    {
+        depthTex = CreateTexture2D(width, height, 1, depthFormat, TEXTURE_USAGE_DEPTH_BUFFER);
+        if (!depthTex)
+        {
+            LogPrintf("Unable to create depth texture for render target (%u, %u @ %u, %u)",
+                width, height, colorFormat, depthFormat);
+            DeleteTexture(colorTex);
+            return nullptr;
+        }
+    }
+
+    // set dirty flags as we have to unbind the current framebuffer
+    m_state |= DIRTY_TARGET;
+
+    // create framebuffer
+    GLuint framebuffer = 0;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    if (colorTex)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex->handle, 0);
+    if (depthTex)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex->handle, 0);
+
+    // check framebuffer status
+    auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+    {
+        LogPrintf("Framebuffer status != GL_FRAMEBUFFER_COMPLETE (%u, %u @ %u, %u)",
+            width, height, colorFormat, depthFormat);
+        DeleteTexture(colorTex);
+        DeleteTexture(depthTex);
+        return nullptr;
+    }
+
+    // create target
+    RenderTarget* target = new RenderTarget();
+    target->framebuffer = framebuffer;
+    target->color = colorTex;
+    target->depth = depthTex;
+    return target;
+}
+
+
+void RenderDevice::DeleteRenderTarget(RenderTarget* target)
+{
+    if (target)
+    {
+        // unbind target
+        if (m_activeTarget == target)
+        {
+            m_activeTarget = nullptr;
+            m_state |= DIRTY_TARGET;
+        }
+
+        // unbind target samplers
+        for (int i = 0; i < MAX_SAMPLERS; i++)
+        {
+            if (target->color && m_activeSamplers[i] == target->color ||
+                target->depth && m_activeSamplers[i] == target->depth)
+            {
+                m_state |= DIRTY_SAMPLERS;
+                m_samplerState |= (1 << i);
+                m_activeSamplers[i] = nullptr;
+            }
+        }
+
+        // delete target textures
+        DeleteTexture(target->color);
+        DeleteTexture(target->depth);
+
+        // delete target framebuffer
+        if (target->framebuffer)
+            glDeleteFramebuffers(1, &target->framebuffer);
+
+        // release memory
+        delete target;
+    }
+}
+
+
+Texture* RenderDevice::GetRenderTargetColor(RenderTarget* target)
+{
+    return target ? target->color : nullptr;
+}
+
+
+Texture* RenderDevice::GetRenderTargetDepth(RenderTarget* target)
+{
+    return target ? target->depth : nullptr;
 }

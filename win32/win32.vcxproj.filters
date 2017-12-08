@@ -44,6 +44,9 @@
     <None Include="test.mtr">
       <Filter>tmpdata</Filter>
     </None>
+    <None Include="BasicMaterialSkyLight.vs">
+      <Filter>tmpdata</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ShaderPreload.txt">

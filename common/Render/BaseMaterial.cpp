@@ -7,7 +7,8 @@
 
 
 BaseMaterial::BaseMaterial(const char* name) :
-    m_name(name)
+    m_name(name),
+    m_shadings(MATERIAL_SHADING_COUNT, nullptr)
 {
 }
 
@@ -25,12 +26,38 @@ bool BaseMaterial::Init()
 
 void BaseMaterial::Shutdown()
 {
+    m_shadings.clear();
 }
 
 
 const char* BaseMaterial::GetName() const
 {
     return m_name.c_str();
+}
+
+
+bool BaseMaterial::SetShading(unsigned int shading, const char* vs, const char* ps)
+{
+    // get requested shader
+    auto shader = GetShader(vs, ps);
+    if (!shader)
+        return false;
+
+    // set new shading
+    m_shadings[shading] = shader;
+
+    // all fine
+    return true;
+}
+
+
+bool BaseMaterial::SetShading(unsigned int shading, Shader* shader)
+{
+    // set new shading
+    m_shadings[shading] = shader;
+
+    // all fine
+    return true;
 }
 
 
@@ -48,6 +75,27 @@ int BaseMaterial::GetSortIndex() const
 
 bool BaseMaterial::Begin(RenderContext* context)
 {
+    // setup shading
+    if (m_shadings[context->shading] == nullptr)
+        return false;
+
+    RenderDevice::GetInstance()->SetShader(m_shadings[context->shading]);
+
+    switch (context->shading)
+    {
+    case MATERIAL_SHADING_SKY_SHADOW:
+    case MATERIAL_SHADING_SKY_LIGHT:
+    {
+        Vector4 lightColor1(context->light->color[0], context->light->color[1], context->light->color[2], 1.0f);
+        Vector4 lightColor2(1.0f, 1.0f, 1.0f, 1.0f);
+        SetUniform(0, lightColor1);
+        SetUniform(1, lightColor2);
+
+        SetMatrix(RenderDevice::MATRIX_LIGHT, context->light->position);
+    }
+    break;
+    }
+
     return true;
 }
 

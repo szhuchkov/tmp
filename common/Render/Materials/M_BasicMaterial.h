@@ -24,31 +24,12 @@ public:
         if (!BaseMaterial::Init())
             return false;
 
-        m_shadowShader = GetShader("BasicMaterialShadow.vs", "BasicMaterialShadow.ps");
-        if (!m_shadowShader)
-            return false;
-
-        m_colorShader = GetShader("BasicMaterial.vs", "BasicMaterial.ps");
-        if (!m_colorShader)
+        if (!SetShading(MATERIAL_SHADING_UNLIT, "BasicMaterial.vs", "BasicMaterial.ps") ||
+            !SetShading(MATERIAL_SHADING_DEPTH_WRITE, "BasicMaterialShadow.vs", "BasicMaterialShadow.ps") ||
+            !SetShading(MATERIAL_SHADING_SKY_LIGHT, "BasicMaterialSkyLight.vs", "BasicMaterial.ps") ||
+            !SetShading(MATERIAL_SHADING_SKY_SHADOW, "BasicMaterialSkyLight.vs", "BasicMaterial.ps"))
             return false;
 
         return true;
     }
-
-    bool Begin(RenderContext* context) override
-    {
-        if (!BaseMaterial::Begin(context))
-            return false;
-
-        if (context->pass == RENDER_PASS_SHADOW)
-            SetShader(m_shadowShader);
-        else
-            SetShader(m_colorShader);
-
-        return true;
-    }
-
-private:
-    Shader* m_shadowShader = nullptr;
-    Shader* m_colorShader = nullptr;
 };

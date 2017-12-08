@@ -157,6 +157,7 @@
     <ClInclude Include="FileSystemTest.h" />
     <ClInclude Include="MathTest.h" />
     <ClInclude Include="MeshDataTest.h" />
+    <ClInclude Include="RenderToTextureTest.h" />
     <ClInclude Include="SceneObjectDataTest.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="UnitTest.h" />

@@ -119,9 +119,25 @@ enum RenderPass
 };
 
 
+enum MaterialShading
+{
+    MATERIAL_SHADING_UNLIT,
+    MATERIAL_SHADING_DEPTH_WRITE,
+    MATERIAL_SHADING_SKY_LIGHT,
+    MATERIAL_SHADING_SKY_SHADOW,
+    MATERIAL_SHADING_SPOT_LIGHT,
+    MATERIAL_SHADING_SPOT_SHADOW,
+    MATERIAL_SHADING_POINT_LIGHT,
+    MATERIAL_SHADING_POINT_SHADOW,
+    MATERIAL_SHADING_GBUFFER,
+    MATERIAL_SHADING_COUNT,
+};
+
+
 struct RenderContext
 {
     RenderPass                  pass = RENDER_PASS_NONE;
+    MaterialShading             shading = MATERIAL_SHADING_UNLIT;
     RenderCamera*               camera = nullptr;
     RenderLight*                light = nullptr;
     RenderEntity*               entity = nullptr;
@@ -159,6 +175,7 @@ private:
     void CullLights(RenderContext* context);
     void CullEntities(RenderContext* context);
     void RenderForContext(RenderContext* context);
+    void SetupMaterialShading(RenderContext* context);
 
 private:
     RenderContext m_mainContext;

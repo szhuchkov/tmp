@@ -1,6 +1,9 @@
 #pragma once
 
 
+#include "Render/RenderWorld.h"
+
+
 struct Shader;
 struct Texture;
 struct RenderContext;
@@ -24,7 +27,6 @@ public:
     virtual void SetMaterial(RenderMaterial* material);
 
 protected:
-    void SetSortIndex(int index);
     void SetShader(Shader* shader);
     void SetTexture(unsigned int index, Texture* texture);
     void SetUniform(unsigned int index, const Vector4& value);
@@ -32,8 +34,12 @@ protected:
 
     Shader* GetShader(const char* vs, const char* ps, const char* gs = nullptr);
     Texture* LoadTexture(const char* name);
+    bool SetShading(unsigned int shading, const char* vs, const char* ps);
+    bool SetShading(unsigned int shading, Shader* shader);
+    void SetSortIndex(int index);
 
 private:
     int m_sortIndex = 0;
     std::string m_name;
+    std::vector<Shader*> m_shadings;
 };

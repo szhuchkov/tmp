@@ -170,6 +170,7 @@
     <None Include="BasicMaterial.vs" />
     <None Include="BasicMaterialShadow.ps" />
     <None Include="BasicMaterialShadow.vs" />
+    <None Include="BasicMaterialSkyLight.vs" />
     <None Include="Quad.ps" />
     <None Include="Quad.vs" />
     <None Include="test.mesh" />

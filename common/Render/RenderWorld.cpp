@@ -180,6 +180,7 @@ void RenderWorld::RenderForContext(RenderContext* context)
     for (auto light : context->visibleLights)
     {
         context->light = light;
+        SetupMaterialShading(context);
 
         // batch from here
         BatchRender::GetInstance()->SetRenderContext(context);
@@ -197,5 +198,33 @@ void RenderWorld::RenderForContext(RenderContext* context)
 
         // to here
         BatchRender::GetInstance()->Execute();
+    }
+}
+
+
+void RenderWorld::SetupMaterialShading(RenderContext* context)
+{
+    if (!context->light)
+    {
+        context->shading = MATERIAL_SHADING_UNLIT;
+        return;
+    }
+
+    bool hasShadow = 0 != (context->light->flags & LIGHT_CAST_SHADOW);
+
+    switch (context->light->type)
+    {
+    case LIGHT_TYPE_SKY:
+        context->shading = (hasShadow ? MATERIAL_SHADING_SKY_SHADOW : MATERIAL_SHADING_SKY_LIGHT);
+        break;
+    case LIGHT_TYPE_POINT:
+        context->shading = (hasShadow ? MATERIAL_SHADING_POINT_SHADOW : MATERIAL_SHADING_POINT_LIGHT);
+        break;
+    case LIGHT_TYPE_SPOT:
+        context->shading = (hasShadow ? MATERIAL_SHADING_SPOT_SHADOW : MATERIAL_SHADING_SPOT_LIGHT);
+        break;
+    default:
+        context->shading = MATERIAL_SHADING_UNLIT;
+        break;
     }
 }

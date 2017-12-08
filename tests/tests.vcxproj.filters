@@ -12,6 +12,7 @@
     <ClInclude Include="..\win32\InputManagerPC.h" />
     <ClInclude Include="..\win32\OGLDriverPC.h" />
     <ClInclude Include="MeshDataTest.h" />
+    <ClInclude Include="RenderToTextureTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestMain.cpp" />
