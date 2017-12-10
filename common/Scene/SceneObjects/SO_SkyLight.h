@@ -18,6 +18,8 @@ public:
         m_light.flags = 0;
         m_light.color = Vector3(0, 0, 0);
         MatrixIdentity(&m_light.position);
+        Vector3 lightPos(2, 1, -3);
+        MatrixLookAt(&m_light.position, &lightPos, &Vector3::ZERO, &Vector3::UP);
     }
 
     ~SO_SkyLight()
