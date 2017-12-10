@@ -248,6 +248,9 @@ void MatrixLookAt(Matrix* dst, const Vector3* eye, const Vector3* at, const Vect
 void MatrixPerspective(Matrix* dst, float fov, float aspect, float znear, float zfar);
 void MatrixOrtho(Matrix* dst, float w, float h, float znear, float zfar);
 void MatrixOrthoOffCenter(Matrix* dst, float l, float r, float b, float t, float znear, float zfar);
+void MatrixTransformCoord(Vector3* dst, const Vector3* v, const Matrix* m);
+void MatrixTransformCoord(Vector3* dst, const Vector4* v, const Matrix* m);
+void MatrixTransformNormal(Vector3* dst, const Vector3* v, const Matrix* m);
 
 
 class Plane

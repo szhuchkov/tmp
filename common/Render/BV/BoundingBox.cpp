@@ -59,4 +59,8 @@ void BoundingBox::ComputeCorners()
     m_corners[5] = Vector3(m_box.maxs.x, m_box.mins.y, m_box.maxs.z);
     m_corners[6] = Vector3(m_box.maxs.x, m_box.maxs.y, m_box.mins.z);
     m_corners[7] = Vector3(m_box.maxs.x, m_box.maxs.y, m_box.maxs.z);
+    for (int i = 0; i < 8; i++)
+    {
+        MatrixTransformCoord(&m_corners[i], &m_corners[i], &m_transform);
+    }
 }
