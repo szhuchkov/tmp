@@ -5,3 +5,10 @@
 *.tlog
 *.obj
 *.ipch
+/ARM64
+/Debug
+/ipch
+/Release
+/x64
+/x86
+/ARM
