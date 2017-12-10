@@ -1,6 +1,10 @@
 #pragma once
 
 
+#include <Render/BV/BoundingBox.h>
+#include <Render/BV/Frustum.h>
+
+
 struct VertexBuffer;
 struct IndexBuffer;
 struct RenderTarget;
@@ -9,6 +13,7 @@ struct Texture;
 
 
 class BaseMaterial;
+class BoundingVolume;
 
 
 enum RenderLayer
@@ -97,7 +102,8 @@ struct RenderEntity
     RenderModel*                model;
     unsigned int                renderLayer;
     unsigned int                flags;
-    Matrix                      position;
+    BoundingBox                 bbox;
+    void*                       bvdata; // bounding volume custom data
 };
 
 
@@ -107,6 +113,7 @@ struct RenderLight
     unsigned int                flags;
     Vector3                     color;
     Matrix                      position;
+    void*                       bvdata; // bounding volume custom data
 };
 
 
@@ -143,6 +150,8 @@ struct RenderContext
     RenderEntity*               entity = nullptr;
     RenderSurface*              surface = nullptr;
 
+    Frustum                     frustum;
+
     std::vector<RenderEntity*>  visibleEntities;
     std::vector<RenderLight*>   visibleLights;
 };
@@ -172,13 +181,10 @@ private:
     RenderWorld();
     ~RenderWorld();
 
-    void CullLights(RenderContext* context);
-    void CullEntities(RenderContext* context);
     void RenderForContext(RenderContext* context);
     void SetupMaterialShading(RenderContext* context);
 
 private:
     RenderContext m_mainContext;
-    std::vector<RenderEntity*> m_entities;
-    std::vector<RenderLight*> m_lights;
+    std::unique_ptr<BoundingVolume> m_bv;
 };

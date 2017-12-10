@@ -101,7 +101,7 @@ public:
         m_entity.model = &m_model;
         m_entity.flags = 0;
         m_entity.renderLayer = 0;
-        MatrixIdentity(&m_entity.position);
+        m_entity.bbox.SetTransform(Matrix::IDENTITY);
         RenderWorld::GetInstance()->AddEntity(&m_entity);
 
         // setup camera

@@ -1,9 +1,11 @@
 #include "pch.h"
-#include "RenderWorld.h"
-#include "RenderDevice.h"
-#include "BatchRender.h"
-#include "MaterialManager.h"
-#include "ShaderManager.h"
+#include <Render/RenderWorld.h>
+#include <Render/RenderDevice.h>
+#include <Render/BatchRender.h>
+#include <Render/MaterialManager.h>
+#include <Render/ShaderManager.h>
+#include <Render/BV/BoundingVolume.h>
+#include <Render/BV/LinearVolume.h>
 
 
 RenderWorld::RenderWorld()
@@ -53,6 +55,9 @@ bool RenderWorld::Init()
         return false;
     }
 
+    // init bounding volume
+    m_bv = std::make_unique<LinearVolume>();
+
     return true;
 }
 
@@ -73,41 +78,25 @@ void RenderWorld::SetCamera(RenderCamera* camera)
 
 void RenderWorld::AddEntity(RenderEntity* entity)
 {
-    m_entities.push_back(entity);
+    m_bv->AddEntity(entity);
 }
 
 
 void RenderWorld::RemoveEntity(RenderEntity* entity)
 {
-    for (size_t i = 0; i < m_entities.size(); i++)
-    {
-        if (m_entities[i] == entity)
-        {
-            m_entities[i] = m_entities.back();
-            m_entities.pop_back();
-            break;
-        }
-    }
+    m_bv->RemoveEntity(entity);
 }
 
 
 void RenderWorld::AddLight(RenderLight* light)
 {
-    m_lights.push_back(light);
+    m_bv->AddLight(light);
 }
 
 
 void RenderWorld::RemoveLight(RenderLight* light)
 {
-    for (size_t i = 0; i < m_lights.size(); i++)
-    {
-        if (m_lights[i] == light)
-        {
-            m_lights[i] = m_lights.back();
-            m_lights.pop_back();
-            break;
-        }
-    }
+    m_bv->RemoveLight(light);
 }
 
 
@@ -122,26 +111,6 @@ void RenderWorld::Render()
 }
 
 
-void RenderWorld::CullEntities(RenderContext* context)
-{
-    context->visibleEntities.resize(m_entities.size());
-    for (size_t i = 0; i < m_entities.size(); i++)
-    {
-        context->visibleEntities[i] = m_entities[i];
-    }
-}
-
-
-void RenderWorld::CullLights(RenderContext* context)
-{
-    context->visibleLights.resize(m_lights.size());
-    for (size_t i = 0; i < m_lights.size(); i++)
-    {
-        context->visibleLights[i] = m_lights[i];
-    }
-}
-
-
 void RenderWorld::RenderForContext(RenderContext* context)
 {
     context->entity = nullptr;
@@ -149,9 +118,7 @@ void RenderWorld::RenderForContext(RenderContext* context)
     context->visibleEntities.clear();
     context->visibleLights.clear();
 
-    CullLights(context);
-    CullEntities(context);
-
+    Matrix viewProj;
     if (!m_mainContext.camera)
     {
         static float angle = 0.0f;
@@ -164,17 +131,21 @@ void RenderWorld::RenderForContext(RenderContext* context)
         MatrixLookAt(&view, &camPos, &camTarget, &camUp);
         Matrix proj;
         MatrixPerspective(&proj, 80.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
-        Matrix viewProj = view * proj;
+        viewProj = view * proj;
         RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION, viewProj);
     }
     else
     {
         Matrix viewInverse;
         MatrixInverse(&viewInverse, &m_mainContext.camera->view);
-        Matrix viewProj = m_mainContext.camera->view * m_mainContext.camera->proj;
+        viewProj = m_mainContext.camera->view * m_mainContext.camera->proj;
         RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION, viewProj);
         RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_INVERSE, viewInverse);
     }
+
+    context->frustum.FromViewProj(viewProj);
+    context->visibleEntities = m_bv->CullEntities(context->frustum);
+    context->visibleLights = m_bv->CullLights(context->frustum);
 
     // TODO: threads
     for (auto light : context->visibleLights)

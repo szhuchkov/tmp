@@ -11,6 +11,12 @@ const Vector3 Vector3::RIGHT(1, 0, 0);
 const Vector3 Vector3::FORWARD(0, 0, 1);
 const Vector3 Vector3::BACK(0, 0, -1);
 
+const Matrix Matrix::IDENTITY(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);
+
 
 float Vec2Dot(const Vector2* a, const Vector2* b)
 {
@@ -363,4 +369,21 @@ void MatrixOrthoOffCenter(Matrix* dst, float l, float r, float b, float t, float
 		0,                  0,                  1 / (f - n),  0,
 		(l + r) / (l - r),  (t + b) / (b - t),  n / (n - f),  1);
 
+}
+
+
+SideType PointOnPlaneSide(const Vector3& point, const Plane& plane)
+{
+    auto d = PointToPlaneDistance(point, plane);
+    if (d > MATH_SMALL_NUMBER)
+        return SIDE_FRONT;
+    if (d < -MATH_SMALL_NUMBER)
+        return SIDE_BACK;
+    return SIDE_CLIP;
+}
+
+
+float PointToPlaneDistance(const Vector3& point, const Plane& plane)
+{
+    return point.x * plane.x + point.y * plane.y + point.z * plane.z + plane.w;
 }

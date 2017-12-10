@@ -13,6 +13,7 @@ struct MeshInstance
     std::vector<RenderSurface>  surfaces;
     std::vector<uint32_t>       materialIndexes;
     int                         instanceID;
+    AABB                        bbox;
 };
 
 

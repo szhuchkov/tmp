@@ -8,6 +8,7 @@
 #include <cmath>
 
 
+#include <memory>
 #include <vector>
 #include <list>
 #include <string>

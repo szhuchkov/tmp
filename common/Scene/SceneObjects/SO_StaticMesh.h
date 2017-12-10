@@ -20,10 +20,9 @@ public:
         m_entity.model = &m_model;
         m_entity.flags = 0;
         m_entity.renderLayer = 0;
+        m_entity.bbox.SetTransform(Matrix::IDENTITY);
 
         m_model.geometry = &m_geometry;
-
-        MatrixIdentity(&m_entity.position);
     }
 
     ~SO_StaticMesh()
@@ -131,6 +130,8 @@ protected:
         m_model.surfaces.resize(m_surfaces.size());
         for (size_t i = 0; i < m_surfaces.size(); i++)
             m_model.surfaces[i] = &m_surfaces[i];
+
+        m_entity.bbox = BoundingBox(m_meshInstance->bbox, Matrix::IDENTITY);
 
         return true;
     }

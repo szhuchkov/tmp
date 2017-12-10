@@ -63,6 +63,17 @@ MeshInstance* MeshManager::LoadMesh(const char* name)
         LogPrintf("Unable to load mesh '%s'", name);
     }
 
+    // compute bbox
+    node->mesh.bbox.Invalidate();
+    auto numVerts = data.GetNumVerts();
+    auto vertexSize = data.GetVertexSize();
+    auto vertexPtr = data.GetVerts();
+    for (size_t i = 0; i < numVerts; i++)
+    {
+        auto pos = reinterpret_cast<const Vector3*>(&vertexPtr[vertexSize * i]);
+        node->mesh.bbox.AddPoint(*pos);
+    }
+
     return &node->mesh;
 }
 

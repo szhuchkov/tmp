@@ -15,6 +15,24 @@
 
 
 constexpr float MATH_PI = 3.141592654f;
+constexpr float MATH_BIG_NUMBER = 10000.0f;
+constexpr float MATH_SMALL_NUMBER = 0.0001f;
+
+
+enum SideType
+{
+    SIDE_BACK = 0,
+    SIDE_CLIP = 1,
+    SIDE_FRONT = 2,
+};
+
+
+enum CullType
+{
+    CULL_OUT = 0,
+    CULL_CLIP = 1,
+    CULL_IN = 2,
+};
 
 
 MATH_INLINE float ToRadians(float degree)
@@ -195,6 +213,8 @@ class Matrix
 public:
 	Vector4	x, y, z, w;
 
+    static const Matrix IDENTITY;
+
 	Matrix();
 	Matrix(const Matrix& m);
 	Matrix(
@@ -228,6 +248,26 @@ void MatrixLookAt(Matrix* dst, const Vector3* eye, const Vector3* at, const Vect
 void MatrixPerspective(Matrix* dst, float fov, float aspect, float znear, float zfar);
 void MatrixOrtho(Matrix* dst, float w, float h, float znear, float zfar);
 void MatrixOrthoOffCenter(Matrix* dst, float l, float r, float b, float t, float znear, float zfar);
+
+
+class Plane
+{
+public:
+    float x, y, z, w;
+
+    Plane() = default;
+    Plane(const Plane& other) = default;
+    Plane(float x, float y, float z, float w);
+
+    Plane& operator = (const Plane& other) = default;
+
+    bool operator == (const Plane& other) const;
+    bool operator != (const Plane& other) const;
+};
+
+
+SideType PointOnPlaneSide(const Vector3& point, const Plane& plane);
+float PointToPlaneDistance(const Vector3& point, const Plane& plane);
 
 
 //-----------------------------------------------------------------------------

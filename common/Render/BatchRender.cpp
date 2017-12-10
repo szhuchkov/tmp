@@ -120,7 +120,7 @@ void BatchRender::Execute()
         if (lastEntity != s->entity)
         {
             lastEntity = s->entity;
-            RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_WORLD, lastEntity->position);
+            RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_WORLD, lastEntity->bbox.GetTransform());
         }
 
         // setup geometry

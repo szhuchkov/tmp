@@ -83,6 +83,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_FreeFlyCamera.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\AABB.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\BoundingBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\Frustum.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\BoundingVolume.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\LinearVolume.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -232,6 +237,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\MeshManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\BV\BoundingBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\BV\Frustum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">
