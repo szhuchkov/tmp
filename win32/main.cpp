@@ -178,6 +178,18 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 }
 
 
+void _LogRaw(const char* format, ...)
+{
+    char buffer[10000] = { 0 };
+    va_list args;
+    va_start(args, format);
+    vsprintf(buffer, format, args);
+    va_end(args);
+    strcat(buffer, "\n");
+    OutputDebugString(buffer);
+}
+
+
 void _LogPrintf(const char* file, int line, const char* format, ...)
 {
 	va_list args;

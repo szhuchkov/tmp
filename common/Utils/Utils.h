@@ -26,7 +26,9 @@ const char* GetLine(const char* context, std::string& buffer);
 //-----------------------------------------------------------------------------
 
 void _LogPrintf(const char* file, int line, const char* format, ...);
+void _LogRaw(const char* format, ...);
 #define LogPrintf(...)		_LogPrintf(__FILE__, __LINE__, __VA_ARGS__)
+#define LogRaw(...)         _LogRaw(__VA_ARGS__)
 
 
 //-----------------------------------------------------------------------------

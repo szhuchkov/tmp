@@ -3,6 +3,35 @@
 #include "OGLDriver.h"
 
 
+#if _DEBUG
+#define GL_CHECK_ERROR(x)       { x; CheckGlErrors(__FILE__, __LINE__, #x); }
+#else
+#define GL_CHECK_ERROR(x)       x
+#endif
+
+
+void CheckGlErrors(const char* file, int line, const char* expr)
+{
+    static int numErrors = 0;
+    const int MAX_ERRORS = 100;
+
+    GLenum err;
+    if (numErrors < MAX_ERRORS && GL_NO_ERROR != (err = glGetError()))
+    {
+        do {
+            numErrors++;
+            LogRaw("%s(%d): glGetError() = 0x%08x for expr '%s'", file, line, err, expr);
+            err = glGetError();
+        } while (err != GL_NO_ERROR && numErrors < MAX_ERRORS);
+
+        if (numErrors >= MAX_ERRORS)
+        {
+            LogPrintf("MAX_ERRORS, stop logging");
+        }
+    }
+}
+
+
 struct VertexAttribDesc
 {
 	const char*		name;
@@ -167,11 +196,14 @@ bool RenderDevice::Init(void* window, int width, int height, bool fullscreen)
 	if (!OGLDriver::GetInstance()->Init(window, width, height, fullscreen))
 		return false;
 
-    glEnable(GL_DEPTH);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CW);
+    m_width = width;
+    m_height = height;
+
+    GL_CHECK_ERROR(glEnable(GL_DEPTH));
+    GL_CHECK_ERROR(glEnable(GL_DEPTH_TEST));
+    GL_CHECK_ERROR(glDepthFunc(GL_LEQUAL));
+    GL_CHECK_ERROR(glEnable(GL_CULL_FACE));
+    GL_CHECK_ERROR(glFrontFace(GL_CW));
 
 	return true;
 }
@@ -254,21 +286,21 @@ void RenderDevice::Clear(unsigned int flags, const float* color, float depth, in
 	// color bit
 	if (flags & CLEAR_COLOR)
 	{
-		glClearColor(color[0], color[1], color[2], color[3]);
+        GL_CHECK_ERROR(glClearColor(color[0], color[1], color[2], color[3]));
 		mask |= GL_COLOR_BUFFER_BIT;
 	}
 
 	// depth bit
 	if (flags & CLEAR_DEPTH)
 	{
-		glClearDepth(depth);
+        GL_CHECK_ERROR(glClearDepth(depth));
 		mask |= GL_DEPTH_BUFFER_BIT;
 	}
 
 	// stencil bit
 	if (flags & CLEAR_STENCIL)
 	{
-		glClearStencil(stencil);
+        GL_CHECK_ERROR(glClearStencil(stencil));
 		mask |= GL_STENCIL_BUFFER_BIT;
 	}
 
@@ -360,7 +392,7 @@ void RenderDevice::DrawPrimitive(unsigned int type, unsigned int offset, unsigne
     ValidateState();
 
 	GLenum mode = GLPrimitiveType(type);
-	glDrawArrays(mode, offset, count);
+    GL_CHECK_ERROR(glDrawArrays(mode, offset, count));
 }
 
 
@@ -374,12 +406,12 @@ void RenderDevice::DrawIndexedPrimitive(unsigned int type, unsigned int vertexOf
 	GLenum indexType = (indexSize == 4 ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT);
 
 #if PLATFORM_ANDROID
-	glDrawElements(mode, count, indexType, GL_BUFFER_POINTER(indexOffset * indexSize));
+    GL_CHECK_ERROR(glDrawElements(mode, count, indexType, GL_BUFFER_POINTER(indexOffset * indexSize)));
 #else
 	//if (vertexOffset > 0)
 	//	glDrawElementsBaseVertex(mode, count, indexType, GL_BUFFER_POINTER(indexOffset * indexSize), vertexOffset);
 	//else
-		glDrawElements(mode, count, indexType, GL_BUFFER_POINTER(indexOffset * indexSize));
+    GL_CHECK_ERROR(glDrawElements(mode, count, indexType, GL_BUFFER_POINTER(indexOffset * indexSize)));
 #endif
 }
 
@@ -391,32 +423,32 @@ void RenderDevice::ValidateState()
     {
         if (m_activeTarget)
         {
-            glBindFramebuffer(GL_FRAMEBUFFER, m_activeTarget->framebuffer);
-            glViewport(0, 0, m_activeTarget->color->width, m_activeTarget->color->height);
+            GL_CHECK_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, m_activeTarget->framebuffer));
+            GL_CHECK_ERROR(glViewport(0, 0, m_activeTarget->color->width, m_activeTarget->color->height));
         }
         else
         {
-            glBindBuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, m_width, m_height);
+            GL_CHECK_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+            GL_CHECK_ERROR(glViewport(0, 0, m_width, m_height));
         }
     }
 
     // vertex buffer
     if (m_state & DIRTY_VERTS)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, m_activeVerts ? m_activeVerts->handle : 0);
+        GL_CHECK_ERROR(glBindBuffer(GL_ARRAY_BUFFER, m_activeVerts ? m_activeVerts->handle : 0));
     }
 
     // index buffer
     if (m_state & DIRTY_INDS)
     {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_activeInds ? m_activeInds->handle : 0);
+        GL_CHECK_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_activeInds ? m_activeInds->handle : 0));
     }
 
     // shader
     if (m_state & DIRTY_SHADER)
     {
-        glUseProgram(m_activeShader ? m_activeShader->program : 0);
+        GL_CHECK_ERROR(glUseProgram(m_activeShader ? m_activeShader->program : 0));
     }
 
     // setup attribute stream
@@ -435,7 +467,7 @@ void RenderDevice::ValidateState()
                 if (m_activeShader->uniformVersion[i] != m_uniformVersion[i])
                 {
                     m_activeShader->uniformVersion[i] = m_uniformVersion[i];
-                    glUniform4fv(m_activeShader->uniformLocation[i], 1, reinterpret_cast<const float*>(&m_uniformValue[i]));
+                    GL_CHECK_ERROR(glUniform4fv(m_activeShader->uniformLocation[i], 1, reinterpret_cast<const float*>(&m_uniformValue[i])));
                 }
             }
         }
@@ -451,7 +483,7 @@ void RenderDevice::ValidateState()
                 if (m_activeShader->matrixVersion[i] != m_matrixVersion[i])
                 {
                     m_activeShader->matrixVersion[i] = m_matrixVersion[i];
-                    glUniformMatrix4fv(m_activeShader->matrixLocation[i], 1, GL_FALSE, reinterpret_cast<const float*>(&m_matrixValue[i]));
+                    GL_CHECK_ERROR(glUniformMatrix4fv(m_activeShader->matrixLocation[i], 1, GL_FALSE, reinterpret_cast<const float*>(&m_matrixValue[i])));
                 }
             }
         }
@@ -464,8 +496,8 @@ void RenderDevice::ValidateState()
         {
             if (m_samplerState & (1 << i))
             {
-                glActiveTexture(GL_TEXTURE0 + i);
-                glBindTexture(GL_TEXTURE_2D, m_activeSamplers[i] ? m_activeSamplers[i]->handle : 0);
+                GL_CHECK_ERROR(glActiveTexture(GL_TEXTURE0 + i));
+                GL_CHECK_ERROR(glBindTexture(GL_TEXTURE_2D, m_activeSamplers[i] ? m_activeSamplers[i]->handle : 0));
             }
         }
     }
@@ -486,12 +518,12 @@ void RenderDevice::SetupVertexStream()
 		{
 			if (m_activeShader->attribLocation[i] != -1)
 			{
-				glVertexAttribPointer(
+                GL_CHECK_ERROR(glVertexAttribPointer(
 					m_activeShader->attribLocation[i],
 					g_VertexAttribDesc[i].size,
 					g_VertexAttribDesc[i].type,
 					g_VertexAttribDesc[i].normalized,
-					m_activeVerts->stride, GL_BUFFER_POINTER(offset));
+					m_activeVerts->stride, GL_BUFFER_POINTER(offset)));
 				activeAttribs |= (1 << m_activeShader->attribLocation[i]);
 			}
 			offset += g_VertexAttribDesc[i].stride;
@@ -506,11 +538,11 @@ void RenderDevice::SetupVertexStream()
 
 		if (curr && !last)
 		{
-			glEnableVertexAttribArray(i);
+            GL_CHECK_ERROR(glEnableVertexAttribArray(i));
 		}
 		else if (last && !curr)
 		{
-			glDisableVertexAttribArray(i);
+            GL_CHECK_ERROR(glDisableVertexAttribArray(i));
 		}
 	}
 
@@ -529,10 +561,10 @@ VertexBuffer* RenderDevice::CreateVertexBuffer(unsigned int format, unsigned int
 
 	// alloc buffer
 	GLuint handle;
-	glGenBuffers(1, &handle);
-	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GL_CHECK_ERROR(glGenBuffers(1, &handle));
+    GL_CHECK_ERROR(glBindBuffer(GL_ARRAY_BUFFER, handle));
+    GL_CHECK_ERROR(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
+    GL_CHECK_ERROR(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
 	// create buffer instance
 	VertexBuffer* buffer = new VertexBuffer();
@@ -548,8 +580,8 @@ void RenderDevice::DeleteVertexBuffer(VertexBuffer* buffer)
 {
 	if (buffer)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDeleteBuffers(1, &buffer->handle);
+        GL_CHECK_ERROR(glBindBuffer(GL_ARRAY_BUFFER, 0));
+        GL_CHECK_ERROR(glDeleteBuffers(1, &buffer->handle));
 		delete buffer;
 	}
 }
@@ -561,9 +593,9 @@ void RenderDevice::UpdateVertexBuffer(VertexBuffer* buffer, const void* data, un
 	if (!size)
 		size = buffer->stride * buffer->numVerts;
 
-	glBindBuffer(GL_ARRAY_BUFFER, buffer->handle);
-	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GL_CHECK_ERROR(glBindBuffer(GL_ARRAY_BUFFER, buffer->handle));
+    GL_CHECK_ERROR(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
+    GL_CHECK_ERROR(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 
@@ -578,10 +610,10 @@ IndexBuffer* RenderDevice::CreateIndexBuffer(unsigned int format, unsigned int n
 
 	// alloc buffer
 	GLuint handle;
-	glGenBuffers(1, &handle);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    GL_CHECK_ERROR(glGenBuffers(1, &handle));
+    GL_CHECK_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle));
+    GL_CHECK_ERROR(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage));
+    GL_CHECK_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
 	// create buffer instance
 	IndexBuffer* buffer = new IndexBuffer();
@@ -597,8 +629,8 @@ void RenderDevice::DeleteIndexBuffer(IndexBuffer* buffer)
 {
 	if (buffer)
 	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glDeleteBuffers(1, &buffer->handle);
+        GL_CHECK_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+        GL_CHECK_ERROR(glDeleteBuffers(1, &buffer->handle));
 		delete buffer;
 	}
 }
@@ -610,9 +642,9 @@ void RenderDevice::UpdateIndexBuffer(IndexBuffer* buffer, const void* data, unsi
 	if (!size)
 		size = buffer->stride * buffer->numInds;
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->handle);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    GL_CHECK_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->handle));
+    GL_CHECK_ERROR(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data));
+    GL_CHECK_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 
@@ -621,13 +653,13 @@ unsigned int RenderDevice::CompileShader(const char* code, unsigned int type)
 	// create shader and attach sources
 	GLuint shader = glCreateShader(type);
 	GLint length = strlen(code);
-	glShaderSource(shader, 1, &code, &length);
-	glCompileShader(shader);
+    GL_CHECK_ERROR(glShaderSource(shader, 1, &code, &length));
+    GL_CHECK_ERROR(glCompileShader(shader));
 
 	// get compilation log
 	char buffer[10000] = { 0 };
 	GLsizei logSize;
-	glGetShaderInfoLog(shader, sizeof(buffer), &logSize, buffer);
+    GL_CHECK_ERROR(glGetShaderInfoLog(shader, sizeof(buffer), &logSize, buffer));
 	if (logSize > 0)
 	{
 		LogPrintf("Shader info log:");
@@ -636,10 +668,10 @@ unsigned int RenderDevice::CompileShader(const char* code, unsigned int type)
 
 	// check compile status
 	GLint status;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    GL_CHECK_ERROR(glGetShaderiv(shader, GL_COMPILE_STATUS, &status));
 	if (!status)
 	{
-		glDeleteShader(shader);
+        GL_CHECK_ERROR(glDeleteShader(shader));
 		return 0;
 	}
 
@@ -650,7 +682,7 @@ unsigned int RenderDevice::CompileShader(const char* code, unsigned int type)
 void RenderDevice::InitShader(Shader* shader)
 {
     //TODO: use glProgramUniform*
-    glUseProgram(shader->program);
+    GL_CHECK_ERROR(glUseProgram(shader->program));
 
     // vertex streams
     for (int i = 0; i < ARRAY_SIZE(g_VertexAttribDesc); i++)
@@ -689,26 +721,26 @@ Shader* RenderDevice::CreateShader(const char* vsCode, const char* fsCode)
 	GLuint fs = CompileShader(fsCode, GL_FRAGMENT_SHADER);
 	if (!vs || !fs)
 	{
-		glDeleteShader(vs);
-		glDeleteShader(fs);
+        GL_CHECK_ERROR(glDeleteShader(vs));
+        GL_CHECK_ERROR(glDeleteShader(fs));
 		LogPrintf("Unable to create shader");
 		return NULL;
 	}
 
 	// create program and attach shaders
 	GLuint program = glCreateProgram();
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
+    GL_CHECK_ERROR(glAttachShader(program, vs));
+    GL_CHECK_ERROR(glAttachShader(program, fs));
+    GL_CHECK_ERROR(glLinkProgram(program));
 
 	// delete shaders now
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+    GL_CHECK_ERROR(glDeleteShader(vs));
+    GL_CHECK_ERROR(glDeleteShader(fs));
 
 	// get log
 	char buffer[10000] = { 0 };
 	GLsizei logSize;
-	glGetProgramInfoLog(program, sizeof(buffer), &logSize, buffer);
+    GL_CHECK_ERROR(glGetProgramInfoLog(program, sizeof(buffer), &logSize, buffer));
 	if (logSize > 0)
 	{
 		LogPrintf("Program info log:");
@@ -717,10 +749,10 @@ Shader* RenderDevice::CreateShader(const char* vsCode, const char* fsCode)
 
 	// check link status
 	GLint status;
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
+    GL_CHECK_ERROR(glGetProgramiv(program, GL_LINK_STATUS, &status));
 	if (!status)
 	{
-		glDeleteProgram(program);
+        GL_CHECK_ERROR(glDeleteProgram(program));
 		return NULL;
 	}
 
@@ -739,7 +771,7 @@ void RenderDevice::DeleteShader(Shader* shader)
 {
 	if (shader)
 	{
-		glDeleteProgram(shader->program);
+        GL_CHECK_ERROR(glDeleteProgram(shader->program));
 		delete shader;
 	}
 }
@@ -748,27 +780,27 @@ void RenderDevice::DeleteShader(Shader* shader)
 Texture* RenderDevice::CreateTexture2D(unsigned int width, unsigned int height, unsigned int levels, unsigned int format, unsigned int usage)
 {
     GLuint handle = 0;
-    glGenTextures(1, &handle);
+    GL_CHECK_ERROR(glGenTextures(1, &handle));
 
-    glBindTexture(GL_TEXTURE_2D, handle);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    GL_CHECK_ERROR(glBindTexture(GL_TEXTURE_2D, handle));
+    GL_CHECK_ERROR(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 
     if (usage == TEXTURE_USAGE_DEPTH_BUFFER)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     }
     else
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, levels == 1 ? GL_LINEAR : GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, levels == 1 ? GL_LINEAR : GL_LINEAR_MIPMAP_LINEAR));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
     }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CHECK_ERROR(glBindTexture(GL_TEXTURE_2D, 0));
 
     Texture* tex = new Texture();
     tex->width = width;
@@ -787,7 +819,7 @@ void RenderDevice::DeleteTexture(Texture* texture)
 {
     if (texture)
     {
-        glDeleteTextures(1, &texture->handle);
+        GL_CHECK_ERROR(glDeleteTextures(1, &texture->handle));
         delete texture;
     }
 }
@@ -797,9 +829,9 @@ void RenderDevice::UpdateTexture2D(Texture* texture, unsigned int level, const v
 {
     unsigned int w = std::max<unsigned int>(1, texture->width >> level);
     unsigned int h = std::max<unsigned int>(1, texture->height >> level);
-    glBindTexture(GL_TEXTURE_2D, texture->handle);
-    glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CHECK_ERROR(glBindTexture(GL_TEXTURE_2D, texture->handle));
+    GL_CHECK_ERROR(glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
+    GL_CHECK_ERROR(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
 
@@ -837,16 +869,16 @@ RenderTarget* RenderDevice::CreateRenderTarget(unsigned int width, unsigned int 
 
     // create framebuffer
     GLuint framebuffer = 0;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    GL_CHECK_ERROR(glGenFramebuffers(1, &framebuffer));
+    GL_CHECK_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer));
     if (colorTex)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex->handle, 0);
+        GL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex->handle, 0));
     if (depthTex)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex->handle, 0);
+        GL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex->handle, 0));
 
     // check framebuffer status
     auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    GL_CHECK_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     if (status != GL_FRAMEBUFFER_COMPLETE)
     {
         LogPrintf("Framebuffer status != GL_FRAMEBUFFER_COMPLETE (%u, %u @ %u, %u)",
@@ -894,7 +926,7 @@ void RenderDevice::DeleteRenderTarget(RenderTarget* target)
 
         // delete target framebuffer
         if (target->framebuffer)
-            glDeleteFramebuffers(1, &target->framebuffer);
+            GL_CHECK_ERROR(glDeleteFramebuffers(1, &target->framebuffer));
 
         // release memory
         delete target;
