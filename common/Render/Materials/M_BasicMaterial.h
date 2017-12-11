@@ -25,9 +25,9 @@ public:
             return false;
 
         if (!SetShading(MATERIAL_SHADING_UNLIT, "BasicMaterial.vs", "BasicMaterial.ps") ||
-            !SetShading(MATERIAL_SHADING_DEPTH_WRITE, "BasicMaterialShadow.vs", "BasicMaterialShadow.ps") ||
+            !SetShading(MATERIAL_SHADING_DEPTH_WRITE, "BasicMaterialDepth.vs", "BasicMaterialDepth.ps") ||
             !SetShading(MATERIAL_SHADING_SKY_LIGHT, "BasicMaterialSkyLight.vs", "BasicMaterial.ps") ||
-            !SetShading(MATERIAL_SHADING_SKY_SHADOW, "BasicMaterialSkyLight.vs", "BasicMaterial.ps"))
+            !SetShading(MATERIAL_SHADING_SKY_SHADOW, "BasicMaterialSkyShadow.vs", "BasicMaterialShadow.ps"))
             return false;
 
         return true;

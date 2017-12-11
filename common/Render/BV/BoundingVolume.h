@@ -16,6 +16,9 @@ public:
     virtual void AddLight(RenderLight* light) = 0;
     virtual void RemoveLight(RenderLight* light) = 0;
 
+    virtual std::vector<RenderEntity*> GetAllEntities() = 0;
+    virtual std::vector<RenderLight*> GetAllLights() = 0;
+
     virtual std::vector<RenderEntity*> CullEntities(const Frustum& frustum) = 0;
     virtual std::vector<RenderLight*> CullLights(const Frustum& frustum) = 0;
 };

@@ -14,6 +14,7 @@ struct Texture;
 
 class BaseMaterial;
 class BoundingVolume;
+class QuadRender;
 
 
 enum RenderLayer
@@ -27,7 +28,7 @@ enum RenderLayer
 
 enum LightFlags
 {
-    LIGHT_CAST_SHADOW = 1,
+    LIGHT_SHADOWS = 1,
 };
 
 
@@ -152,6 +153,8 @@ struct RenderContext
 
     Frustum                     frustum;
 
+    Matrix                      shadowMatrix;
+
     std::vector<RenderEntity*>  visibleEntities;
     std::vector<RenderLight*>   visibleLights;
 };
@@ -176,15 +179,21 @@ public:
     void RemoveLight(RenderLight* light);
 
     BaseMaterial* GetBaseMaterial(const char* name);
+    Texture* GetShadowMap();
 
 private:
     RenderWorld();
     ~RenderWorld();
 
     void RenderForContext(RenderContext* context);
+    void RenderShadowsForLight(RenderContext* context);
     void SetupMaterialShading(RenderContext* context);
 
 private:
     RenderContext m_mainContext;
+    RenderContext m_shadowContext;
     std::unique_ptr<BoundingVolume> m_bv;
+    RenderTarget* m_shadowTarget = nullptr;
+    Texture* m_shadowMap = nullptr;
+    QuadRender* m_debugShadowRender = nullptr;
 };

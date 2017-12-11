@@ -87,13 +87,20 @@ bool BaseMaterial::Begin(RenderContext* context)
     case MATERIAL_SHADING_SKY_LIGHT:
     {
         Vector4 lightColor1(context->light->color[0], context->light->color[1], context->light->color[2], 1.0f);
-        Vector4 lightColor2(1.0f, 1.0f, 1.0f, 1.0f);
+        Vector4 lightColor2(0.6f, 0.6f, 0.6f, 1.0f);
         SetUniform(0, lightColor1);
         SetUniform(1, lightColor2);
 
         SetMatrix(RenderDevice::MATRIX_LIGHT, context->light->position);
     }
     break;
+    }
+
+    // setup shadow params
+    if (context->light && context->light->flags & LIGHT_SHADOWS && context->pass != RENDER_PASS_SHADOW)
+    {
+        SetMatrix(RenderDevice::MATRIX_SHADOW, context->shadowMatrix);
+        SetTexture(4, RenderWorld::GetInstance()->GetShadowMap());
     }
 
     return true;

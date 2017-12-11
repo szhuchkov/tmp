@@ -18,7 +18,7 @@ public:
         m_light.flags = 0;
         m_light.color = Vector3(0, 0, 0);
         MatrixIdentity(&m_light.position);
-        Vector3 lightPos(2, 1, -3);
+        Vector3 lightPos(-2, 3, 1);
         MatrixLookAt(&m_light.position, &lightPos, &Vector3::ZERO, &Vector3::UP);
     }
 
@@ -38,7 +38,7 @@ public:
             return false;
 
         if (data.GetBool("CastShadows"))
-            m_light.flags |= LIGHT_CAST_SHADOW;
+            m_light.flags |= LIGHT_SHADOWS;
 
         if (data.HasProperty("Color"))
             m_light.color = data.GetVec3("Color");

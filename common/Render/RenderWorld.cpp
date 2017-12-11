@@ -6,6 +6,7 @@
 #include <Render/ShaderManager.h>
 #include <Render/BV/BoundingVolume.h>
 #include <Render/BV/LinearVolume.h>
+#include <Render/QuadRender.h>
 
 
 RenderWorld::RenderWorld()
@@ -29,6 +30,13 @@ BaseMaterial* RenderWorld::GetBaseMaterial(const char* name)
         LogPrintf("Warning: base material '%s' not found", name);
     }
     return mtr;
+}
+
+
+Texture* RenderWorld::GetShadowMap()
+{
+    //return RenderDevice::GetInstance()->GetRenderTargetColor(m_shadowTarget);
+    return m_shadowMap;
 }
 
 
@@ -58,12 +66,45 @@ bool RenderWorld::Init()
     // init bounding volume
     m_bv = std::make_unique<LinearVolume>();
 
+    // create shadowmap texture
+    m_shadowTarget = RenderDevice::GetInstance()->CreateRenderTarget(1024, 1024, RenderDevice::TEXF_A8R8G8B8, RenderDevice::TEXF_D16);
+    if (!m_shadowTarget)
+    {
+        LogPrintf("Unable to create shadowmap texture");
+        return false;
+    }
+
+    m_shadowMap = RenderDevice::GetInstance()->GetRenderTargetDepth(m_shadowTarget);
+
+    // create debug shadow render
+    m_debugShadowRender = new QuadRender();
+    if (!m_debugShadowRender->Init())
+    {
+        LogPrintf("Unable to create debug shadow render");
+        return false;
+    }
+
+    m_debugShadowRender->SetTexture(RenderDevice::GetInstance()->GetRenderTargetColor(m_shadowTarget));
+   // m_debugShadowRender->SetTexture(m_shadowMap);
+    m_debugShadowRender->SetPosition(0, 0, 0.3f, 0.3f);
+
     return true;
 }
 
 
 void RenderWorld::Shutdown()
 {
+    RenderDevice::GetInstance()->DeleteRenderTarget(m_shadowTarget);
+    m_shadowTarget = nullptr;
+    m_shadowMap = nullptr;
+
+    if (m_debugShadowRender)
+    {
+        m_debugShadowRender->Shutdown();
+        delete m_debugShadowRender;
+        m_debugShadowRender = nullptr;
+    }
+
     BatchRender::GetInstance()->Shutdown();
     MaterialManager::GetInstance()->Shutdown();
     ShaderManager::GetInstance()->Shutdown();
@@ -106,8 +147,11 @@ void RenderWorld::Render()
     const float clearColor[] = { 0.4f, 0.6f, 0.8f, 1.0f };
     const float clearDepth = 1.0f;
     RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
-
+    
     RenderForContext(&m_mainContext);
+    
+    RenderDevice::GetInstance()->SetRenderTarget(nullptr);
+    m_debugShadowRender->Render();
 }
 
 
@@ -118,7 +162,7 @@ void RenderWorld::RenderForContext(RenderContext* context)
     context->visibleEntities.clear();
     context->visibleLights.clear();
 
-    Matrix viewProj;
+    Matrix viewProj, viewInverse;
     if (!m_mainContext.camera)
     {
         static float angle = 0.0f;
@@ -132,15 +176,12 @@ void RenderWorld::RenderForContext(RenderContext* context)
         Matrix proj;
         MatrixPerspective(&proj, 80.0f, 1280.0f / 720.0f, 1.0f, 100.0f);
         viewProj = view * proj;
-        RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION, viewProj);
+        MatrixInverse(&viewInverse, &view);
     }
     else
     {
-        Matrix viewInverse;
         MatrixInverse(&viewInverse, &m_mainContext.camera->view);
         viewProj = m_mainContext.camera->view * m_mainContext.camera->proj;
-        RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION, viewProj);
-        RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_INVERSE, viewInverse);
     }
 
     context->frustum.FromViewProj(viewProj);
@@ -151,9 +192,25 @@ void RenderWorld::RenderForContext(RenderContext* context)
     for (auto light : context->visibleLights)
     {
         context->light = light;
+
+        // begin shadow pass
+        if (light->flags & LIGHT_SHADOWS)
+        {
+            RenderShadowsForLight(context);
+            Matrix shadowBiasMatrix(
+                0.5f, 0.0f, 0.0f, 0.0f,
+                0.0f, 0.5f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.5f, 0.0f,
+                0.5f, 0.5f, 0.5f, 1.0f);
+            m_mainContext.shadowMatrix = m_shadowContext.shadowMatrix * shadowBiasMatrix;
+        }
+
         SetupMaterialShading(context);
 
-        // batch from here
+        // begin light pass
+        RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION, viewProj);
+        RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_INVERSE, viewInverse);
+
         BatchRender::GetInstance()->SetRenderContext(context);
 
         for (auto entity : context->visibleEntities)
@@ -167,9 +224,70 @@ void RenderWorld::RenderForContext(RenderContext* context)
             }
         }
 
-        // to here
+        // end light pass
         BatchRender::GetInstance()->Execute();
     }
+}
+
+
+void RenderWorld::RenderShadowsForLight(RenderContext* context)
+{
+    auto light = context->light;
+
+    m_shadowContext.camera = nullptr;
+    m_shadowContext.light = light;
+    m_shadowContext.pass = RENDER_PASS_SHADOW;
+    m_shadowContext.shading = MATERIAL_SHADING_DEPTH_WRITE;
+
+    // compute frustum
+    m_shadowContext.frustum.FromViewProj(light->position);
+
+    // cull entities
+    m_shadowContext.visibleEntities = m_bv->GetAllEntities();// m_bv->CullEntities(m_shadowContext.frustum);
+
+    // setup shadow matrices
+    Matrix view;
+    view = light->position;
+    Matrix proj;
+    MatrixOrtho(&proj, 20, 20, -100, 100);
+    Matrix viewProj;
+    viewProj = view * proj;
+    Matrix viewInverse;
+    MatrixInverse(&viewInverse, &view);
+    m_shadowContext.shadowMatrix = viewProj;
+
+    RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_PROJECTION,viewProj);
+    RenderDevice::GetInstance()->SetMatrix(RenderDevice::MATRIX_VIEW_INVERSE, viewInverse);
+
+    // begin shadow pass
+    RenderDevice::GetInstance()->SetRenderTarget(m_shadowTarget);
+    float clearColor[] = { 1, 1, 1, 1 };
+    float clearDepth = 1.0f;
+    RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
+
+    // change face direction
+    RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_FRONT);
+
+    // batch rendering
+    BatchRender::GetInstance()->SetRenderContext(&m_shadowContext);
+    for (auto entity : m_shadowContext.visibleEntities)
+    {
+        // skip entities with no shadows
+        if (0 == (entity->flags & RENDER_ENTITY_CAST_SHADOW))
+            continue;
+
+        m_shadowContext.entity = entity;
+        for (auto surf : m_shadowContext.entity->model->surfaces)
+        {
+            m_shadowContext.surface = surf;
+            BatchRender::GetInstance()->AddDrawSurface(&m_shadowContext);
+        }
+    }
+    BatchRender::GetInstance()->Execute();
+    RenderDevice::GetInstance()->SetRenderTarget(nullptr);
+
+    // restore cull mode
+    RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_BACK);
 }
 
 
@@ -181,7 +299,7 @@ void RenderWorld::SetupMaterialShading(RenderContext* context)
         return;
     }
 
-    bool hasShadow = 0 != (context->light->flags & LIGHT_CAST_SHADOW);
+    bool hasShadow = 0 != (context->light->flags & LIGHT_SHADOWS);
 
     switch (context->light->type)
     {

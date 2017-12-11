@@ -168,9 +168,11 @@
   <ItemGroup>
     <None Include="BasicMaterial.ps" />
     <None Include="BasicMaterial.vs" />
+    <None Include="BasicMaterialDepth.ps" />
+    <None Include="BasicMaterialDepth.vs" />
     <None Include="BasicMaterialShadow.ps" />
-    <None Include="BasicMaterialShadow.vs" />
     <None Include="BasicMaterialSkyLight.vs" />
+    <None Include="BasicMaterialSkyShadow.vs" />
     <None Include="Quad.ps" />
     <None Include="Quad.vs" />
     <None Include="test.mesh" />

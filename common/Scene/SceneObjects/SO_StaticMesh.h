@@ -18,7 +18,7 @@ public:
         SceneObject(id, CLASS_NAME)
     {
         m_entity.model = &m_model;
-        m_entity.flags = 0;
+        m_entity.flags = RENDER_ENTITY_CAST_SHADOW;
         m_entity.renderLayer = 0;
         m_entity.bbox.SetTransform(Matrix::IDENTITY);
 

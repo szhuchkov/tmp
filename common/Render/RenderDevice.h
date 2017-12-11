@@ -107,6 +107,13 @@ public:
         MATRIX_USER_MATRIX_0,
     };
 
+    enum CullMode
+    {
+        CULL_MODE_NONE,
+        CULL_MODE_FRONT,
+        CULL_MODE_BACK,
+    };
+
     bool Init(void* window, int width, int height, bool fullscreen);
     void Shutdown();
     bool Update();
@@ -148,6 +155,7 @@ public:
     void SetRenderTarget(RenderTarget* target);
     void SetUniform(unsigned int index, const Vector4& value);
     void SetMatrix(unsigned int index, const Matrix& value);
+    void SetCullMode(unsigned int mode);
     void DrawPrimitive(unsigned int type, unsigned int offset, unsigned int count);
     void DrawIndexedPrimitive(unsigned int type, unsigned int vertexOffset, unsigned int vertexCount, unsigned int indexOffset, unsigned int count);
 

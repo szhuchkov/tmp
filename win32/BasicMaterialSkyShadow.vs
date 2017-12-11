@@ -5,17 +5,26 @@ attribute vec3 aNormal;
 uniform mat4 gWorld;
 uniform mat4 gViewProjection;
 uniform mat4 gLightMatrix;
+uniform mat4 gShadowMatrix;
 
 uniform vec4 gUniform0;
 uniform vec4 gUniform1;
 
 varying vec2 vTexCoord;
-varying vec4 vColor;
+varying vec3 vDiffuseColor;
+varying vec3 vAmbientColor;
+varying vec4 vShadowPos;
 
 void main()
 {
+	// world position
 	vec3 wPos = (gWorld * vec4(aPos, 1.0)).xyz;
+
+	// output position
 	gl_Position = gViewProjection * vec4(wPos, 1.0);
+
+	// shadow position
+	vShadowPos = gShadowMatrix * vec4(wPos, 1.0);
 
     // world space normal
     vec3 wNormal = mat3(gWorld) * vec3(aNormal);
@@ -32,6 +41,7 @@ void main()
 	ambientPart = 0.5 + 0.5 * ambientPart;
 
 	vTexCoord = aTexCoord;
-    vColor.rgb = gUniform0.xyz * diffPart + gUniform1.xyz * ambientPart;
-	vColor.a = 1.0;
+
+	vDiffuseColor = gUniform0.xyz * diffPart;
+	vAmbientColor = gUniform1.xyz * ambientPart;
 }

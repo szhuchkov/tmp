@@ -103,13 +103,13 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 	RECT wndRect;
 	SetRect(&wndRect, 0, 0, width, height);
 	AdjustWindowRect(&wndRect, wndStyle, FALSE);
-	width = wndRect.right - wndRect.left;
-	height = wndRect.bottom - wndRect.top;
-	int x = (GetSystemMetrics(SM_CXFULLSCREEN) - width) / 2;
-	int y = (GetSystemMetrics(SM_CYFULLSCREEN) - height) / 2;
+	int windowWidth = wndRect.right - wndRect.left;
+	int windowHeight = wndRect.bottom - wndRect.top;
+	int x = (GetSystemMetrics(SM_CXFULLSCREEN) - windowWidth) / 2;
+	int y = (GetSystemMetrics(SM_CYFULLSCREEN) - windowHeight) / 2;
 
 	// create window
-	cl_hWnd = CreateWindow(WND_CLASS_NAME, WND_NAME, wndStyle, x, y, width, height, GetDesktopWindow(), NULL, hInstance, NULL);
+	cl_hWnd = CreateWindow(WND_CLASS_NAME, WND_NAME, wndStyle, x, y, windowWidth, windowHeight, GetDesktopWindow(), NULL, hInstance, NULL);
 	if (!cl_hWnd)
 	{
 		LogPrintf("CreateWindow() failed");
@@ -120,7 +120,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 	UpdateWindow(cl_hWnd);
 
 	// initialize engine
-	if (!Engine::GetInstance()->Init(cl_hWnd, 1024, 768, false))
+	if (!Engine::GetInstance()->Init(cl_hWnd, width, height, false))
 	{
 		LogPrintf("Engine init failed");
 		Engine::GetInstance()->Shutdown();

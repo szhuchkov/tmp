@@ -1,5 +1,7 @@
 attribute vec3 aPos;
-attribute vec2 aTexCoord;
+
+
+uniform vec4 gUniform0;
 
 
 varying vec2 vTexCoord;
@@ -7,8 +9,9 @@ varying vec2 vTexCoord;
 
 void main()
 {
-	gl_Position.xyz = aPos.xyz;
+	gl_Position.xy = 2.0 * (gUniform0.xy + aPos.xy * gUniform0.zw) - 1.0;
+	gl_Position.z = aPos.z;
 	gl_Position.w = 1.0;
 
-	vTexCoord = aTexCoord;
+	vTexCoord.xy = aPos.xy;
 }

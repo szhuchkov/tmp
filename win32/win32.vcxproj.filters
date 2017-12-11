@@ -26,12 +26,6 @@
     <None Include="BasicMaterial.ps">
       <Filter>tmpdata</Filter>
     </None>
-    <None Include="BasicMaterialShadow.vs">
-      <Filter>tmpdata</Filter>
-    </None>
-    <None Include="BasicMaterialShadow.ps">
-      <Filter>tmpdata</Filter>
-    </None>
     <None Include="Quad.vs">
       <Filter>tmpdata</Filter>
     </None>
@@ -45,6 +39,18 @@
       <Filter>tmpdata</Filter>
     </None>
     <None Include="BasicMaterialSkyLight.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterialSkyShadow.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterialDepth.ps">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterialDepth.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="BasicMaterialShadow.ps">
       <Filter>tmpdata</Filter>
     </None>
   </ItemGroup>

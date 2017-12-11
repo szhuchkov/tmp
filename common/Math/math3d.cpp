@@ -79,11 +79,21 @@ void Vec3Cross(Vector3* dst, const Vector3* a, const Vector3* b)
 
 void MatrixIdentity(Matrix* dst)
 {
-    *dst = Matrix(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1);
+    *dst = Matrix::IDENTITY;
+}
+
+
+void MatrixTranspose(Matrix* dst, const Matrix* src)
+{
+    Matrix tmp;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = i; j < 4; j++)
+        {
+            tmp[i][j] = (*src)[j][i];
+        }
+    }
+    *dst = tmp;
 }
 
 

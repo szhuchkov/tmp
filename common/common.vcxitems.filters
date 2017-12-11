@@ -88,6 +88,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\Frustum.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\BoundingVolume.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\LinearVolume.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\QuadRender.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -239,6 +240,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\BV\BoundingBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\BV\Frustum.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\QuadRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">

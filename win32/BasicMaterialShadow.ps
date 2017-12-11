@@ -1,8 +1,52 @@
+uniform sampler2D sTex0;
+uniform sampler2DShadow sTex4;
 
 
+varying vec2 vTexCoord;
+varying vec3 vDiffuseColor;
+varying vec3 vAmbientColor;
 varying vec4 vShadowPos;
+
+
+
+
+float SampleShadow(sampler2DShadow tex, vec4 p)
+{
+#if 1
+const vec2 ShadowPoissonCoords[4] = vec2[](
+  vec2( -0.94201624, -0.39906216 ),
+  vec2( 0.94558609, -0.76890725 ),
+  vec2( -0.094184101, -0.92938870 ),
+  vec2( 0.34495938, 0.29387760 )
+);
+	float s1 = shadow2DProj(tex, p + vec4(ShadowPoissonCoords[0].xy / 1024, 0, 0)).r;
+	float s2 = shadow2DProj(tex, p + vec4(ShadowPoissonCoords[1].xy / 1024, 0, 0)).r;
+	float s3 = shadow2DProj(tex, p + vec4(ShadowPoissonCoords[2].xy / 1024, 0, 0)).r;
+	float s4 = shadow2DProj(tex, p + vec4(ShadowPoissonCoords[3].xy / 1024, 0, 0)).r;
+	float s = dot(vec4(s1, s2, s3, s4), vec4(0.25));
+	return s;
+#else
+	return 
+	float s = texture(tex, p.xy).z;
+	float d = p.z;
+	return d < s ? 1 : 0;
+#endif
+}
+
 
 void main()
 {
-	gl_FragColor = vec4(vShadowPos.z / vShadowPos.w);
+	// diffuse map
+	vec4 texDiffuse = texture(sTex0, vTexCoord);
+
+	// sample shadow
+	vec4 shadowPos = vShadowPos / vShadowPos.w;
+	float shadow = SampleShadow(sTex4, vShadowPos);
+	
+	// compute result color
+	vec3 color = vAmbientColor + shadow * vDiffuseColor;
+
+	// output color
+	gl_FragColor.xyz = texDiffuse.xyz * color;
+	gl_FragColor.w = texDiffuse.w;
 }

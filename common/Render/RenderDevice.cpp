@@ -199,11 +199,11 @@ bool RenderDevice::Init(void* window, int width, int height, bool fullscreen)
     m_width = width;
     m_height = height;
 
-    GL_CHECK_ERROR(glEnable(GL_DEPTH));
     GL_CHECK_ERROR(glEnable(GL_DEPTH_TEST));
     GL_CHECK_ERROR(glDepthFunc(GL_LEQUAL));
     GL_CHECK_ERROR(glEnable(GL_CULL_FACE));
     GL_CHECK_ERROR(glFrontFace(GL_CW));
+    GL_CHECK_ERROR(glCullFace(GL_FRONT));
 
 	return true;
 }
@@ -273,9 +273,7 @@ unsigned int RenderDevice::GetIndexSize(unsigned int format)
 {
 	if (format & INDEX_32)
 		return 4;
-	if (format & INDEX_16)
-		return 2;
-	return 0;
+    return 2;
 }
 
 
@@ -303,6 +301,23 @@ void RenderDevice::Clear(unsigned int flags, const float* color, float depth, in
         GL_CHECK_ERROR(glClearStencil(stencil));
 		mask |= GL_STENCIL_BUFFER_BIT;
 	}
+
+    // force change render target
+    if (m_state & DIRTY_TARGET)
+    {
+        if (m_activeTarget)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, m_activeTarget->framebuffer);
+            glViewport(0, 0, m_activeTarget->color->width, m_activeTarget->color->height);
+        }
+        else
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, m_width, m_height);
+        }
+
+        m_state &= ~DIRTY_TARGET;
+    }
 
 	glClear(mask);
 }
@@ -383,6 +398,26 @@ void RenderDevice::SetMatrix(unsigned int index, const Matrix& value)
             m_matrixVersion[index]++;
             m_matrixValue[index] = value;
         }
+    }
+}
+
+
+void RenderDevice::SetCullMode(unsigned int mode)
+{
+    switch (mode)
+    {
+    case CULL_MODE_NONE:
+        GL_CHECK_ERROR(glCullFace(GL_FRONT_AND_BACK));
+        break;
+    case CULL_MODE_FRONT:
+        GL_CHECK_ERROR(glCullFace(GL_FRONT));
+        break;
+    case CULL_MODE_BACK:
+        GL_CHECK_ERROR(glCullFace(GL_BACK));
+        break;
+    default:
+        LogPrintf("Invalid cull mode %u", mode);
+        break;
     }
 }
 
@@ -783,10 +818,19 @@ Texture* RenderDevice::CreateTexture2D(unsigned int width, unsigned int height, 
     GL_CHECK_ERROR(glGenTextures(1, &handle));
 
     GL_CHECK_ERROR(glBindTexture(GL_TEXTURE_2D, handle));
-    GL_CHECK_ERROR(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 
     if (usage == TEXTURE_USAGE_DEPTH_BUFFER)
     {
+        GL_CHECK_ERROR(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+        GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE));
+    }
+    else if (usage == TEXTURE_USAGE_RENDER_TARGET)
+    {
+        GL_CHECK_ERROR(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
         GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
         GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
         GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -794,6 +838,7 @@ Texture* RenderDevice::CreateTexture2D(unsigned int width, unsigned int height, 
     }
     else
     {
+        GL_CHECK_ERROR(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
         GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
         GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, levels == 1 ? GL_LINEAR : GL_LINEAR_MIPMAP_LINEAR));
         GL_CHECK_ERROR(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
@@ -864,7 +909,7 @@ RenderTarget* RenderDevice::CreateRenderTarget(unsigned int width, unsigned int 
         }
     }
 
-    // set dirty flags as we have to unbind the current framebuffer
+    // set dirty flags as we have to unbind current framebuffer
     m_state |= DIRTY_TARGET;
 
     // create framebuffer
@@ -872,7 +917,7 @@ RenderTarget* RenderDevice::CreateRenderTarget(unsigned int width, unsigned int 
     GL_CHECK_ERROR(glGenFramebuffers(1, &framebuffer));
     GL_CHECK_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer));
     if (colorTex)
-        GL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex->handle, 0));
+        GL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex->handle, 0));
     if (depthTex)
         GL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex->handle, 0));
 

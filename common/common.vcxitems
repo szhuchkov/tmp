@@ -21,6 +21,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\MeshManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\QuadRender.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MaterialLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\QuadRender.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_FreeFlyCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_SkyLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_StaticMesh.h" />
