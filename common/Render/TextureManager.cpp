@@ -17,12 +17,22 @@ TextureManager::~TextureManager()
 
 Texture* TextureManager::LoadTexture(const char* name, bool genMipmaps)
 {
-    char ext[8] = {};
+    // search existing texture
+    auto it = m_nameToNode.find(name);
+    if (it != m_nameToNode.end())
+    {
+        auto node = it->second;
+        node->instances++;
+        return node->tex;
+    }
 
+    // extract file extention
+    char ext[8] = {};
     const char* ptr = strrchr(name, '.');
     if (ptr && strlen(ptr) <= 8)
         strcpy(ext, ptr + 1);
 
+    // load texture format
     Texture* tex = nullptr;
     if (!strcmp(ext, "bmp"))
         tex = nullptr, LogPrintf("TODO: implement");
@@ -35,6 +45,7 @@ Texture* TextureManager::LoadTexture(const char* name, bool genMipmaps)
     else
         LogPrintf("Unsupported texture format: '%s'", name);
 
+    // add to maps
     if (tex)
     {
         TextureNode* node = new TextureNode();
