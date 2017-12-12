@@ -44,6 +44,7 @@ void InputDeviceKeyboard::OnKeyDown(unsigned int code)
 {
     if (m_keyState[code] != KEY_STATE_PRESSED)
     {
+        LOG_INPUT_EVENT("OnKeyDown(%u)", code);
         m_keyState[code] = KEY_STATE_JUST_PRESSED;
         for (auto item : m_callbacks)
             item->OnKeyDown(code);
@@ -55,6 +56,7 @@ void InputDeviceKeyboard::OnKeyUp(unsigned int code)
 {
     if (m_keyState[code] != KEY_STATE_RELEASED)
     {
+        LOG_INPUT_EVENT("OnKeyUp(%u)", code);
         m_keyState[code] = KEY_STATE_JUST_RELEASED;
         for (auto item : m_callbacks)
             item->OnKeyUp(code);
@@ -65,4 +67,16 @@ void InputDeviceKeyboard::OnKeyUp(unsigned int code)
 bool InputDeviceKeyboard::GetKeyDown(unsigned int code) const
 {
     return m_keyState[code] == KEY_STATE_PRESSED;
+}
+
+
+bool InputDeviceKeyboard::GetKeyPressed(unsigned int code) const
+{
+    return m_keyState[code] == KEY_STATE_JUST_PRESSED;
+}
+
+
+bool InputDeviceKeyboard::GetKeyReleased(unsigned int code) const
+{
+    return m_keyState[code] == KEY_STATE_JUST_RELEASED;
 }

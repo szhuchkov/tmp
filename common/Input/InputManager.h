@@ -1,7 +1,7 @@
 #pragma once
 
-
-#if defined _DEBUG
+#define LOGGER_NO_INPUT
+#if defined _DEBUG && !defined LOGGER_NO_INPUT
 #define LOG_INPUT_EVENT     LogPrintf
 #else
 #define LOG_INPUT_EVENT(...)
@@ -9,9 +9,14 @@
 
 
 typedef size_t InputDeviceID;
-
-
 constexpr InputDeviceID INVALID_INPUT_DEVICE_ID = ~0;
+
+
+class InputDeviceMouse;
+class InputDeviceKeyboard;
+class InputDeviceTouch;
+class InputDeviceJoystick;
+class InputDeviceGamepad;
 
 
 enum InputDeviceClass
@@ -66,6 +71,10 @@ public:
 
 	size_t GetNumDevices();
 	InputDevice* GetDevice(size_t index);
+
+    InputDeviceKeyboard* GetSystemKeyboard();
+    InputDeviceMouse* GetSystemMouse();
+    InputDeviceTouch* GetSystemTouch();
 
 	InputDevice* FindDeviceByID(InputDeviceID id);
 	InputDeviceList FindDevicesByClass(InputDeviceClass cls);

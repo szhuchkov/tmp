@@ -152,3 +152,24 @@ InputDeviceList InputManager::GetConnectedDevices()
 	}
 	return res;
 }
+
+
+InputDeviceMouse* InputManager::GetSystemMouse()
+{
+    auto devices = FindDevicesByClass(INPUT_DEVICE_CLASS_MOUSE);
+    return devices.empty() ? nullptr : reinterpret_cast<InputDeviceMouse*>(devices[0]);
+}
+
+
+InputDeviceKeyboard* InputManager::GetSystemKeyboard()
+{
+    auto devices = FindDevicesByClass(INPUT_DEVICE_CLASS_KEYBOARD);
+    return devices.empty() ? nullptr : reinterpret_cast<InputDeviceKeyboard*>(devices[0]);
+}
+
+
+InputDeviceTouch* InputManager::GetSystemTouch()
+{
+    auto devices = FindDevicesByClass(INPUT_DEVICE_CLASS_TOUCH);
+    return devices.empty() ? nullptr : reinterpret_cast<InputDeviceTouch*>(devices[0]);
+}
