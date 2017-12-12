@@ -1,6 +1,7 @@
 #pragma once
 
 
+class Ray;
 class SceneObject;
 
 
@@ -13,13 +14,23 @@ public:
         return &instance;
     }
 
+    struct RayIntersection
+    {
+        SceneObject*    object;
+        float           distance;
+        Vector3         normal;
+    };
+
     void Clear();
     void Update(unsigned int dt);
     bool Load(const char* name);
 
     SceneObject* CreateObject(const char* clsName);
+    std::vector<SceneObject*> EnumObjects();
     void AddObject(SceneObject* obj);
     void RemoveObject(SceneObject* obj);
+
+    std::vector<RayIntersection> RayHitObjects(const Ray& ray, bool sortByDistance = false);
 
 private:
     Scene();
