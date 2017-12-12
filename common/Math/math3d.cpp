@@ -17,6 +17,8 @@ const Matrix Matrix::IDENTITY(
     0.0f, 0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 1.0f);
 
+const AffineTransform AffineTransform::IDENTITY(Matrix::IDENTITY);
+
 
 float Vec2Dot(const Vector2* a, const Vector2* b)
 {
@@ -426,4 +428,54 @@ SideType PointOnPlaneSide(const Vector3& point, const Plane& plane)
 float PointToPlaneDistance(const Vector3& point, const Plane& plane)
 {
     return point.x * plane.x + point.y * plane.y + point.z * plane.z + plane.w;
+}
+
+
+Ray::Ray(const Vector3& origin, const Vector3& dir)
+{
+    this->origin = origin;
+    this->direction = dir;
+}
+
+
+void AffineIdentity(AffineTransform* tm)
+{
+    tm->FromMatrix(Matrix::IDENTITY);
+}
+
+
+AffineTransform::AffineTransform(const Matrix& m)
+{
+    FromMatrix(m);
+}
+
+
+void AffineTransform::FromMatrix(const Matrix& m)
+{
+    translation = Vector3(m[3][0], m[3][1], m[3][2]);
+    axis[0] = Vector3(m[0][0], m[0][1], m[0][2]);
+    axis[1] = Vector3(m[1][0], m[1][1], m[1][2]);
+    axis[2] = Vector3(m[2][0], m[2][1], m[2][2]);
+    scale.x = Vec3Length(&axis[0]);
+    scale.y = Vec3Length(&axis[0]);
+    scale.z = Vec3Length(&axis[0]);
+}
+
+
+Matrix AffineTransform::ToMatrix() const
+{
+    Matrix m = Matrix::IDENTITY;
+    m[0][0] = scale.x * axis[0].x;
+    m[0][1] = scale.x * axis[0].y;
+    m[0][2] = scale.x * axis[0].z;
+    m[1][0] = scale.y * axis[1].x;
+    m[1][1] = scale.y * axis[1].y;
+    m[1][2] = scale.y * axis[1].z;
+    m[2][0] = scale.z * axis[2].x;
+    m[2][1] = scale.z * axis[2].y;
+    m[2][2] = scale.z * axis[2].z;
+    m[3][0] = translation.x;
+    m[3][1] = translation.y;
+    m[3][2] = translation.z;
+    return m;
 }

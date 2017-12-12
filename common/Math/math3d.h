@@ -217,6 +217,26 @@ public:
 };
 
 
+class Plane
+{
+public:
+    float x, y, z, w;
+
+    Plane() = default;
+    Plane(const Plane& other) = default;
+    Plane(float x, float y, float z, float w);
+
+    Plane& operator = (const Plane& other) = default;
+
+    bool operator == (const Plane& other) const;
+    bool operator != (const Plane& other) const;
+};
+
+
+SideType PointOnPlaneSide(const Vector3& point, const Plane& plane);
+float PointToPlaneDistance(const Vector3& point, const Plane& plane);
+
+
 class Matrix
 {
 public:
@@ -263,24 +283,45 @@ void MatrixTransformCoord(Vector3* dst, const Vector4* v, const Matrix* m);
 void MatrixTransformNormal(Vector3* dst, const Vector3* v, const Matrix* m);
 
 
-class Plane
+class AffineTransform
 {
 public:
-    float x, y, z, w;
+    static const AffineTransform IDENTITY;
 
-    Plane() = default;
-    Plane(const Plane& other) = default;
-    Plane(float x, float y, float z, float w);
+    Vector3 translation;
+    Vector3 axis[3];
+    Vector3 scale;
 
-    Plane& operator = (const Plane& other) = default;
+    AffineTransform() = default;
+    AffineTransform(const AffineTransform& other) = default;
+    AffineTransform(const Matrix& matrix);
 
-    bool operator == (const Plane& other) const;
-    bool operator != (const Plane& other) const;
+    AffineTransform& operator = (const AffineTransform& other) = default;
+    AffineTransform& operator = (const Matrix& m);
+
+    bool operator == (const AffineTransform& other) const;
+    bool operator != (const AffineTransform& other) const;
+
+    void FromMatrix(const Matrix& m);
+    Matrix ToMatrix() const;
 };
 
 
-SideType PointOnPlaneSide(const Vector3& point, const Plane& plane);
-float PointToPlaneDistance(const Vector3& point, const Plane& plane);
+void AffineIdentity(AffineTransform* tm);
+
+
+class Ray
+{
+public:
+    Vector3 origin;
+    Vector3 direction;
+
+    Ray() = default;
+    Ray(const Ray& other) = default;
+    Ray(const Vector3& origin, const Vector3& direction);
+
+    Ray& operator = (const Ray& other) = default;
+};
 
 
 //-----------------------------------------------------------------------------
