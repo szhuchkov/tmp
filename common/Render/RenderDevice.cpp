@@ -155,6 +155,8 @@ struct Texture
 struct RenderTarget
 {
 	GLuint			framebuffer;
+    unsigned int    width;
+    unsigned int    height;
 	Texture*		color;
 	Texture*		depth;
 };
@@ -308,7 +310,7 @@ void RenderDevice::Clear(unsigned int flags, const float* color, float depth, in
         if (m_activeTarget)
         {
             glBindFramebuffer(GL_FRAMEBUFFER, m_activeTarget->framebuffer);
-            glViewport(0, 0, m_activeTarget->color->width, m_activeTarget->color->height);
+            glViewport(0, 0, m_activeTarget->width, m_activeTarget->height);
         }
         else
         {
@@ -404,10 +406,17 @@ void RenderDevice::SetMatrix(unsigned int index, const Matrix& value)
 
 void RenderDevice::SetCullMode(unsigned int mode)
 {
+    if (m_cullMode == mode)
+        return;
+
+    if (m_cullMode == CULL_MODE_NONE)
+        GL_CHECK_ERROR(glEnable(GL_CULL_FACE));
+
+    m_cullMode = static_cast<CullMode>(mode);
     switch (mode)
     {
     case CULL_MODE_NONE:
-        GL_CHECK_ERROR(glCullFace(GL_FRONT_AND_BACK));
+        GL_CHECK_ERROR(glDisable(GL_CULL_FACE));
         break;
     case CULL_MODE_FRONT:
         GL_CHECK_ERROR(glCullFace(GL_FRONT));
@@ -459,7 +468,7 @@ void RenderDevice::ValidateState()
         if (m_activeTarget)
         {
             GL_CHECK_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, m_activeTarget->framebuffer));
-            GL_CHECK_ERROR(glViewport(0, 0, m_activeTarget->color->width, m_activeTarget->color->height));
+            GL_CHECK_ERROR(glViewport(0, 0, m_activeTarget->width, m_activeTarget->height));
         }
         else
         {
@@ -938,6 +947,8 @@ RenderTarget* RenderDevice::CreateRenderTarget(unsigned int width, unsigned int 
     target->framebuffer = framebuffer;
     target->color = colorTex;
     target->depth = depthTex;
+    target->width = width;
+    target->height = height;
     return target;
 }
 

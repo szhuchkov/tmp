@@ -136,7 +136,7 @@ void BatchRender::Execute()
         if (lastMaterial != s->surface->material)
         {
             lastMaterial = s->surface->material;
-            lastBaseMaterial->SetMaterial(lastMaterial);
+            lastBaseMaterial->SetMaterial(m_context, lastMaterial);
         }
 
         // now draw

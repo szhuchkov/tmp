@@ -2,37 +2,46 @@
 
 
 #include "InputManager.h"
+#include "KeyCodes.h"
 
 
 class InputDeviceKeyboard : public InputDevice
 {
 public:
-	enum
-	{
-		KEY_STATE_UP,
-		KEY_STATE_DOWN,
-	};
+    enum
+    {
+        KEY_STATE_RELEASED,
+        KEY_STATE_PRESSED,
+        KEY_STATE_JUST_PRESSED,
+        KEY_STATE_JUST_RELEASED,
+    };
 
-	InputDeviceKeyboard();
+    enum { MAX_KEYS = 256 };
+
+    class Callback
+    {
+    public:
+        virtual void OnKeyDown(unsigned int code) {}
+        virtual void OnKeyUp(unsigned int code) {}
+    };
+
+	InputDeviceKeyboard(InputDeviceID id);
 	virtual ~InputDeviceKeyboard();
-
-	InputDeviceClass GetDeviceClass() const override;
-	const char* GetDeviceName() const override;
 
 	void Update() override;
 
-	bool IsConnected() const override;
+    void AddCallback(Callback* func);
+    void RemoveCallback(Callback* func);
 
-	int GetNumButtons() const override;
-	int GetButton(int button) const override;
+    char GetKeyState(unsigned int code) const;
+    bool GetKeyDown(unsigned int code) const;
+    bool GetKeyPressed(unsigned int code) const;
+    bool GetKeyReleased(unsigned int code) const;
 
-	int GetNumAxis() const override;
-	float GetAxis(int axis) const override;
-
-	void OnKeyDown(int key);
-	void OnKeyUp(int key);
+	void OnKeyDown(unsigned int code);
+	void OnKeyUp(unsigned int code);
 
 private:
-	static const int MAX_KEYS = 512;
-	int m_keys[MAX_KEYS];
+    std::set<Callback*> m_callbacks;
+    std::vector<char> m_keyState;
 };

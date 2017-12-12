@@ -89,6 +89,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\BoundingVolume.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\LinearVolume.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\QuadRender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\KeyCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />

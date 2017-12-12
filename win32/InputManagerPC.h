@@ -4,6 +4,8 @@
 #include <Input/InputManager.h>
 #include <Input/InputDeviceMouse.h>
 #include <Input/InputDeviceKeyboard.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
 
 
 class InputManagerPC : public InputManager
@@ -31,10 +33,20 @@ private:
 	InputManagerPC();
 	~InputManagerPC();
 
+    void UpdateMouse();
+    void UpdateKeyboard();
+
+private:
     POINT m_cursorInitialPos;
     bool m_cursorLocked = false;
     bool m_focus = true;
 
-	InputDeviceMouse m_mouse;
-	InputDeviceKeyboard m_keyboard;
+    std::unique_ptr<InputDeviceMouse> m_mouse;
+    std::unique_ptr<InputDeviceKeyboard> m_keyboard;
+
+    IDirectInput8* m_pDI = nullptr;
+    IDirectInputDevice8* m_pMouseDevice = nullptr;
+    IDirectInputDevice8* m_pKeyboardDevice = nullptr;
+    std::vector<BYTE> m_keyState;
+    DIMOUSESTATE m_mouseState;
 };

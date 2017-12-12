@@ -2,13 +2,9 @@
 #include "InputDeviceMouse.h"
 
 
-InputDeviceMouse::InputDeviceMouse()
+InputDeviceMouse::InputDeviceMouse(InputDeviceID id) :
+    InputDevice(INPUT_DEVICE_CLASS_MOUSE, id, "SystemMouse")
 {
-	for (auto& button : m_buttons)
-		button = BUTTON_STATE_UP;
-
-	for (auto& axis : m_axis)
-		axis = 0;
 }
 
 
@@ -17,50 +13,8 @@ InputDeviceMouse::~InputDeviceMouse()
 }
 
 
-InputDeviceClass InputDeviceMouse::GetDeviceClass() const
-{
-	return INPUT_DEVICE_CLASS_MOUSE;
-}
-
-
-const char* InputDeviceMouse::GetDeviceName() const
-{
-	return "Mouse";
-}
-
-
 void InputDeviceMouse::Update()
 {
-}
-
-
-bool InputDeviceMouse::IsConnected() const
-{
-	return true;
-}
-
-
-int InputDeviceMouse::GetNumButtons() const
-{
-	return MAX_MOUSE_BUTTONS;
-}
-
-
-int InputDeviceMouse::GetButton(int index) const
-{
-	return m_buttons[index];
-}
-
-
-int InputDeviceMouse::GetNumAxis() const
-{
-	return MAX_MOUSE_AXIS;
-}
-
-
-float InputDeviceMouse::GetAxis(int index) const
-{
-	return static_cast<float>(m_axis[index]);
 }
 
 
@@ -82,67 +36,147 @@ void InputDeviceMouse::UnlockCursor()
 }
 
 
-void InputDeviceMouse::OnMouseDown(int button)
+void InputDeviceMouse::AddCallback(Callback* func)
 {
-	if (button >= MAX_MOUSE_BUTTONS)
-		return;
+    m_callbacks.insert(func);
+}
 
-	if (m_buttons[button] != BUTTON_STATE_DOWN)
-	{
-		m_buttons[button] = BUTTON_STATE_DOWN;
-		PushButtonEvent(button, BUTTON_STATE_DOWN);
+
+void InputDeviceMouse::RemoveCallback(Callback* func)
+{
+    auto it = m_callbacks.find(func);
+    if (it != m_callbacks.end())
+        m_callbacks.erase(it);
+}
+
+
+void InputDeviceMouse::OnMouseDown(unsigned int button)
+{
+    if (m_buttonState[button] != BUTTON_STATE_PRESSED)
+    {
+        if (button == 0)
+        {
+            auto timer = Sys_Milliseconds();
+            auto timeout = timer - m_clickTimer;
+
+            if (timeout > CLICK_TIMEOUT)
+            {
+                // initiate click event
+                m_clickDetected = false;
+                m_clickPos = m_cursorPos;
+                m_clickTimer = timer;
+            }
+            else
+            {
+                // initiate double click event
+                if (m_clickDetected)
+                    m_clickTimer = timer;
+            }
+        }
+
+        m_buttonState[button] = BUTTON_STATE_JUST_PRESSED;
+        for (auto item : m_callbacks)
+            item->OnMouseDown(m_cursorPos.x, m_cursorPos.y, button);
 	}
 }
 
 
-void InputDeviceMouse::OnMouseUp(int button)
+void InputDeviceMouse::OnMouseUp(unsigned int button)
 {
-	if (button >= MAX_MOUSE_BUTTONS)
-		return;
-
-	if (m_buttons[button] != BUTTON_STATE_UP)
+    if (m_buttonState[button] != BUTTON_STATE_RELEASED)
 	{
-		m_buttons[button] = BUTTON_STATE_UP;
-		PushButtonEvent(button, BUTTON_STATE_UP);
+        if (button == 0)
+        {
+            auto timer = Sys_Milliseconds();
+            auto timeout = timer - m_clickTimer;
+
+            // detect click events
+            if (std::abs(m_clickPos.x - m_cursorPos.x) < CLICK_MAX_DISTANCE &&
+                std::abs(m_clickPos.y - m_cursorPos.y) < CLICK_MAX_DISTANCE)
+            {
+                // detect double click
+                if (m_clickDetected && timeout < DOUBLE_CLICK_TIMEOUT)
+                {
+                    LOG_INPUT_EVENT("OnDoubleClick(%d, %d)", m_clickPos.x, m_clickPos.y);
+
+                    for (auto item : m_callbacks)
+                        item->OnDoubleClick(m_cursorPos.x, m_cursorPos.y, 0);
+
+                    m_clickDetected = false;
+                }
+                else if (!m_clickDetected && timeout < CLICK_TIMEOUT)
+                {
+                    LOG_INPUT_EVENT("OnSingleClick(%d, %d)", m_clickPos.x, m_clickPos.y);
+                    
+                    for (auto item : m_callbacks)
+                        item->OnSingleClick(m_cursorPos.x, m_cursorPos.y, 0);
+
+                    m_clickTimer = timer;
+                    m_clickDetected = true;
+                }
+                else
+                {
+                    m_clickDetected = false;
+                }
+            }
+            else
+            {
+                m_clickDetected = false;
+            }
+        }
+
+        m_buttonState[button] = BUTTON_STATE_JUST_RELEASED;
+        for (auto item : m_callbacks)
+            item->OnMouseUp(m_cursorPos.x, m_cursorPos.y, button);
 	}
 }
 
 
 void InputDeviceMouse::OnMouseMove(int x, int y)
 {
-	if (m_axis[0] != x || m_axis[1] != y)
-	{
-		if (m_axis[0] != x)
-		{
-			m_axis[0] = x;
-			PushAxisEvent(0, static_cast<float>(x));
-		}
-
-		if (m_axis[1] != y)
-		{
-			m_axis[1] = y;
-			PushAxisEvent(1, static_cast<float>(y));
-		}
-
-		//PushTouchEvent(0, 0, x, y);
-
-        m_cursorPos.x = x;
-        m_cursorPos.y = y;
-	}
+    for (auto item : m_callbacks)
+        item->OnMouseMove(x, y);
 }
 
 
 void InputDeviceMouse::OnMouseWheel(int z)
 {
-	if (m_axis[2] != z)
-	{
-		m_axis[2] = z;
-		PushAxisEvent(2, static_cast<float>(z));
-	}
+    for (auto item : m_callbacks)
+        item->OnMouseWheel(z);
 }
 
 
 const InputDeviceMouse::CursorPos& InputDeviceMouse::GetCursorPos() const
 {
     return m_cursorPos;
+}
+
+
+char InputDeviceMouse::GetButtonState(unsigned int button) const
+{
+    return m_buttonState[button];
+}
+
+
+bool InputDeviceMouse::GetButtonDown(unsigned int button) const
+{
+    return m_buttonState[button] == BUTTON_STATE_PRESSED;
+}
+
+
+bool InputDeviceMouse::GetButtonPressed(unsigned int button) const
+{
+    return m_buttonState[button] == BUTTON_STATE_JUST_PRESSED;
+}
+
+
+bool InputDeviceMouse::GetButtonReleased(unsigned int button) const
+{
+    return m_buttonState[button] == BUTTON_STATE_JUST_RELEASED;
+}
+
+
+void InputDeviceMouse::OnCursorPositionChanged(int x, int y)
+{
+    m_cursorPos = { x, y };
 }

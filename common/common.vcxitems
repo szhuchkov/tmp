@@ -131,6 +131,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Input\KeyCodes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)jpeglib\jpeglib.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\AABB.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BaseMaterial.h" />

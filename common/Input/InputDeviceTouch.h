@@ -7,36 +7,50 @@
 class InputDeviceTouch : public InputDevice
 {
 public:
-	enum
-	{
-		POINTER_UP,
-		POINTER_DOWN,
-		POINTER_MOVE,
-	};
+    enum
+    {
+        POINTER_STATE_UP,
+        POINTER_STATE_DOWN,
+        POINTER_STATE_JUST_DOWN,
+        POINTER_STATE_JUST_UP,
+    };
+
+    struct PointerPos
+    {
+        int x, y;
+    };
+
+    enum { MAX_POINTERS = 4 };
+
+    class Callback
+    {
+    public:
+        virtual void OnPointerDown(int x, int y, unsigned int pointer) {}
+        virtual void OnPointerUp(int x, int y, unsigned int pointer) {}
+        virtual void OnPointerMove(int x, int y, unsigned int pointer) {}
+    };
 
 	InputDeviceTouch();
 	virtual ~InputDeviceTouch();
 
-	InputDeviceClass GetDeviceClass() const override;
-	const char* GetDeviceName() const override;
-
 	void Update() override;
 
-	bool IsConnected() const override;
+    std::vector<unsigned int> GetActivePointers() const;
+    char GetPointerState(unsigned int pointer) const;
+    bool GetPointerDown(unsigned int pointer) const;
+    PointerPos GetPointerPos(unsigned int pointer) const;
 
-	int GetNumButtons() const override;
-	int GetButton(int button) const override;
-
-	int GetNumAxis() const override;
-	float GetAxis(int axis) const override;
-
-	void OnPointerDown(int pointer, int x, int y);
-	void OnPointerUp(int pointer, int x, int y);
-	void OnPointerMove(int pointer, int x, int y);
+	void OnPointerDown(int id, int x, int y);
+	void OnPointerUp(int id, int x, int y);
+	void OnPointerMove(int id, int x, int y);
 
 private:
-	static const int MAX_POINTERS = 4;
-	bool m_pointerDown[MAX_POINTERS];
-	int m_pointerX[MAX_POINTERS];
-	int m_pointerY[MAX_POINTERS];
+    int GetPointer(int id);
+    int AllocPointer(int id);
+    void ReleasePointer(int id);
+
+private:
+    char m_pointerState[MAX_POINTERS] = {};
+    PointerPos m_pointerPos[MAX_POINTERS];
+    int m_pointerID[MAX_POINTERS];
 };

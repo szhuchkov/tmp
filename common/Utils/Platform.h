@@ -33,3 +33,5 @@
 #define PLATFORM_PC			0
 #endif
 
+
+size_t Sys_Milliseconds();

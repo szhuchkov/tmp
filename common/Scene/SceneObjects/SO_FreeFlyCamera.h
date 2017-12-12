@@ -43,13 +43,13 @@ private:
             }
 
             Vector2 move(0, 0);
-            if (m_keyboard->GetButton('W'))
+            if (m_keyboard->GetKeyDown('W'))
                 move.x += m_moveSpeed * dt;
-            if (m_keyboard->GetButton('S'))
+            if (m_keyboard->GetKeyDown('S'))
                 move.x -= m_moveSpeed * dt;
-            if (m_keyboard->GetButton('A'))
+            if (m_keyboard->GetKeyDown('A'))
                 move.y -= m_moveSpeed * dt;
-            if (m_keyboard->GetButton('D'))
+            if (m_keyboard->GetKeyDown('D'))
                 move.y += m_moveSpeed * dt;
 
             if (std::abs(move.x) > 0.0001f || std::abs(move.y) > 0.001f)

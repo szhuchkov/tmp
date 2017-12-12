@@ -151,6 +151,7 @@ struct RenderContext
     RenderEntity*               entity = nullptr;
     RenderSurface*              surface = nullptr;
 
+    bool                        reverseCulling = false;
     Frustum                     frustum;
 
     Matrix                      shadowMatrix;

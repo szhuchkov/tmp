@@ -2,111 +2,107 @@
 #include "InputDeviceTouch.h"
 
 
-InputDeviceTouch::InputDeviceTouch()
-{
-	for(int i = 0; i < MAX_POINTERS; i++)
-	{
-		m_pointerDown[i] = false;
-		m_pointerX[i] = m_pointerY[i] = 0;
-	}
-}
-
-
 InputDeviceTouch::~InputDeviceTouch()
 {
 }
 
 
-InputDeviceClass InputDeviceTouch::GetDeviceClass() const
-{
-	return INPUT_DEVICE_CLASS_TOUCH;
-}
-
-
-const char * InputDeviceTouch::GetDeviceName() const
-{
-	return "Touch";
-}
-
-
 void InputDeviceTouch::Update()
 {
+    // update state for pointers
+    for (int i = 0; i < MAX_POINTERS; i++)
+    {
+        if (m_pointerState[i] == POINTER_STATE_JUST_UP)
+            m_pointerState[i] = POINTER_STATE_UP;
+        else if (m_pointerState[i] == POINTER_STATE_JUST_DOWN)
+            m_pointerState[i] = POINTER_STATE_DOWN;
+    }
 }
 
 
-bool InputDeviceTouch::IsConnected() const
+std::vector<unsigned int> InputDeviceTouch::GetActivePointers() const
 {
-	return true;
+    std::vector<unsigned int> pointers;
+    for (unsigned int i = 0; i < MAX_POINTERS; i++)
+    {
+        if (m_pointerState[i] == POINTER_STATE_DOWN)
+            pointers.push_back(i);
+    }
+    return pointers;
 }
 
 
-int InputDeviceTouch::GetNumButtons() const
+InputDeviceTouch::PointerPos InputDeviceTouch::GetPointerPos(unsigned int pointer) const
 {
-	return 0;
+    return m_pointerPos[pointer];
 }
 
 
-int InputDeviceTouch::GetButton(int button) const
+char InputDeviceTouch::GetPointerState(unsigned int pointer) const
 {
-	return 0;
+    return m_pointerState[pointer];
 }
 
 
-int InputDeviceTouch::GetNumAxis() const
+bool InputDeviceTouch::GetPointerDown(unsigned int pointer) const
 {
-	return 2 * MAX_POINTERS;
+    return m_pointerState[pointer] == POINTER_STATE_DOWN;
 }
 
 
-float InputDeviceTouch::GetAxis(int axis) const
+void InputDeviceTouch::OnPointerDown(int id, int x, int y)
 {
-	return static_cast<float>(axis & 1 ? m_pointerY[axis / 2] : m_pointerX[axis / 2]);
+    auto pointer = AllocPointer(id);
+    if (pointer != -1)
+    {
+        m_pointerID[pointer] = id;
+        m_pointerPos[pointer] = { x, y };
+        m_pointerState[pointer] = POINTER_STATE_JUST_DOWN;
+    }
 }
 
 
-void InputDeviceTouch::OnPointerDown(int pointer, int x, int y)
+void InputDeviceTouch::OnPointerUp(int id, int x, int y)
 {
-	if (pointer >= MAX_POINTERS)
-		return;
-
-	if (!m_pointerDown[pointer])
-	{
-		m_pointerDown[pointer] = true;
-		PushTouchEvent(pointer, POINTER_DOWN, x, y);
-	}
-
-	m_pointerX[pointer] = x;
-	m_pointerY[pointer] = y;
+    auto pointer = GetPointer(id);
+    if (pointer != -1)
+    {
+        m_pointerState[pointer] = POINTER_STATE_JUST_UP;
+        ReleasePointer(id);
+    }
 }
 
 
-void InputDeviceTouch::OnPointerUp(int pointer, int x, int y)
+int InputDeviceTouch::AllocPointer(int id)
 {
-	if (pointer >= MAX_POINTERS)
-		return;
-
-	if (m_pointerDown[pointer])
-	{
-		m_pointerDown[pointer] = false;
-		PushTouchEvent(pointer, POINTER_UP, x, y);
-	}
-
-	m_pointerX[pointer] = x;
-	m_pointerY[pointer] = y;
+    for (int i = 0; i < MAX_POINTERS; i++)
+    {
+        if (m_pointerID[i] == -1)
+            return i;
+    }
+    return -1;
 }
 
 
-void InputDeviceTouch::OnPointerMove(int pointer, int x, int y)
+void InputDeviceTouch::ReleasePointer(int id)
 {
-	if (pointer >= MAX_POINTERS)
-		return;
+    for (int i = 0; i < MAX_POINTERS; i++)
+    {
+        if (m_pointerID[i] == id)
+        {
+            m_pointerID[i] = -1;
+            break;
+        }
+    }
+}
 
-	if (m_pointerDown[pointer])
-	{
-		if (m_pointerX[pointer] != x || m_pointerY[pointer] != y)
-			PushTouchEvent(pointer, POINTER_MOVE, x, y);
-	}
 
-	m_pointerX[pointer] = x;
-	m_pointerY[pointer] = y;
+int InputDeviceTouch::GetPointer(int id)
+{
+    for (int i = 0; i < MAX_POINTERS; i++)
+    {
+        if (m_pointerID[i] == id)
+            return i;
+    }
+    return -1;
 }

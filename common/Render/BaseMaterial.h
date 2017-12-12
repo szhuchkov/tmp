@@ -24,7 +24,7 @@ public:
     virtual void Shutdown();
     virtual bool Begin(RenderContext* context);
     virtual void End(RenderContext* context);
-    virtual void SetMaterial(RenderMaterial* material);
+    virtual void SetMaterial(RenderContext* context, RenderMaterial* material);
 
 protected:
     void SetShader(Shader* shader);

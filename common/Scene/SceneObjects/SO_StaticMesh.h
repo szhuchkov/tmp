@@ -100,8 +100,6 @@ public:
             m_materialLib = nullptr;
         }
 
-        m_surfaces.clear();
-
         // free materials
         for (size_t i = 0; i < m_materials.size(); i++)
         {
@@ -111,6 +109,9 @@ public:
                 TextureManager::GetInstance()->FreeTexture(m_materials[i].texmaps[j]);
             }
         }
+
+        m_surfaces.clear();
+        m_materials.clear();
     }
 
 protected:

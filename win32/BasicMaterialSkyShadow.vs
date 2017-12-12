@@ -40,8 +40,10 @@ void main()
 	float ambientPart = dot(vec3(0, 1, 0), wNormal);
 	ambientPart = 0.5 + 0.5 * ambientPart;
 
+	// output texcoord
 	vTexCoord = aTexCoord;
 
+	// output color
 	vDiffuseColor = gUniform0.xyz * diffPart;
 	vAmbientColor = gUniform1.xyz * ambientPart;
 }

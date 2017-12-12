@@ -197,6 +197,9 @@ private:
     unsigned int        m_activeAttribs = 0;
     unsigned int        m_activeStreamOffset = 0;
 
+    // local batch
+    CullMode            m_cullMode = CULL_MODE_FRONT;
+
     // texture cache
     Texture*            m_activeSamplers[MAX_SAMPLERS] = {};
 

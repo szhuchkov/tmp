@@ -2,10 +2,10 @@
 #include "InputDeviceKeyboard.h"
 
 
-InputDeviceKeyboard::InputDeviceKeyboard()
+InputDeviceKeyboard::InputDeviceKeyboard(InputDeviceID id) :
+    InputDevice(INPUT_DEVICE_CLASS_KEYBOARD, id, "SystemKeyboard"),
+    m_keyState(256, KEY_STATE_RELEASED)
 {
-	for (auto& key : m_keys)
-		key = KEY_STATE_UP;
 }
 
 
@@ -14,74 +14,55 @@ InputDeviceKeyboard::~InputDeviceKeyboard()
 }
 
 
-InputDeviceClass InputDeviceKeyboard::GetDeviceClass() const
-{
-	return INPUT_DEVICE_CLASS_KEYBOARD;
-}
-
-
-const char* InputDeviceKeyboard::GetDeviceName() const
-{
-	return "Keyboard";
-}
-
-
-int InputDeviceKeyboard::GetNumButtons() const
-{
-	return MAX_KEYS;
-}
-
-
-int InputDeviceKeyboard::GetButton(int index) const
-{
-	return m_keys[index];
-}
-
-
-int InputDeviceKeyboard::GetNumAxis() const
-{
-	return 0;
-}
-
-
-float InputDeviceKeyboard::GetAxis(int index) const
-{
-	return 0.0f;
-}
-
-
 void InputDeviceKeyboard::Update()
 {
+    for (size_t i = 0; i < MAX_KEYS; i++)
+    {
+        if (m_keyState[i] == KEY_STATE_JUST_PRESSED)
+            m_keyState[i] = KEY_STATE_PRESSED;
+        else if (m_keyState[i] == KEY_STATE_JUST_RELEASED)
+            m_keyState[i] = KEY_STATE_RELEASED;
+    }
 }
 
 
-bool InputDeviceKeyboard::IsConnected() const
+void InputDeviceKeyboard::AddCallback(Callback* func)
 {
-	return true;
+    m_callbacks.insert(func);
 }
 
 
-void InputDeviceKeyboard::OnKeyDown(int key)
+void InputDeviceKeyboard::RemoveCallback(Callback* func)
 {
-	if (key >= MAX_KEYS)
-		return;
-
-	if (m_keys[key] != KEY_STATE_DOWN)
-	{
-		m_keys[key] = KEY_STATE_DOWN;
-		PushButtonEvent(key, KEY_STATE_DOWN);
-	}
+    auto it = m_callbacks.find(func);
+    if (it != m_callbacks.end())
+        m_callbacks.erase(it);
 }
 
 
-void InputDeviceKeyboard::OnKeyUp(int key)
+void InputDeviceKeyboard::OnKeyDown(unsigned int code)
 {
-	if (key >= MAX_KEYS)
-		return;
+    if (m_keyState[code] != KEY_STATE_PRESSED)
+    {
+        m_keyState[code] = KEY_STATE_JUST_PRESSED;
+        for (auto item : m_callbacks)
+            item->OnKeyDown(code);
+    }
+}
 
-	if (m_keys[key] != KEY_STATE_UP)
-	{
-		m_keys[key] = KEY_STATE_UP;
-		PushButtonEvent(key, KEY_STATE_UP);
-	}
+
+void InputDeviceKeyboard::OnKeyUp(unsigned int code)
+{
+    if (m_keyState[code] != KEY_STATE_RELEASED)
+    {
+        m_keyState[code] = KEY_STATE_JUST_RELEASED;
+        for (auto item : m_callbacks)
+            item->OnKeyUp(code);
+    }
+}
+
+
+bool InputDeviceKeyboard::GetKeyDown(unsigned int code) const
+{
+    return m_keyState[code] == KEY_STATE_PRESSED;
 }

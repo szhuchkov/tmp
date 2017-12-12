@@ -18,9 +18,13 @@ public:
 
     void* GetWindow();
 
+    size_t GetTime();
+
 private:
 	Engine();
 	~Engine();
 
-    void*   m_window = nullptr;
+    void* m_window = nullptr;
+    size_t m_startTime = 0;
+    size_t m_currTime = 0;
 };;

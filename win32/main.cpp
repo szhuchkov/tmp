@@ -3,7 +3,6 @@
 #include <Render/RenderDevice.h>
 #include <Scene/Scene.h>
 #include "InputManagerPC.h"
-#include "../tests/TestScene.h"
 
 
 #define WND_NAME		"AGE RenderWindow"
@@ -13,6 +12,8 @@
 static HINSTANCE	cl_hInstance = NULL;
 static HWND			cl_hWnd = NULL;
 static bool			cl_quit = false;
+static uint64_t     sys_timerBase = 0;
+static uint64_t     sys_timerFreq = 1;
 
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -32,38 +33,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         }
     }
     break;
-	case WM_KEYDOWN:
-		InputManagerPC::GetInstance()->OnKeyDown(LOWORD(wParam));
-		break;
-	case WM_KEYUP:
-		InputManagerPC::GetInstance()->OnKeyUp(LOWORD(wParam));
-		break;
-	case WM_MOUSEMOVE:
-		{
-			short x = LOWORD(lParam);
-			short y = HIWORD(lParam);
-			if (x >= 0 && y >= 0)
-				InputManagerPC::GetInstance()->OnMouseMove(LOWORD(lParam), HIWORD(lParam));
-		}
-		break;
-	case WM_LBUTTONDOWN:
-		InputManagerPC::GetInstance()->OnMouseDown(0);
-		break;
-	case WM_LBUTTONUP:
-		InputManagerPC::GetInstance()->OnMouseUp(0);
-		break;
-	case WM_RBUTTONDOWN:
-		InputManagerPC::GetInstance()->OnMouseDown(1);
-		break;
-	case WM_RBUTTONUP:
-		InputManagerPC::GetInstance()->OnMouseUp(1);
-		break;
-	case WM_MBUTTONDOWN:
-		InputManagerPC::GetInstance()->OnMouseDown(2);
-		break;
-	case WM_MBUTTONUP:
-		InputManagerPC::GetInstance()->OnMouseUp(2);
-		break;
 	case WM_CLOSE:
 		cl_quit = true;
 		return 0;
@@ -75,6 +44,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, int showCmd)
 {
 	cl_hInstance = hInstance;
+
+    // init system timer
+    QueryPerformanceCounter((LARGE_INTEGER*)&sys_timerBase);
+    QueryPerformanceFrequency((LARGE_INTEGER*)&sys_timerFreq);
 
 	// init some vars
 	CVar_Set("ScreenWidth", 1280);
@@ -134,8 +107,6 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
         return -1;
     }
 
-//    TestScene::GetInstance()->Init();
-
 	// run main loop
 	while (!cl_quit)
 	{
@@ -152,20 +123,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 
 		auto mouseDeviceID = InputManager::GetInstance()->FindDevicesByClass(INPUT_DEVICE_CLASS_MOUSE).front()->GetDeviceID();
 
-		for(size_t i = 0; i < InputManager::GetInstance()->GetNumEvents(); i++)
-		{
-			const auto& e = InputManager::GetInstance()->GetEvent(i);
-			if (e.type == INPUT_EVENT_TYPE_TOUCH && e.device == mouseDeviceID)
-			{
-				//if (e.data.touch.x > 400 && e.data.touch.y > 400)
-				//	cl_quit = true;
-			}
-		}
-
 		Engine::GetInstance()->Render();
 	}
-
-    TestScene::GetInstance()->Shutdown();
 
 	// shutdown
     Scene::GetInstance()->Clear();
@@ -175,6 +134,14 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, 
 	CVar_Clear();
 
 	return 0;
+}
+
+
+size_t Sys_Milliseconds()
+{
+    uint64_t curr;
+    QueryPerformanceCounter((LARGE_INTEGER*)&curr);
+    return (size_t)((curr - sys_timerBase) * 1000 / sys_timerFreq);
 }
 
 

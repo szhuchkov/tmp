@@ -47,6 +47,15 @@ MATH_INLINE float ToDegree(float radian)
 }
 
 
+template <typename _T>
+MATH_INLINE const _T& Clamp(const _T& val, const _T& mins, const _T& maxs)
+{
+    if (val < mins) return mins;
+    if (maxs < val) return maxs;
+    return val;
+}
+
+
 class Vector2
 {
 public:

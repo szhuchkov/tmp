@@ -112,7 +112,7 @@ void BaseMaterial::End(RenderContext* context)
 }
 
 
-void BaseMaterial::SetMaterial(RenderMaterial* material)
+void BaseMaterial::SetMaterial(RenderContext* context, RenderMaterial* material)
 {
     // bind textures
     for (int i = 0; i < 4; i++)
@@ -120,12 +120,17 @@ void BaseMaterial::SetMaterial(RenderMaterial* material)
         RenderDevice::GetInstance()->SetTexture(i, material->texmaps[i]);
     }
 
-    //TODO: two-sided materials
-    if (material->flags & (1 << MATERIAL_FLAG_TWOSIDED))
+    // setup culling
+    if (material->flags & MATERIAL_FLAG_TWOSIDED)
     {
+        RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_NONE);
     }
     else
     {
+        if (context->reverseCulling)
+            RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_FRONT);
+        else
+            RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_BACK);
     }
 }
 

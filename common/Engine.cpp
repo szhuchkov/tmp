@@ -21,6 +21,9 @@ bool Engine::Init(void* window, int width, int height, bool fullscreen)
 {
     m_window = window;
 
+    // init timer
+    m_startTime = Sys_Milliseconds();
+
 	// init file system
 	if (!FileSystem::GetInstance()->Init())
 	{
@@ -75,13 +78,21 @@ bool Engine::Resize(int width, int height)
 
 bool Engine::Update()
 {
+    // update timer
+    auto time = Sys_Milliseconds();
+    auto currTime = time - m_startTime;
+    auto deltaTime = currTime - m_currTime;
+    m_currTime = currTime;
+
+    // update render device
 	if (!RenderDevice::GetInstance()->Update())
 		return false;
 
-	InputManager::GetInstance()->ClearEvents();
+    // update input manager
 	InputManager::GetInstance()->Update();
 
-    Scene::GetInstance()->Update(15);
+    // update scene
+    Scene::GetInstance()->Update(deltaTime);
 
 	return true;
 }
@@ -100,4 +111,10 @@ void Engine::Render()
 void* Engine::GetWindow()
 {
     return m_window;
+}
+
+
+size_t Engine::GetTime()
+{
+    return m_currTime;
 }

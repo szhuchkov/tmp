@@ -2,6 +2,14 @@
 #include "InputManager.h"
 
 
+InputDevice::InputDevice(InputDeviceClass cls, InputDeviceID id, const std::string& name) :
+    m_deviceClass(cls),
+    m_deviceID(id),
+    m_deviceName(name)
+{
+}
+
+
 InputDeviceID InputDevice::GetDeviceID() const
 {
 	return m_deviceID;
@@ -14,55 +22,27 @@ void InputDevice::SetDeviceID(InputDeviceID id)
 }
 
 
-void InputDevice::ClearEvents()
+InputDeviceClass InputDevice::GetDeviceClass() const
 {
-	m_events.clear();
+    return m_deviceClass;
 }
 
 
-size_t InputDevice::GetNumEvents() const
+const char* InputDevice::GetDeviceName() const
 {
-	return m_events.size();
+    return m_deviceName.c_str();
 }
 
 
-const InputEvent& InputDevice::GetEvent(size_t index) const
+void InputDevice::SetConnected(bool connected)
 {
-	return m_events[index];
+    m_isConnected = connected;
 }
 
 
-void InputDevice::PushButtonEvent(int button, int state)
+bool InputDevice::IsConnected() const
 {
-	m_events.resize(m_events.size() + 1);
-	auto& e = m_events.back();
-	e.type = INPUT_EVENT_TYPE_BUTTON;
-	e.device = m_deviceID;
-	e.index = button;
-	e.data.button.state = state;
-}
-
-
-void InputDevice::PushAxisEvent(int axis, float value)
-{
-	m_events.resize(m_events.size() + 1);
-	auto& e = m_events.back();
-	e.type = INPUT_EVENT_TYPE_AXIS;
-	e.device = m_deviceID;
-	e.index = axis;
-	e.data.axis.value = value;
-}
-
-
-void InputDevice::PushTouchEvent(int pointer, int state, int x, int y)
-{
-	m_events.resize(m_events.size() + 1);
-	auto& e = m_events.back();
-	e.type = INPUT_EVENT_TYPE_TOUCH;
-	e.device = m_deviceID;
-	e.index = pointer;
-	e.data.touch.x = x;
-	e.data.touch.y = y;
+    return m_isConnected;
 }
 
 
@@ -92,7 +72,6 @@ void InputManager::Update()
 	for(auto device: m_devices)
 	{
 		device->Update();
-		PopEvents(device);
 	}
 }
 
@@ -172,41 +151,4 @@ InputDeviceList InputManager::GetConnectedDevices()
 			res.push_back(device);
 	}
 	return res;
-}
-
-
-void InputManager::ClearEvents()
-{
-	m_events.clear();
-}
-
-
-
-void InputManager::PopEvents(InputDevice* device)
-{
-	for (size_t i = 0; i < device->GetNumEvents(); i++)
-	{
-		const auto& e = device->GetEvent(i);
-		PushEvent(e);
-	}
-	device->ClearEvents();
-}
-
-
-void InputManager::PushEvent(const InputEvent& e)
-{
-	m_events.resize(m_events.size() + 1);
-	m_events.back() = e;
-}
-
-
-size_t InputManager::GetNumEvents()
-{
-	return m_events.size();
-}
-
-
-const InputEvent& InputManager::GetEvent(size_t index)
-{
-	return m_events[index];
 }

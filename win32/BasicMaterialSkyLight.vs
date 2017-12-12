@@ -10,11 +10,14 @@ uniform vec4 gUniform0;
 uniform vec4 gUniform1;
 
 varying vec2 vTexCoord;
-varying vec4 vColor;
+varying vec3 vColor;
 
 void main()
 {
+	// world position
 	vec3 wPos = (gWorld * vec4(aPos, 1.0)).xyz;
+
+	// output position
 	gl_Position = gViewProjection * vec4(wPos, 1.0);
 
     // world space normal
@@ -31,7 +34,9 @@ void main()
 	float ambientPart = dot(vec3(0, 1, 0), wNormal);
 	ambientPart = 0.5 + 0.5 * ambientPart;
 
+	// output texcoord
 	vTexCoord = aTexCoord;
-    vColor.rgb = gUniform0.xyz * diffPart + gUniform1.xyz * ambientPart;
-	vColor.a = 1.0;
+
+	// output color
+	vColor = gUniform0.xyz * diffPart + gUniform1.xyz * ambientPart;
 }

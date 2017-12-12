@@ -70,6 +70,22 @@ public:
         }
     }
 
+    void SetPosition(const Vector3& pos)
+    {
+        MatrixIdentity(&m_light.position);
+        MatrixLookAt(&m_light.position, &pos, &Vector3::ZERO, &Vector3::UP);
+    }
+
+    void SetColor(const Vector3& color)
+    {
+        m_light.color = color;
+    }
+
+    void SetShadows(bool enable)
+    {
+        m_light.flags = enable ? LIGHT_SHADOWS : 0;
+    }
+
 private:
     RenderLight m_light;
     bool m_isVisible = false;

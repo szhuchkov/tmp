@@ -67,7 +67,7 @@ bool RenderWorld::Init()
     m_bv = std::make_unique<LinearVolume>();
 
     // create shadowmap texture
-    m_shadowTarget = RenderDevice::GetInstance()->CreateRenderTarget(1024, 1024, RenderDevice::TEXF_A8R8G8B8, RenderDevice::TEXF_D16);
+    m_shadowTarget = RenderDevice::GetInstance()->CreateRenderTarget(1024, 1024, RenderDevice::TEXF_NONE, RenderDevice::TEXF_D16);
     if (!m_shadowTarget)
     {
         LogPrintf("Unable to create shadowmap texture");
@@ -151,7 +151,7 @@ void RenderWorld::Render()
     RenderForContext(&m_mainContext);
     
     RenderDevice::GetInstance()->SetRenderTarget(nullptr);
-    m_debugShadowRender->Render();
+    //m_debugShadowRender->Render();
 }
 
 
@@ -234,10 +234,12 @@ void RenderWorld::RenderShadowsForLight(RenderContext* context)
 {
     auto light = context->light;
 
+    // setup shadow context
     m_shadowContext.camera = nullptr;
     m_shadowContext.light = light;
     m_shadowContext.pass = RENDER_PASS_SHADOW;
     m_shadowContext.shading = MATERIAL_SHADING_DEPTH_WRITE;
+    m_shadowContext.reverseCulling = true;
 
     // compute frustum
     m_shadowContext.frustum.FromViewProj(light->position);
@@ -263,10 +265,7 @@ void RenderWorld::RenderShadowsForLight(RenderContext* context)
     RenderDevice::GetInstance()->SetRenderTarget(m_shadowTarget);
     float clearColor[] = { 1, 1, 1, 1 };
     float clearDepth = 1.0f;
-    RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_COLOR | RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
-
-    // change face direction
-    RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_FRONT);
+    RenderDevice::GetInstance()->Clear(RenderDevice::CLEAR_DEPTH, clearColor, clearDepth, 0);
 
     // batch rendering
     BatchRender::GetInstance()->SetRenderContext(&m_shadowContext);
@@ -285,9 +284,6 @@ void RenderWorld::RenderShadowsForLight(RenderContext* context)
     }
     BatchRender::GetInstance()->Execute();
     RenderDevice::GetInstance()->SetRenderTarget(nullptr);
-
-    // restore cull mode
-    RenderDevice::GetInstance()->SetCullMode(RenderDevice::CULL_MODE_BACK);
 }
 
 
