@@ -153,6 +153,8 @@ void InputManagerPC::Shutdown()
 
 void InputManagerPC::Update()
 {
+    InputManager::Update();
+
     if (!m_focus)
         return;
 
@@ -179,8 +181,6 @@ void InputManagerPC::Update()
 
     UpdateMouse();
     UpdateKeyboard();
-
-	InputManager::Update();
 }
 
 
