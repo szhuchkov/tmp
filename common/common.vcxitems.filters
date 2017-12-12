@@ -90,6 +90,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\BV\LinearVolume.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\QuadRender.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Input\KeyCodes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectTransform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectCollision.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -242,6 +244,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\BV\BoundingBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\BV\Frustum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\QuadRender.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectTransform.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectCollision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">

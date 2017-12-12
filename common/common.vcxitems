@@ -22,6 +22,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\MeshManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\QuadRender.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectCollision.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectTransform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -144,9 +146,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\Loaders\MeshData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\MeshManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Render\QuadRender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectCollision.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_FreeFlyCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_SkyLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjects\SO_StaticMesh.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectTransform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConfigFile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utils\ConsoleVar.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Engine.h" />
