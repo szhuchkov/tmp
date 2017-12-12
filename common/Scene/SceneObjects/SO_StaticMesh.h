@@ -2,6 +2,8 @@
 
 
 #include <Scene/SceneObject.h>
+#include <Scene/SceneObjectTransform.h>
+#include <Scene/SceneObjectCollision.h>
 #include <Scene/SceneObjectData.h>
 #include <Render/RenderWorld.h>
 #include <Render/MaterialManager.h>
@@ -17,10 +19,13 @@ public:
     SO_StaticMesh(int id) :
         SceneObject(id, CLASS_NAME)
     {
+        CreateTransform();
+        CreateCollision();
+
         m_entity.model = &m_model;
         m_entity.flags = RENDER_ENTITY_CAST_SHADOW;
         m_entity.renderLayer = 0;
-        m_entity.bbox.SetTransform(Matrix::IDENTITY);
+        m_entity.bbox.SetTransform(GetTransform()->GetPosition().ToMatrix());
 
         m_model.geometry = &m_geometry;
     }
@@ -34,6 +39,12 @@ public:
     {
         SceneObject::Spawn();
         Show();
+    }
+
+    void OnTransformChanged() override
+    {
+        SceneObject::OnTransformChanged();
+        m_entity.bbox.SetTransform(GetTransform()->GetPosition().ToMatrix());
     }
 
     void Show()
@@ -54,7 +65,7 @@ public:
         }
     }
 
-    bool Load(const SceneObjectData& data)
+    bool Load(const SceneObjectData& data) override
     {
         if (!SceneObject::Load(data))
             return false;
@@ -82,6 +93,9 @@ public:
 
         if (!LinkMaterials())
             return false;
+
+        //GetCollision()->CreateBox(m_meshInstance->bbox.mins, m_meshInstance->bbox.maxs);
+        GetCollision()->CreateSphere(10.0f);
 
         return true;
     }

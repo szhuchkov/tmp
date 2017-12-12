@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "SceneObject.h"
+#include "SceneObjectTransform.h"
+#include "SceneObjectCollision.h"
 #include "SceneObjectData.h"
 
 
@@ -66,4 +68,47 @@ void SceneObject::Kill()
 
 void SceneObject::Spawn()
 {
+}
+
+
+void SceneObject::CreateTransform()
+{
+    m_transform = std::make_unique<SceneObjectTransform>(this);
+}
+
+
+const SceneObjectTransform* SceneObject::GetTransform() const
+{
+    return m_transform.get();
+}
+
+
+SceneObjectTransform* SceneObject::GetTransform()
+{
+    return m_transform.get();
+}
+
+
+void SceneObject::OnTransformChanged()
+{
+    if (m_collision)
+        m_collision->SetPosition(m_transform->GetPosition());
+}
+
+
+void SceneObject::CreateCollision()
+{
+    m_collision = std::make_unique<SceneObjectCollision>(this);
+}
+
+
+const SceneObjectCollision* SceneObject::GetCollision() const
+{
+    return m_collision.get();
+}
+
+
+SceneObjectCollision* SceneObject::GetCollision()
+{
+    return m_collision.get();
 }

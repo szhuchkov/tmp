@@ -11,6 +11,7 @@ public:
     // write values
     void SetBool(const char* name, bool value);
     void SetString(const char* name, const char* value);
+    void SetString(const std::string& name, const std::string& value);
     void SetInt(const char* name, int value);
     void SetFloat(const char* name, float value);
     void SetVec2(const char* name, const Vector2& value);
@@ -21,6 +22,7 @@ public:
     // read values
     bool GetBool(const char* name) const;
     const char* GetString(const char* name) const;
+    const char* GetString(const std::string& name) const;
     int GetInt(const char* name) const;
     float GetFloat(const char* name) const;
     Vector2 GetVec2(const char* name) const;

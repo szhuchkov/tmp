@@ -29,6 +29,12 @@ void SceneObjectData::SetString(const char* name, const char* value)
 }
 
 
+void SceneObjectData::SetString(const std::string& name, const std::string& value)
+{
+    m_items[name] = value;
+}
+
+
 void SceneObjectData::SetInt(const char* name, int value)
 {
     char buffer[256];
@@ -92,6 +98,15 @@ bool SceneObjectData::GetBool(const char* name) const
 
 
 const char* SceneObjectData::GetString(const char* name) const
+{
+    auto it = m_items.find(name);
+    if (it != m_items.end())
+        return it->second.c_str();
+    return "";
+}
+
+
+const char* SceneObjectData::GetString(const std::string& name) const
 {
     auto it = m_items.find(name);
     if (it != m_items.end())
