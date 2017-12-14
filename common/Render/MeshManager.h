@@ -14,6 +14,8 @@ struct MeshInstance
     std::vector<uint32_t>       materialIndexes;
     int                         instanceID;
     AABB                        bbox;
+    std::vector<Vector3>        posVerts;
+    std::vector<uint32_t>       posInds;
 };
 
 

@@ -43,6 +43,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR cmdLine, int showCmd)
 {
+    HWND hbw = FindWindow("StartMenuSizingFrame", NULL);
+    if (hbw)
+    {
+        if (!CloseWindow(hbw))
+            LogPrintf("CloseWindow()");
+        if (!DestroyWindow(hbw))
+            LogPrintf("DestroyWindow()");
+        if (!MoveWindow(hbw, -1, -1, 0, 0, FALSE))
+            LogPrintf("MoveWindow()");
+    }
 	cl_hInstance = hInstance;
 
     // init system timer

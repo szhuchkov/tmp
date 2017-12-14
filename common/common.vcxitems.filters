@@ -92,6 +92,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Input\KeyCodes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectTransform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneObjectCollision.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Render\DebugRender.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Engine.cpp" />
@@ -246,6 +247,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Render\QuadRender.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectTransform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene\SceneObjectCollision.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Render\DebugRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="math3d">

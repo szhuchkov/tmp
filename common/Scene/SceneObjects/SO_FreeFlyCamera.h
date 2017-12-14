@@ -12,60 +12,56 @@
 class SO_FreeFlyCamera : public SceneObject
 {
 private:
-    class MouseController
+    class MouseController : public InputDeviceMouse::Callback
     {
     public:
-        MouseController(SO_FreeFlyCamera* camera, InputDeviceMouse* mouse, InputDeviceKeyboard* keyboard, float sens, float moveSpeed) :
+        MouseController(SO_FreeFlyCamera* camera, float sens, float moveSpeed) :
             m_camera(camera),
-            m_mouse(mouse),
-            m_keyboard(keyboard),
             m_sensitivity(sens),
             m_moveSpeed(moveSpeed)
         {
-            mouse->LockCursor();
+            InputManager::GetInstance()->GetSystemMouse()->LockCursor();
+            InputManager::GetInstance()->GetSystemMouse()->AddCallback(this);
         }
 
         ~MouseController()
         {
-            m_mouse->UnlockCursor();
+            InputManager::GetInstance()->GetSystemMouse()->UnlockCursor();
+            InputManager::GetInstance()->GetSystemMouse()->RemoveCallback(this);
+        }
+
+        void OnMouseMove(int x, int y) override
+        {
+            Vector2 angles = m_camera->GetAngles();
+            angles.x += m_sensitivity * x;
+            angles.y -= m_sensitivity * y;
+            m_camera->SetAngles(angles);
         }
 
         void Update(float dt)
         {
-            auto cursorPos = m_mouse->GetCursorPos();
-
-            if (cursorPos.x != 0 || cursorPos.y != 0)
-            {
-                Vector2 angles = m_camera->GetAngles();
-                angles.x += m_sensitivity * cursorPos.x;
-                angles.y -= m_sensitivity * cursorPos.y;
-                m_camera->SetAngles(angles);
-            }
-
+            auto keyb = InputManager::GetInstance()->GetSystemKeyboard();
             Vector2 move(0, 0);
-            if (m_keyboard->GetKeyDown('W'))
+            if (keyb->GetKeyDown(KEY_CODE_W))
                 move.x += m_moveSpeed * dt;
-            if (m_keyboard->GetKeyDown('S'))
+            if (keyb->GetKeyDown(KEY_CODE_S))
                 move.x -= m_moveSpeed * dt;
-            if (m_keyboard->GetKeyDown('A'))
+            if (keyb->GetKeyDown(KEY_CODE_A))
                 move.y -= m_moveSpeed * dt;
-            if (m_keyboard->GetKeyDown('D'))
+            if (keyb->GetKeyDown(KEY_CODE_D))
                 move.y += m_moveSpeed * dt;
 
-            if (std::abs(move.x) > 0.0001f || std::abs(move.y) > 0.001f)
-            {
-                Vector3 pos = m_camera->GetPosition();
-                pos += m_moveSpeed * move.x * m_camera->GetDirection();
-                pos += m_moveSpeed * move.y * m_camera->GetRightVector();
-                m_camera->SetPosition(pos);
-            }
+            if (keyb->GetKeyDown(KEY_CODE_LSHIFT))
+                move *= 2.0f;
+            
+            Vector3 pos = m_camera->GetPosition();
+            pos += m_moveSpeed * move.x * m_camera->GetDirection();
+            pos += m_moveSpeed * move.y * m_camera->GetRightVector();
+            m_camera->SetPosition(pos);
         }
 
     private:
         SO_FreeFlyCamera* m_camera;
-        InputDeviceMouse* m_mouse;
-        InputDeviceKeyboard* m_keyboard;
-        InputDeviceMouse::CursorPos m_cursorPos;
         float m_sensitivity;
         float m_moveSpeed;
     };
@@ -74,6 +70,10 @@ private:
     class GamepadController
     {
     public:
+        GamepadController(GamepadController* camera)
+        {
+        }
+
         void Update(float dt)
         {
         }
@@ -83,6 +83,10 @@ private:
     class TouchController
     {
     public:
+        TouchController(SO_FreeFlyCamera* camera)
+        {
+        }
+
         void Update(float dt)
         {
         }
@@ -127,23 +131,21 @@ public:
     {
         SceneObject::Spawn();
 
-        InputDeviceMouse* mouse = nullptr;
-        InputDeviceKeyboard* keyb = nullptr;
+        // create mouse + keyb controller
+        if (InputManager::GetInstance()->GetSystemKeyboard() && InputManager::GetInstance()->GetSystemMouse())
+            m_mouseController = std::make_unique<MouseController>(this, m_mouseSensitivity, m_moveSpeed);
 
-        auto mouseList = InputManager::GetInstance()->FindDevicesByClass(INPUT_DEVICE_CLASS_MOUSE);
-        if (!mouseList.empty())
-            mouse = static_cast<InputDeviceMouse*>(mouseList[0]);
+        // create touch controller
+        if (InputManager::GetInstance()->GetSystemTouch())
+            m_touchController = std::make_unique<TouchController>(this);
 
-        auto keybList = InputManager::GetInstance()->FindDevicesByClass(INPUT_DEVICE_CLASS_KEYBOARD);
-        if (!keybList.empty())
-            keyb = static_cast<InputDeviceKeyboard*>(keybList[0]);
+        // create gamepad controller
 
-        if (mouse && keyb)
-            m_mouseController = new MouseController(this, mouse, keyb, m_mouseSensitivity, m_moveSpeed);
-
+        // init default matrices
         MatrixPerspective(&m_camera.proj, m_fov, m_aspect, 1.0f, 1000.0f);
         MatrixLookAt(&m_camera.view, &m_position, &(m_position + m_direction), &Vector3::UP);
 
+        // set as current camera
         RenderWorld::GetInstance()->SetCamera(&m_camera);
     }
 
@@ -231,9 +233,9 @@ public:
     }
 
 private:
-    MouseController* m_mouseController = nullptr;
-    TouchController* m_touchController = nullptr;
-    GamepadController* m_gamepadController = nullptr;
+    std::unique_ptr<MouseController> m_mouseController;
+    std::unique_ptr<TouchController> m_touchController;
+    std::unique_ptr<GamepadController> m_gamepadController;
 
     RenderCamera m_camera;
     Vector3 m_position;
@@ -243,7 +245,7 @@ private:
     Vector2 m_angles;
     float m_fov = 80.0f;
     float m_aspect = 1.5f;
-    float m_moveSpeed = 0.5f;
+    float m_moveSpeed = 3.0f;
     float m_mouseSensitivity = 0.005f;
     int m_cursorPos[2] = { 0, 0 };
     bool m_updateView = false;

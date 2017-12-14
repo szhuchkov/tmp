@@ -206,6 +206,8 @@ bool RenderDevice::Init(void* window, int width, int height, bool fullscreen)
     GL_CHECK_ERROR(glEnable(GL_CULL_FACE));
     GL_CHECK_ERROR(glFrontFace(GL_CW));
     GL_CHECK_ERROR(glCullFace(GL_FRONT));
+    GL_CHECK_ERROR(glEnable(GL_LINE_SMOOTH));
+    GL_CHECK_ERROR(glLineWidth(1.0f));
 
 	return true;
 }

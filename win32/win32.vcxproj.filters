@@ -53,6 +53,15 @@
     <None Include="BasicMaterialShadow.ps">
       <Filter>tmpdata</Filter>
     </None>
+    <None Include="DebugColor.ps">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="DebugShape.vs">
+      <Filter>tmpdata</Filter>
+    </None>
+    <None Include="DebugTex.ps">
+      <Filter>tmpdata</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ShaderPreload.txt">

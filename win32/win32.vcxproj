@@ -173,6 +173,9 @@
     <None Include="BasicMaterialShadow.ps" />
     <None Include="BasicMaterialSkyLight.vs" />
     <None Include="BasicMaterialSkyShadow.vs" />
+    <None Include="DebugColor.ps" />
+    <None Include="DebugShape.vs" />
+    <None Include="DebugTex.ps" />
     <None Include="Quad.ps" />
     <None Include="Quad.vs" />
     <None Include="test.mesh" />

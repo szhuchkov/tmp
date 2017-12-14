@@ -9,6 +9,7 @@
 #include <Render/MaterialManager.h>
 #include <Render/MeshManager.h>
 #include <Render/TextureManager.h>
+#include <Render/DebugRender.h>
 
 
 class SO_StaticMesh : public SceneObject
@@ -45,6 +46,20 @@ public:
     {
         SceneObject::OnTransformChanged();
         m_entity.bbox.SetTransform(GetTransform()->GetPosition().ToMatrix());
+    }
+
+    void Update(unsigned int dt) override
+    {
+        SceneObject::Update(dt);
+        if (m_meshInstance)
+        {
+            DebugRender::GetInstance()->DrawIndexedMesh(
+                &m_meshInstance->posVerts[0],
+                &m_meshInstance->posInds[0],
+                m_meshInstance->posInds.size(),
+                0xff00ff00,
+                GetTransform()->GetPosition().ToMatrix());
+        }
     }
 
     void Show()

@@ -1,10 +1,11 @@
 #include "pch.h"
-#include "Engine.h"
-#include "FileSystem.h"
-#include "Render/RenderDevice.h"
-#include "Render/RenderWorld.h"
-#include "Input/InputManager.h"
-#include "Scene/Scene.h"
+#include <Engine.h>
+#include <FileSystem.h>
+#include <Render/RenderDevice.h>
+#include <Render/RenderWorld.h>
+#include <Render/DebugRender.h>
+#include <Input/InputManager.h>
+#include <Scene/Scene.h>
 
 
 Engine::Engine()
@@ -52,12 +53,20 @@ bool Engine::Init(void* window, int width, int height, bool fullscreen)
         return false;
     }
 
+    // init debug render
+    if (!DebugRender::GetInstance()->Init())
+    {
+        LogPrintf("DebugRender init failed");
+        return false;
+    }
+
 	return true;
 }
 
 
 void Engine::Shutdown()
 {
+    DebugRender::GetInstance()->Shutdown();
     RenderWorld::GetInstance()->Shutdown();
 	InputManager::GetInstance()->Shutdown();
 	RenderDevice::GetInstance()->Shutdown();
@@ -103,6 +112,7 @@ void Engine::Render()
 	if (RenderDevice::GetInstance()->BeginFrame())
 	{
         RenderWorld::GetInstance()->Render();
+        DebugRender::GetInstance()->Render();
 		RenderDevice::GetInstance()->EndFrame();
 	}
 }

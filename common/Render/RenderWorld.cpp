@@ -7,6 +7,7 @@
 #include <Render/BV/BoundingVolume.h>
 #include <Render/BV/LinearVolume.h>
 #include <Render/QuadRender.h>
+#include <Render/DebugRender.h>
 
 
 RenderWorld::RenderWorld()
@@ -183,6 +184,9 @@ void RenderWorld::RenderForContext(RenderContext* context)
         MatrixInverse(&viewInverse, &m_mainContext.camera->view);
         viewProj = m_mainContext.camera->view * m_mainContext.camera->proj;
     }
+
+    //TODO: figure out where to set it
+    DebugRender::GetInstance()->SetViewProj(viewProj);
 
     context->frustum.FromViewProj(viewProj);
     context->visibleEntities = m_bv->CullEntities(context->frustum);

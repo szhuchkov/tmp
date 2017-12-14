@@ -68,10 +68,42 @@ MeshInstance* MeshManager::LoadMesh(const char* name)
     auto numVerts = data.GetNumVerts();
     auto vertexSize = data.GetVertexSize();
     auto vertexPtr = data.GetVerts();
+    node->mesh.posVerts.resize(numVerts);
     for (size_t i = 0; i < numVerts; i++)
     {
         auto pos = reinterpret_cast<const Vector3*>(&vertexPtr[vertexSize * i]);
+        node->mesh.posVerts[i] = *pos;
         node->mesh.bbox.AddPoint(*pos);
+    }
+
+    // copy inds to system buffer
+    auto numInds = data.GetNumInds();
+    node->mesh.posInds.resize(numInds);
+    if (data.GetFormat() & RenderDevice::INDEX_32)
+    {
+        auto dst = &node->mesh.posInds[0];
+        auto src = reinterpret_cast<const uint32_t*>(data.GetInds());
+        for (size_t i = 0; i < data.GetNumSurfaces(); i++)
+        {
+            auto& s = data.GetSurfaces()[i];
+            for (size_t j = 0; j < s.indexCount; j++)
+            {
+                *dst++ =/* s.vertexOffset + */*src++;
+            }
+        }
+    }
+    else
+    {
+        auto dst = &node->mesh.posInds[0];
+        auto src = reinterpret_cast<const uint16_t*>(data.GetInds());
+        for (size_t i = 0; i < data.GetNumSurfaces(); i++)
+        {
+            auto& s = data.GetSurfaces()[i];
+            for (size_t j = 0; j < s.indexCount; j++)
+            {
+                *dst++ = s.vertexOffset + *src++;
+            }
+        }
     }
 
     return &node->mesh;

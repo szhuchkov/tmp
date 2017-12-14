@@ -387,9 +387,9 @@ void MatrixOrthoOffCenter(Matrix* dst, float l, float r, float b, float t, float
 void MatrixTransformCoord(Vector3* dst, const Vector3* v, const Matrix* m)
 {
     Vector3 r;
-    r.x = v->x * (*m)[0][0] + v->y * (*m)[0][1] + v->z * (*m)[0][2] + (*m)[0][3];
-    r.y = v->x * (*m)[1][0] + v->y * (*m)[1][1] + v->z * (*m)[1][2] + (*m)[1][3];
-    r.z = v->x * (*m)[2][0] + v->y * (*m)[2][1] + v->z * (*m)[2][2] + (*m)[2][3];
+    r.x = v->x * (*m)[0][0] + v->y * (*m)[1][0] + v->z * (*m)[2][0] + (*m)[3][0];
+    r.y = v->x * (*m)[0][1] + v->y * (*m)[1][1] + v->z * (*m)[2][1] + (*m)[3][1];
+    r.z = v->x * (*m)[0][2] + v->y * (*m)[1][2] + v->z * (*m)[2][2] + (*m)[3][2];
     *dst = r;
 }
 
@@ -397,9 +397,9 @@ void MatrixTransformCoord(Vector3* dst, const Vector3* v, const Matrix* m)
 void MatrixTransformCoord(Vector3* dst, const Vector4* v, const Matrix* m)
 {
     Vector3 r;
-    r.x = v->x * (*m)[0][0] + v->y * (*m)[0][1] + v->z * (*m)[0][2] + v->w * (*m)[0][3];
-    r.y = v->x * (*m)[1][0] + v->y * (*m)[1][1] + v->z * (*m)[1][2] + v->w * (*m)[1][3];
-    r.z = v->x * (*m)[2][0] + v->y * (*m)[2][1] + v->z * (*m)[2][2] + v->w * (*m)[2][3];
+    r.x = v->x * (*m)[0][0] + v->y * (*m)[1][0] + v->z * (*m)[2][0] + v->w * (*m)[3][0];
+    r.y = v->x * (*m)[0][1] + v->y * (*m)[1][1] + v->z * (*m)[2][1] + v->w * (*m)[3][1];
+    r.z = v->x * (*m)[0][2] + v->y * (*m)[1][2] + v->z * (*m)[2][2] + v->w * (*m)[3][2];
     *dst = r;
 }
 
@@ -407,10 +407,46 @@ void MatrixTransformCoord(Vector3* dst, const Vector4* v, const Matrix* m)
 void MatrixTransformNormal(Vector3* dst, const Vector3* v, const Matrix* m)
 {
     Vector3 r;
-    r.x = v->x * (*m)[0][0] + v->y * (*m)[0][1] + v->z * (*m)[0][2];
-    r.y = v->x * (*m)[1][0] + v->y * (*m)[1][1] + v->z * (*m)[1][2];
-    r.z = v->x * (*m)[2][0] + v->y * (*m)[2][1] + v->z * (*m)[2][2];
+    r.x = v->x * (*m)[0][0] + v->y * (*m)[1][0] + v->z * (*m)[2][0];
+    r.y = v->x * (*m)[0][1] + v->y * (*m)[1][1] + v->z * (*m)[2][1];
+    r.z = v->x * (*m)[0][2] + v->y * (*m)[1][2] + v->z * (*m)[2][2];
     *dst = r;
+}
+
+
+void MatrixRotationX(Matrix* m, float angle)
+{
+    float s = std::sin(angle);
+    float c = std::cos(angle);
+    *m = Matrix(
+        1, 0, 0, 0,
+        0, c,-s, 0,
+        0, s, c, 0,
+        0, 0, 0, 1);
+}
+
+
+void MatrixRotationY(Matrix* m, float angle)
+{
+    float s = std::sin(angle);
+    float c = std::cos(angle);
+    *m = Matrix(
+        c, 0, s, 0,
+        0, 1, 0, 0,
+       -s, 0, c, 0,
+        0, 0, 0, 1);
+}
+
+
+void MatrixRotationZ(Matrix* m, float angle)
+{
+    float s = std::sin(angle);
+    float c = std::cos(angle);
+    *m = Matrix(
+        c,-s, 0, 0,
+        s, c, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1);
 }
 
 
@@ -478,4 +514,16 @@ Matrix AffineTransform::ToMatrix() const
     m[3][1] = translation.y;
     m[3][2] = translation.z;
     return m;
+}
+
+
+void AffineTransform::Rotate(const Matrix& m)
+{
+    MatrixTransformNormal(&axis[0], &axis[0], &m);
+    MatrixTransformNormal(&axis[1], &axis[1], &m);
+    MatrixTransformNormal(&axis[2], &axis[2], &m);
+    // re-normalize axis
+    Vec3Normalize(&axis[0], &axis[0]);
+    Vec3Normalize(&axis[1], &axis[1]);
+    Vec3Normalize(&axis[2], &axis[2]);
 }

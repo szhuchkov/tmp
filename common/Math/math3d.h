@@ -281,6 +281,11 @@ void MatrixOrthoOffCenter(Matrix* dst, float l, float r, float b, float t, float
 void MatrixTransformCoord(Vector3* dst, const Vector3* v, const Matrix* m);
 void MatrixTransformCoord(Vector3* dst, const Vector4* v, const Matrix* m);
 void MatrixTransformNormal(Vector3* dst, const Vector3* v, const Matrix* m);
+void MatrixRotationX(Matrix* dst, float angle);
+void MatrixRotationY(Matrix* dst, float angle);
+void MatrixRotationZ(Matrix* dst, float angle);
+void MatrixTranslation(Matrix* dst, const Vector3* translation);
+void MatrixScale(Matrix* dst, const Vector3* scale);
 
 
 class AffineTransform
@@ -304,6 +309,8 @@ public:
 
     void FromMatrix(const Matrix& m);
     Matrix ToMatrix() const;
+
+    void Rotate(const Matrix& m);
 };
 
 

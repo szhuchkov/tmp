@@ -161,8 +161,16 @@ void InputManagerPC::Update()
     HWND hwnd = reinterpret_cast<HWND>(Engine::GetInstance()->GetWindow());
     POINT cursorPos;
     GetCursorPos(&cursorPos);
-    ScreenToClient(hwnd, &cursorPos);
-    m_mouse->OnCursorPositionChanged(cursorPos.x, cursorPos.y);
+
+    if (m_cursorLocked)
+    {
+        SetCursorPos(m_cursorInitialPos.x, m_cursorInitialPos.y);
+    }
+    else
+    {
+        ScreenToClient(hwnd, &cursorPos);
+        m_mouse->OnCursorPositionChanged(cursorPos.x, cursorPos.y);
+    }
 
     if (m_mouse->IsCursorLocked() != m_cursorLocked)
     {
