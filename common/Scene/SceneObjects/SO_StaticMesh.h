@@ -53,12 +53,15 @@ public:
         SceneObject::Update(dt);
         if (m_meshInstance)
         {
+            DebugRender::GetInstance()->DrawBoundingBox(m_entity.bbox, 0xffff0000);
+#if 1
             DebugRender::GetInstance()->DrawIndexedMesh(
                 &m_meshInstance->posVerts[0],
                 &m_meshInstance->posInds[0],
                 m_meshInstance->posInds.size(),
                 0xff00ff00,
                 GetTransform()->GetPosition().ToMatrix());
+#endif
         }
     }
 

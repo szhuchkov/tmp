@@ -14,12 +14,14 @@ class BoundingBox;
 class DebugRender
 {
 public:
+    // some limits
     enum
     {
         MAX_VERTS = 100000,
         MAX_INDS = 100000,
     };
 
+    // draw vertex format
     struct DrawVertex
     {
         Vector3 pos;
@@ -27,6 +29,7 @@ public:
         uint32_t color;
     };
 
+    // singleton instance
     inline static DebugRender* GetInstance()
     {
         static DebugRender instance;
@@ -44,8 +47,8 @@ public:
     void DrawLines3D(const Vector3* points, size_t numPoints, uint32_t color, const Matrix& transform);
     void DrawMesh(const Vector3* verts, size_t numVerts, uint32_t color, const Matrix& transform);
     void DrawIndexedMesh(const Vector3* verts, const uint32_t* inds, size_t numInds, uint32_t color, const Matrix& transform);
-    void DrawAABB(const AABB& box, const Matrix& transform);
-    void DrawBoundingBox(const BoundingBox& box);
+    void DrawAABB(const AABB& box, uint32_t color, const Matrix& transform);
+    void DrawBoundingBox(const BoundingBox& box, uint32_t color);
     void DrawImage(const Vector2& pos, const Vector2& size, Texture* tex);
     void DrawString(const Vector2& pos, const Vector2& size, const std::string& text);
 

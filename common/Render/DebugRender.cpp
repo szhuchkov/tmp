@@ -2,6 +2,8 @@
 #include "DebugRender.h"
 #include "RenderDevice.h"
 #include "ShaderManager.h"
+#include <Render/BV/AABB.h>
+#include <Render/BV/BoundingBox.h>
 
 
 DebugRender::DebugRender()
@@ -207,22 +209,35 @@ void DebugRender::DrawIndexedMesh(const Vector3* pos, const uint32_t* inds, size
     node->numVerts = 0;
 
     // copy inds
-    auto dstInds = AllocInds(numInds);
-    memcpy(dstInds, inds, sizeof(uint32_t) * numInds);
 
     // compute number of verts
     size_t maxIndex = 0;
+    auto dstInds = AllocInds(numInds);
     for (size_t i = 0; i < numInds; i++)
+    {
+        dstInds[i] = node->offsetVerts + inds[i];
         maxIndex = std::max(maxIndex, inds[i]);
-    maxIndex++;
+    }
 
     // copy verts
-    size_t numVerts = maxIndex + 1;
-    auto dstVerts = AllocVerts(numVerts);
-    for (size_t i = 0; i < numVerts; i++)
+    node->numVerts = maxIndex + 1;
+    auto dstVerts = AllocVerts(node->numVerts);
+    for (size_t i = 0; i < node->numVerts; i++)
     {
         MatrixTransformCoord(&dstVerts[i].pos, &pos[i], &transform);
         //dstVerts[i].pos = pos[i];
         dstVerts[i].color = color;
     }
+}
+
+
+void DebugRender::DrawBoundingBox(const BoundingBox& bbox, uint32_t color)
+{
+    auto c = bbox.GetCorners();
+    std::vector<uint32_t> inds({
+        0, 1, 1, 3, 3, 2, 2, 0,
+        4, 5, 5, 7, 7, 6, 6, 4,
+        0, 4, 1, 5, 2, 6, 3, 7,
+    });
+    DrawIndexedMesh(&c[0], &inds[0], inds.size(), color, Matrix::IDENTITY);
 }
